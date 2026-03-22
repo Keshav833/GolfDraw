@@ -1,40 +1,69 @@
+import { z } from 'zod';
 import { NextResponse } from 'next/server';
-import { createServerClient } from '@supabase/ssr';
-import { cookies } from 'next/headers';
-import { runDraw } from '@/lib/draw/engine';
+import { createServiceSupabase, drawError, requireAdminUser } from '@/lib/draw/api';
+import { simulateStoredDraw } from '@/lib/draw/workflow';
+
+const schema = z.object({
+  draw_id: z.string().uuid(),
+});
 
 export async function POST(req: Request) {
   try {
-    const { draw_id } = await req.json();
-    const cookieStore = cookies();
-    const supabase = createServerClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, { cookies: { getAll() { return cookieStore.getAll() }, setAll() {} } });
-    
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user || user.app_metadata?.role !== 'admin') return NextResponse.json({ data: null, error: { message: 'Forbidden', code: '403' } }, { status: 403 });
+    const adminCheck = await requireAdminUser();
+    if ('response' in adminCheck) {
+      return adminCheck.response;
+    }
 
-    const adminSupabase = createServerClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, { cookies: { getAll() { return [] }, setAll() {} } });
+    const parsed = schema.safeParse(await req.json());
 
-    const { data: draw } = await adminSupabase.from('draws').select('*').eq('id', draw_id).single();
-    if (!draw || draw.status === 'published') return NextResponse.json({ data: null, error: { message: 'Invalid draw', code: '400' } }, { status: 400 });
+    if (!parsed.success) {
+      return drawError(422, parsed.error.issues[0]?.message ?? 'Invalid request', 'VALIDATION_ERROR');
+    }
 
-    const pool = Number(draw.prize_pool_total);
-    const prize_pool = {
-      jackpot: pool * 0.40,
-      four_match: pool * 0.35,
-      three_match: pool * 0.25
-    };
+    const serviceSupabase = createServiceSupabase();
+    const { data: draw, error } = await serviceSupabase
+      .from('draws')
+      .select('*')
+      .eq('id', parsed.data.draw_id)
+      .single();
 
-    const result = runDraw({
-      draw_number: draw.draw_number,
-      mode: draw.mode as 'random' | 'algorithmic',
-      prize_pool,
-      users: draw.config.users
+    if (error || !draw) {
+      return drawError(404, error?.message ?? 'Draw not found', 'NOT_FOUND');
+    }
+
+    if (draw.status === 'published') {
+      return drawError(400, 'Published draws cannot be simulated again', 'INVALID_DRAW');
+    }
+
+    const result = simulateStoredDraw(draw);
+
+    const { error: updateError } = await serviceSupabase
+      .from('draws')
+      .update({
+        status: 'simulated',
+        draw_number: result.draw_number,
+        seed: result.seed,
+        config: {
+          ...(draw.config ?? {}),
+          draw_number: result.draw_number,
+          seed: result.seed,
+        },
+      })
+      .eq('id', draw.id);
+
+    if (updateError) {
+      return drawError(500, updateError.message, 'DB_ERR');
+    }
+
+    return NextResponse.json({
+      data: result,
+      error: null,
     });
-
-    await adminSupabase.from('draws').update({ status: 'simulated' }).eq('id', draw_id);
-
-    return NextResponse.json({ data: result, error: null });
-  } catch (err: any) {
-    return NextResponse.json({ data: null, error: { message: err.message, code: 'ERR' } }, { status: 500 });
+  } catch (error) {
+    return drawError(
+      500,
+      error instanceof Error ? error.message : 'Failed to simulate draw',
+      'ERR'
+    );
   }
 }

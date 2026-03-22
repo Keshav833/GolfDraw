@@ -1,89 +1,77 @@
-export interface Winner {
-  user_id: string;
-}
+import type { DrawConfig, DrawResult, MatchResult } from '@/lib/types/draw';
+import { applyAlgorithmicBias } from '@/lib/draw/algorithm';
+import { detectMatches } from '@/lib/draw/matcher';
+import { calculatePrizeBuckets, splitPrize } from '@/lib/draw/prizes';
+import { generateDrawNumber } from '@/lib/draw/random';
 
-export type DrawInput = {
-  draw_number: number;
-  mode: 'random' | 'algorithmic';
-  prize_pool: {
-    jackpot: number;
-    four_match: number;
-    three_match: number;
+export function runDrawEngine(config: DrawConfig): DrawResult {
+  let drawNumber: number;
+  let seed: string;
+
+  if (config.draw_number && config.seed) {
+    drawNumber = config.draw_number;
+    seed = config.seed;
+  } else {
+    const generated = generateDrawNumber();
+    drawNumber = generated.drawNumber;
+    seed = generated.seed;
+  }
+
+  if (config.mode === 'algorithmic') {
+    drawNumber = applyAlgorithmicBias(config.eligible_users, drawNumber, seed);
+  }
+
+  const prizeBuckets = calculatePrizeBuckets(
+    config.prize_pool_total,
+    config.rollover_amount ?? 0
+  );
+
+  const matches = detectMatches(config.eligible_users, drawNumber);
+  const fiveMatchUsers = matches.filter((match) => match.category === '5-match');
+  const fourMatchUsers = matches.filter((match) => match.category === '4-match');
+  const threeMatchUsers = matches.filter((match) => match.category === '3-match');
+
+  const prizePerFive = splitPrize(prizeBuckets.jackpot, fiveMatchUsers.length);
+  const prizePerFour = splitPrize(prizeBuckets.four_match, fourMatchUsers.length);
+  const prizePerThree = splitPrize(prizeBuckets.three_match, threeMatchUsers.length);
+
+  const buildResults = (
+    matchList: typeof matches,
+    prizePerWinner: number
+  ): MatchResult[] =>
+    matchList.map((match) => ({
+      user_id: match.user.user_id,
+      full_name: match.user.full_name,
+      email: match.user.email,
+      match_count: match.matchCount,
+      match_category: match.category,
+      prize_amount: prizePerWinner,
+    }));
+
+  const fiveMatchResults = buildResults(fiveMatchUsers, prizePerFive);
+  const fourMatchResults = buildResults(fourMatchUsers, prizePerFour);
+  const threeMatchResults = buildResults(threeMatchUsers, prizePerThree);
+
+  const jackpotRollover = fiveMatchUsers.length === 0;
+  const rolloverAmount = jackpotRollover ? prizeBuckets.jackpot : 0;
+
+  return {
+    draw_number: drawNumber,
+    seed,
+    mode: config.mode,
+    month: config.month,
+    five_match: fiveMatchResults,
+    four_match: fourMatchResults,
+    three_match: threeMatchResults,
+    jackpot_rollover: jackpotRollover,
+    rollover_amount: rolloverAmount,
+    prize_pool: {
+      jackpot: prizeBuckets.jackpot,
+      four_match: prizeBuckets.four_match,
+      three_match: prizeBuckets.three_match,
+      total: config.prize_pool_total + (config.rollover_amount ?? 0),
+    },
+    eligible_count: config.eligible_users.length,
+    match_count: matches.length,
   };
-  users: Array<{
-    user_id: string;
-    scores: number[];
-  }>;
-};
-
-export type DrawResult = {
-  five_match: Winner[];
-  four_match: Winner[];
-  three_match: Winner[];
-  jackpot_rollover: boolean;
-};
-
-export function runDraw(input: DrawInput, randomFunction: () => number = Math.random): DrawResult {
-  const { draw_number, mode, users } = input;
-  
-  const result: DrawResult = {
-    five_match: [],
-    four_match: [],
-    three_match: [],
-    jackpot_rollover: false
-  };
-
-  // Pure deterministic bucketing first
-  for (const u of users) {
-    let matches = 0;
-    for (const s of u.scores) {
-      if (s === draw_number) matches++;
-    }
-    
-    // We only push to the highest corresponding tier to avoid duplicate claims
-    if (matches >= 5) result.five_match.push({ user_id: u.user_id });
-    else if (matches === 4) result.four_match.push({ user_id: u.user_id });
-    else if (matches === 3) result.three_match.push({ user_id: u.user_id });
-  }
-
-  // If algorithmic mode is enabled and nobody naturally hit 5 matches,
-  // we select the user whose average score is closest to the draw number
-  // using weighted random selection to fill the jackpot bucket.
-  if (mode === 'algorithmic' && result.five_match.length === 0 && users.length > 0) {
-    
-    // Calculate weights (inverse of distance). Max weight to lowest distance.
-    const weightedUsers = users.map(u => {
-      const activeScores = u.scores.length > 0 ? u.scores : [draw_number + 10]; // punish empty 
-      const avg = activeScores.reduce((a, b) => a + b, 0) / activeScores.length;
-      const dist = Math.abs(avg - draw_number);
-      // Ensure distance isn't exactly 0 to avoid Infinity
-      const safeDist = Math.max(dist, 0.001); 
-      return {
-        user_id: u.user_id,
-        weight: 1 / safeDist
-      };
-    });
-
-    const totalWeight = weightedUsers.reduce((sum, u) => sum + u.weight, 0);
-    const randomTarget = randomFunction() * totalWeight;
-
-    let cumulative = 0;
-    let selectedUserId = weightedUsers[0].user_id;
-
-    for (const u of weightedUsers) {
-      cumulative += u.weight;
-      if (randomTarget <= cumulative) {
-        selectedUserId = u.user_id;
-        break;
-      }
-    }
-
-    result.five_match.push({ user_id: selectedUserId });
-  }
-
-  if (result.five_match.length === 0) {
-    result.jackpot_rollover = true;
-  }
-
-  return result;
 }

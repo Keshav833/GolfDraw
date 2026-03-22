@@ -1,57 +1,73 @@
+import { z } from 'zod';
 import { NextResponse } from 'next/server';
-import { createServerClient } from '@supabase/ssr';
-import { cookies } from 'next/headers';
-import crypto from 'crypto';
+import { createServiceSupabase, drawError, isValidMonth, requireAdminUser } from '@/lib/draw/api';
+import { createDraftDraw } from '@/lib/draw/workflow';
+
+const schema = z.object({
+  month: z.string().refine((value) => isValidMonth(value), {
+    message: 'Month must be in YYYY-MM format',
+  }),
+  mode: z.enum(['random', 'algorithmic']),
+  prize_pool_total: z.number().nonnegative().optional(),
+});
 
 export async function POST(req: Request) {
   try {
-    const { month, mode, prize_pool_total } = await req.json();
-    const cookieStore = cookies();
-    const supabase = createServerClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, { cookies: { getAll() { return cookieStore.getAll() }, setAll() {} } });
-    
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user || user.app_metadata?.role !== 'admin') {
-      return NextResponse.json({ data: null, error: { message: 'Forbidden', code: '403' } }, { status: 403 });
+    const adminCheck = await requireAdminUser();
+    if ('response' in adminCheck) {
+      return adminCheck.response;
     }
 
-    const draw_number = crypto.randomInt(1, 46);
-    const seed = crypto.randomUUID();
+    const parsed = schema.safeParse(await req.json());
 
-    const adminSupabase = createServerClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, { cookies: { getAll() { return [] }, setAll() {} } });
-
-    const { data: subs } = await adminSupabase.from('subscriptions').select('user_id').eq('status', 'active');
-    const userIds = subs?.map(s => s.user_id) || [];
-    
-    const { data: allScores } = await adminSupabase.from('scores').select('user_id, value').in('user_id', userIds).order('submitted_at', { ascending: false });
-    
-    const userScores: Record<string, number[]> = {};
-    if (allScores) {
-      for (const s of allScores) {
-        if (!userScores[s.user_id]) userScores[s.user_id] = [];
-        if (userScores[s.user_id].length < 5) userScores[s.user_id].push(s.value);
-      }
+    if (!parsed.success) {
+      return drawError(422, parsed.error.issues[0]?.message ?? 'Invalid request', 'VALIDATION_ERROR');
     }
 
-    const snapshotUsers = userIds.map(uid => ({
-      user_id: uid,
-      scores: userScores[uid] || []
-    }));
+    const serviceSupabase = createServiceSupabase();
+    const { month, mode, prize_pool_total } = parsed.data;
 
-    const config = { users: snapshotUsers };
+    const { data: existingDraw, error: existingError } = await serviceSupabase
+      .from('draws')
+      .select('id')
+      .eq('month', month)
+      .limit(1)
+      .maybeSingle();
 
-    const { data, error } = await adminSupabase.from('draws').insert({
+    if (existingError) {
+      return drawError(500, existingError.message, 'DB_ERR');
+    }
+
+    if (existingDraw) {
+      return drawError(409, 'A draw already exists for this month', 'DUPLICATE_DRAW');
+    }
+
+    const { draw, config } = await createDraftDraw({
+      supabase: serviceSupabase,
       month,
       mode,
-      prize_pool_total,
-      draw_number,
-      seed,
-      config,
-      status: 'draft'
-    }).select().single();
+      prizePoolOverride: prize_pool_total,
+    });
 
-    if (error) return NextResponse.json({ data: null, error: { message: error.message, code: 'DB_ERR' } }, { status: 500 });
-    return NextResponse.json({ data, error: null });
-  } catch (err: any) {
-    return NextResponse.json({ data: null, error: { message: err.message, code: 'ERR' } }, { status: 500 });
+    return NextResponse.json({
+      data: {
+        draw_id: draw.id,
+        month: draw.month,
+        mode: draw.mode,
+        status: draw.status,
+        draw_number: draw.draw_number,
+        seed: draw.seed,
+        prize_pool_total: Number(draw.prize_pool_total ?? 0),
+        eligible_count: config.eligible_users.length,
+        rollover_amount: config.rollover_amount ?? 0,
+      },
+      error: null,
+    });
+  } catch (error) {
+    return drawError(
+      500,
+      error instanceof Error ? error.message : 'Failed to configure draw',
+      'ERR'
+    );
   }
 }
