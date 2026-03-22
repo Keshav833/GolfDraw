@@ -1,41 +1,47 @@
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Button } from '@/components/ui/button'
-import Link from 'next/link'
-import { resetPassword } from '../actions'
+'use client';
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { toast } from 'sonner';
+import { createBrowserClient } from '@supabase/ssr';
+import Link from 'next/link';
 
-export default function ForgotPasswordPage({ searchParams }: { searchParams: { error?: string, message?: string } }) {
+export default function ForgotPassword() {
+  const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
+  const supabase = createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
+
+  const handleReset = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
+    setLoading(false);
+    if (error) {
+      toast.error(error.message);
+    } else {
+      toast.success('Password reset link sent! Check your email.');
+    }
+  };
+
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-2xl">Reset Password</CardTitle>
-        <CardDescription>Enter your email and we'll send you a link to reset your password.</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form action={resetPassword} className="space-y-4">
-          {searchParams?.error && (
-            <div className="p-3 text-sm text-destructive bg-destructive/10 rounded-md">
-              {searchParams.error}
-            </div>
-          )}
-          {searchParams?.message && (
-            <div className="p-3 text-sm text-green-600 bg-green-500/10 rounded-md">
-              {searchParams.message}
-            </div>
-          )}
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input id="email" name="email" type="email" required placeholder="m@example.com" />
-          </div>
-          <Button type="submit" className="w-full">Send Reset Link</Button>
-        </form>
-      </CardContent>
-      <CardFooter className="flex justify-center border-t p-4">
-        <Link href="/login" className="text-sm text-primary hover:underline">
-          Back to login
-        </Link>
-      </CardFooter>
-    </Card>
-  )
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+       <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-lg border border-gray-100">
+         <div className="text-center">
+            <h2 className="text-3xl font-extrabold text-gray-900 font-serif">Reset Password</h2>
+            <p className="mt-2 text-sm text-gray-600">Enter your email and we'll send a reset link</p>
+         </div>
+         <form className="mt-8 space-y-6" onSubmit={handleReset}>
+           <Input type="email" placeholder="Email address" required value={email} onChange={e => setEmail(e.target.value)} />
+           <Button type="submit" className="w-full bg-green-800 hover:bg-green-700 text-white" disabled={loading}>
+             {loading ? 'Sending...' : 'Send Reset Link'}
+           </Button>
+         </form>
+         <div className="text-center text-sm mt-4">
+           <Link href="/login" className="text-green-700 hover:underline">Back to login</Link>
+         </div>
+       </div>
+    </div>
+  );
 }

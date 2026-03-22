@@ -1,6 +1,6 @@
--- Create Charities table
-CREATE TABLE public.charities (
-    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+npm i @supabase/ssr @supabase/supabase-js
+npx shadcn@latest add card input label select
+_uuid() PRIMARY KEY,
     name TEXT NOT NULL,
     description TEXT,
     categories TEXT[] DEFAULT '{}'::TEXT[],

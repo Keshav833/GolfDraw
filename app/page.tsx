@@ -62,10 +62,10 @@ export default function HomePage() {
         }
         .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
         .nav-logo-mark { 
-          width: 38px; height: 38px; 
+          width: 58px; height: 58px; 
           background: var(--bg); 
-          border-radius: 50%; 
-          box-shadow: var(--shadow-out-sm);
+          // border-radius: 50%; 
+          // box-shadow: var(--shadow-out-sm);
           display: flex; align-items: center; justify-content: center; flex-shrink: 0; 
         }
         .nav-logo-text { font-family: var(--font-display); font-size: 22px; color: var(--text-main); }
@@ -381,11 +381,8 @@ export default function HomePage() {
       <div className="landing-page">
         <nav className="nav">
           <a href="#" className="nav-logo">
-            <div className="nav-logo-mark">
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                <circle cx="9" cy="9" r="4" fill="var(--accent-light)"/>
-                <path d="M9 2.5v2M9 13.5v2M2.5 9h2M13.5 9h2" stroke="var(--accent-light)" strokeWidth="1.5" strokeLinecap="round"/>
-              </svg>
+            <div className="nav-logo-mark" style={{ overflow: 'hidden' }}>
+              <img src="/images/GolfDraw.png" alt="GolfDraw" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
             <span className="nav-logo-text">GolfDraw</span>
           </a>
@@ -397,7 +394,7 @@ export default function HomePage() {
           </ul>
           <div className="nav-actions">
             <a href="/login" className="btn btn-ghost">Sign in</a>
-            <a href="/register" className="btn btn-primary">Get started</a>
+            <a href="/login" className="btn btn-primary">Get started</a>
           </div>
         </nav>
 
@@ -416,7 +413,7 @@ export default function HomePage() {
               Track your golf scores, enter monthly prize draws, and automatically contribute to a charity you believe in — all with one subscription.
             </p>
             <div className="hero-actions animate-fade-up delay-3">
-              <a href="/register" className="btn btn-primary btn-large">Start playing — £9/mo</a>
+              <a href="/login" className="btn btn-primary btn-large">Start playing — £9/mo</a>
               <a href="#how-it-works" className="btn btn-ghost btn-large">See how it works</a>
             </div>
             <div className="trust-row animate-fade-up delay-4">
@@ -614,7 +611,7 @@ export default function HomePage() {
               <div className="plan-name">Monthly</div>
               <div className="plan-price"><sup>£</sup>9<sub> / month</sub></div>
               <div className="plan-desc">Billed monthly. Cancel anytime.</div>
-              <a href="/register" className="btn btn-ghost plan-btn">Get started</a>
+              <a href="/login" className="btn btn-ghost plan-btn">Get started</a>
               <div className="plan-features">
                 <div className="plan-feat">
                   <div className="feat-check"><svg width="10" height="8" viewBox="0 0 8 6" fill="none"><path d="M1 3l2 2 4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg></div>
@@ -635,7 +632,7 @@ export default function HomePage() {
               <div className="plan-name">Yearly</div>
               <div className="plan-price"><sup>£</sup>86<sub> / year</sub></div>
               <div className="plan-desc">That's £7.17/mo · billed annually.</div>
-              <a href="/register" className="btn btn-primary plan-btn">Get started</a>
+              <a href="/login" className="btn btn-primary plan-btn">Get started</a>
               <div className="plan-features">
                 <div className="plan-feat">
                   <div className="feat-check"><svg width="10" height="8" viewBox="0 0 8 6" fill="none"><path d="M1 3l2 2 4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg></div>
@@ -732,7 +729,7 @@ export default function HomePage() {
             <h2 className="cta-h2">Ready to play your first draw?</h2>
             <p className="cta-sub">Join 2,400+ golfers tracking scores, winning prizes, and giving back to causes they care about.</p>
             <div className="cta-actions">
-              <a href="/register" className="btn btn-primary btn-xl">Start for £9 / month</a>
+              <a href="/login" className="btn btn-primary btn-xl">Start for £9 / month</a>
               <button className="btn btn-ghost btn-xl">Learn more</button>
             </div>
             <p className="cta-note">No commitment · Cancel anytime · First draw entry immediate</p>
@@ -744,10 +741,8 @@ export default function HomePage() {
             <div className="footer-top">
               <div className="footer-brand">
                 <a href="#" className="nav-logo" style={{ textDecoration: 'none', display: 'inline-flex' }}>
-                  <div className="nav-logo-mark" style={{ width: '32px', height: '32px' }}>
-                    <svg width="16" height="16" viewBox="0 0 18 18" fill="none">
-                      <circle cx="9" cy="9" r="4" fill="var(--accent-dark)" />
-                    </svg>
+                  <div className="nav-logo-mark" style={{ width: '32px', height: '32px', overflow: 'hidden' }}>
+                    <img src="/images/GolfDraw.png" alt="GolfDraw" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                   </div>
                   <span className="nav-logo-text" style={{ fontSize: '18px' }}>GolfDraw</span>
                 </a>

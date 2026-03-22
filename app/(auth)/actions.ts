@@ -19,7 +19,7 @@ export async function login(formData: FormData) {
   }
 
   revalidatePath('/', 'layout')
-  redirect('/user/dashboard')
+  redirect('/dashboard')
 }
 
 export async function register(formData: FormData) {
@@ -56,7 +56,7 @@ export async function register(formData: FormData) {
   }
 
   revalidatePath('/', 'layout')
-  redirect('/user/dashboard')
+  redirect('/register/charity')
 }
 
 export async function resetPassword(formData: FormData) {
