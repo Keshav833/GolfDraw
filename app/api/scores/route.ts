@@ -1,28 +1,143 @@
 import { NextResponse } from 'next/server';
+import { z } from 'zod';
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
+import type { ScoreApiResponse } from '@/lib/types/score';
+
+const scoreSchema = z.object({
+  value: z.preprocess(
+    (value) => {
+      if (value === '' || value === null || value === undefined) {
+        return undefined;
+      }
+
+      if (typeof value === 'string') {
+        const trimmed = value.trim();
+
+        if (!trimmed) {
+          return undefined;
+        }
+
+        const parsed = Number(trimmed);
+        return Number.isNaN(parsed) ? value : parsed;
+      }
+
+      if (typeof value === 'number' && Number.isNaN(value)) {
+        return undefined;
+      }
+
+      return value;
+    },
+    z
+      .number({
+        required_error: 'Score must be a whole number',
+        invalid_type_error: 'Score must be a whole number',
+      })
+      .int('Score must be a whole number')
+      .min(1, 'Score must be at least 1')
+      .max(45, 'Score cannot exceed 45')
+  ),
+});
+
+function jsonResponse(body: ScoreApiResponse, status: number) {
+  return NextResponse.json(body, { status });
+}
+
+function createSupabaseServerClient() {
+  const cookieStore = cookies();
+
+  return createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return cookieStore.getAll();
+        },
+        setAll() {},
+      },
+    }
+  );
+}
+
+export async function GET() {
+  try {
+    const supabase = createSupabaseServerClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      return jsonResponse({ data: null, error: { message: 'Unauthorized', code: '401' } }, 401);
+    }
+
+    const { data, error } = await supabase
+      .from('scores')
+      .select('id, user_id, value, submitted_at')
+      .eq('user_id', user.id)
+      .order('submitted_at', { ascending: false })
+      .limit(5);
+
+    if (error) {
+      return jsonResponse({ data: null, error: { message: error.message, code: 'DB_ERR' } }, 500);
+    }
+
+    return jsonResponse({ data: { scores: data ?? [] }, error: null }, 200);
+  } catch (err: any) {
+    return jsonResponse(
+      { data: null, error: { message: err.message || 'Server error', code: 'ERR' } },
+      500
+    );
+  }
+}
 
 export async function POST(req: Request) {
   try {
-    const { value } = await req.json();
-    const cookieStore = cookies();
-    const supabase = createServerClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, { cookies: { getAll() { return cookieStore.getAll() }, setAll() {} } });
-    
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return NextResponse.json({ data: null, error: { message: 'Unauthorized', code: '401' } }, { status: 401 });
+    const supabase = createSupabaseServerClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
 
-    const val = parseInt(value);
-    if (isNaN(val) || val < 1 || val > 45) {
-      return NextResponse.json({ data: null, error: { message: 'Invalid score', code: '400' } }, { status: 400 });
+    if (!user) {
+      return jsonResponse({ data: null, error: { message: 'Unauthorized', code: '401' } }, 401);
     }
 
-    const { error } = await supabase.from('scores').insert({ user_id: user.id, value: val });
-    if (error) return NextResponse.json({ data: null, error: { message: error.message, code: 'DB_ERR' } }, { status: 500 });
+    const rawBody = await req.json();
+    const parsed = scoreSchema.safeParse(rawBody);
 
-    const { data } = await supabase.from('scores').select('*').eq('user_id', user.id).order('submitted_at', { ascending: false }).limit(5);
+    if (!parsed.success) {
+      const message = parsed.error.issues.map((issue) => issue.message).join(', ');
+      return jsonResponse({ data: null, error: { message, code: 'VALIDATION_ERR' } }, 422);
+    }
 
-    return NextResponse.json({ data, error: null });
+    const { error: insertError } = await supabase.from('scores').insert({
+      user_id: user.id,
+      value: parsed.data.value,
+    });
+
+    if (insertError) {
+      return jsonResponse(
+        { data: null, error: { message: insertError.message, code: 'DB_ERR' } },
+        500
+      );
+    }
+
+    const { data, error } = await supabase
+      .from('scores')
+      .select('id, user_id, value, submitted_at')
+      .eq('user_id', user.id)
+      .order('submitted_at', { ascending: false })
+      .limit(5);
+
+    if (error) {
+      return jsonResponse({ data: null, error: { message: error.message, code: 'DB_ERR' } }, 500);
+    }
+
+    return jsonResponse({ data: { scores: data ?? [] }, error: null }, 201);
   } catch (err: any) {
-    return NextResponse.json({ data: null, error: { message: err.message, code: 'ERR' } }, { status: 500 });
+    return jsonResponse(
+      { data: null, error: { message: err.message || 'Server error', code: 'ERR' } },
+      500
+    );
   }
 }

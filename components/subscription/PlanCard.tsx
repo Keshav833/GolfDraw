@@ -1,5 +1,12 @@
 import React from 'react';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Check } from 'lucide-react';
 
@@ -20,7 +27,7 @@ export function PlanCard({
   breakdown,
   featured,
   onSelect,
-  isLoading
+  isLoading,
 }: PlanCardProps) {
   return (
     <Card
@@ -33,15 +40,17 @@ export function PlanCard({
     >
       <div
         className="absolute inset-x-0 top-0 h-1.5"
-        style={{ background: featured ? 'linear-gradient(90deg, #2d8c55, #7de0aa)' : 'rgba(58,166,96,0.18)' }}
+        style={{
+          background: featured ? 'linear-gradient(90deg, #2d8c55, #7de0aa)' : 'rgba(58,166,96,0.18)',
+        }}
       />
-      {featured && (
+      {featured ? (
         <div className="absolute right-0 top-0 translate-x-2 -translate-y-3 transform">
           <span className="rounded-full bg-green-600 px-3 py-1 text-xs font-bold uppercase tracking-wide text-white">
             Best Value
           </span>
         </div>
-      )}
+      ) : null}
       <CardHeader className="pb-4">
         <CardTitle className="capitalize text-2xl">{plan}</CardTitle>
         <CardDescription>
@@ -60,10 +69,10 @@ export function PlanCard({
           </div>
         ) : null}
         <ul className="mt-auto space-y-3 text-sm text-gray-600">
-          {features.map((f, i) => (
-            <li key={i} className="flex items-center gap-2">
+          {features.map((feature, index) => (
+            <li key={index} className="flex items-center gap-2">
               <Check className="h-4 w-4 flex-shrink-0 text-green-600" />
-              <span>{f}</span>
+              <span>{feature}</span>
             </li>
           ))}
         </ul>

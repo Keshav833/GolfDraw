@@ -1,33 +1,166 @@
 import { NextResponse } from 'next/server';
-import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
+import { createServerClient } from '@supabase/ssr';
+import { z } from 'zod';
+import { CONTRIBUTION_OPTIONS, type Charity } from '@/lib/types/charity';
+
+type UserCharityGetResponse = {
+  data: { charity: Charity | null; pct: number } | null;
+  error: { message: string; code?: string } | null;
+};
+
+type UserCharityPatchResponse = {
+  data: { charity_id: string | null; charity_contribution_pct: number } | null;
+  error: { message: string; code?: string } | null;
+};
+
+const patchSchema = z.object({
+  charity_id: z.string().uuid(),
+  charity_contribution_pct: z
+    .number()
+    .int()
+    .refine((value) => CONTRIBUTION_OPTIONS.includes(value as (typeof CONTRIBUTION_OPTIONS)[number]), {
+      message: 'Must be 10, 15, or 30',
+    })
+    .optional(),
+});
+
+function createSupabaseServerClient() {
+  const cookieStore = cookies();
+
+  return createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return cookieStore.getAll();
+        },
+        setAll() {},
+      },
+    }
+  );
+}
+
+function jsonResponse<T extends UserCharityGetResponse | UserCharityPatchResponse>(
+  body: T,
+  status: number
+) {
+  return NextResponse.json(body, { status });
+}
+
+export async function GET() {
+  try {
+    const supabase = createSupabaseServerClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      return jsonResponse({ data: null, error: { message: 'Unauthorized', code: '401' } }, 401);
+    }
+
+    const { data, error } = await supabase
+      .from('users')
+      .select(
+        'charity_id, charity_contribution_pct, charities(id, name, description, category, country, is_active, created_at)'
+      )
+      .eq('id', user.id)
+      .single();
+
+    if (error) {
+      return jsonResponse(
+        { data: null, error: { message: error.message, code: 'DB_ERR' } },
+        500
+      );
+    }
+
+    return jsonResponse(
+      {
+        data: {
+          charity: firstCharity(data?.charities),
+          pct: Number(data?.charity_contribution_pct ?? 0),
+        },
+        error: null,
+      },
+      200
+    );
+  } catch (error: any) {
+    return jsonResponse(
+      { data: null, error: { message: error.message ?? 'Server error', code: 'ERR' } },
+      500
+    );
+  }
+}
+
+function firstCharity(value: Charity | Charity[] | null | undefined) {
+  if (!value) {
+    return null;
+  }
+
+  return Array.isArray(value) ? value[0] ?? null : value;
+}
 
 export async function PATCH(req: Request) {
   try {
-    const { charity_id, charity_contribution_pct } = await req.json();
-    const cookieStore = cookies();
-    const supabase = createServerClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, { cookies: { getAll() { return cookieStore.getAll() }, setAll() {} } });
-    
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return NextResponse.json({ data: null, error: { message: 'Unauthorized', code: '401' } }, { status: 401 });
+    const supabase = createSupabaseServerClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
 
-    const allowedPcts = new Set([10, 15, 30]);
-    const parsedPct = Number(charity_contribution_pct);
-    const pct = parsedPct === 0 ? 0 : allowedPcts.has(parsedPct) ? parsedPct : 0;
-    const updates: { charity_contribution_pct: number; charity_id?: string | null } = {
-      charity_contribution_pct: pct
-    };
-
-    if (typeof charity_id !== 'undefined') {
-      updates.charity_id =
-        typeof charity_id === 'string' && charity_id.trim().length > 0 ? charity_id : null;
+    if (!user) {
+      return jsonResponse({ data: null, error: { message: 'Unauthorized', code: '401' } }, 401);
     }
 
-    const { data, error } = await supabase.from('users').update(updates).eq('id', user.id).select().single();
+    const rawBody = await req.json();
+    const parsedBody = patchSchema.safeParse(rawBody);
 
-    if (error) return NextResponse.json({ data: null, error: { message: error.message, code: 'DB_ERR' } }, { status: 500 });
-    return NextResponse.json({ data, error: null });
-  } catch (err: any) {
-    return NextResponse.json({ data: null, error: { message: err.message, code: 'ERR' } }, { status: 500 });
+    if (!parsedBody.success) {
+      return jsonResponse(
+        {
+          data: null,
+          error: {
+            message: parsedBody.error.issues.map((issue) => issue.message).join(', '),
+            code: 'VALIDATION_ERR',
+          },
+        },
+        422
+      );
+    }
+
+    const updateValues = {
+      charity_id: parsedBody.data.charity_id,
+      charity_contribution_pct: parsedBody.data.charity_contribution_pct,
+    };
+
+    const { data, error } = await supabase
+      .from('users')
+      .update(updateValues)
+      .eq('id', user.id)
+      .select('charity_id, charity_contribution_pct')
+      .single();
+
+    if (error) {
+      return jsonResponse(
+        { data: null, error: { message: error.message, code: 'DB_ERR' } },
+        500
+      );
+    }
+
+    return jsonResponse(
+      {
+        data: {
+          charity_id: data?.charity_id ?? null,
+          charity_contribution_pct: Number(data?.charity_contribution_pct ?? 0),
+        },
+        error: null,
+      },
+      200
+    );
+  } catch (error: any) {
+    return jsonResponse(
+      { data: null, error: { message: error.message ?? 'Server error', code: 'ERR' } },
+      500
+    );
   }
 }

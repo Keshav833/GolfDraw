@@ -1,4 +1,4 @@
-![alt text](image.png)
+![alt text](public/images/image.png)
 # ⛳ GolfDraw — Golf Performance, Prizes & Charity Platform
 
 A subscription-based web platform combining golf score tracking, monthly prize draws, and charitable giving. Built with Next.js, Supabase, and Stripe.

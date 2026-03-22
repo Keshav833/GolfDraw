@@ -1,8 +1,9 @@
 'use client';
+
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { PlanCard } from '@/components/subscription/PlanCard';
 import { toast } from 'sonner';
+import { PlanCard } from '@/components/subscription/PlanCard';
 
 export default function RegisterPlan() {
   const router = useRouter();
@@ -13,15 +14,17 @@ export default function RegisterPlan() {
     email: string;
     password: string;
   } | null>(null);
-  const queryPct = Number(searchParams.get('charity_pct') ?? '');
+
+  const queryPct = Number(searchParams.get('charity_pct') ?? '0');
   const charityPct = Number.isFinite(queryPct) && queryPct >= 0 ? queryPct : 0;
-  const monthlyCharityAmount = 9 * (charityPct / 100);
+  const monthlyCharityAmount = (9 * charityPct) / 100;
   const monthlyPrizePoolAmount = 9 - monthlyCharityAmount;
-  const yearlyCharityAmount = 86 * (charityPct / 100);
+  const yearlyCharityAmount = (86 * charityPct) / 100;
   const yearlyPrizePoolAmount = 86 - yearlyCharityAmount;
 
   useEffect(() => {
     const pending = sessionStorage.getItem('pending_registration');
+
     if (!pending) {
       router.replace('/register');
       return;
@@ -43,6 +46,7 @@ export default function RegisterPlan() {
     }
 
     setLoading(planType);
+
     try {
       const res = await fetch('/api/auth/register', {
         method: 'POST',
@@ -50,18 +54,20 @@ export default function RegisterPlan() {
         body: JSON.stringify({
           ...pendingRegistration,
           charity_contribution_pct: charityPct,
-          plan_type: planType
+          plan_type: planType,
         }),
       });
+
       const json = await res.json();
 
-      if (json.error || !json.data) {
+      if (!res.ok || json.error || !json.data) {
         throw new Error(json.error?.message || 'Failed to activate plan');
       }
+
       sessionStorage.removeItem('pending_registration');
       router.push('/dashboard?account_created=1');
-    } catch (err: any) {
-      toast.error(err.message);
+    } catch (error: any) {
+      toast.error(error.message);
       setLoading(null);
     }
   };
@@ -82,7 +88,7 @@ export default function RegisterPlan() {
     >
       <div className="mx-auto max-w-6xl space-y-8">
         <div
-          className="overflow-hidden rounded-[32px] border border-white/60 p-8 sm:p-10"
+          className="rounded-[32px] border border-white/60 p-8 sm:p-10"
           style={{
             background:
               'radial-gradient(circle at top right, rgba(234,179,8,0.18), transparent 28%), radial-gradient(circle at top left, rgba(125,224,170,0.28), transparent 32%), linear-gradient(145deg, rgba(255,255,255,0.78), rgba(224,229,236,0.94))',
@@ -100,7 +106,8 @@ export default function RegisterPlan() {
               Choose your plan
             </h2>
             <p className="mt-4 text-base sm:text-lg" style={{ color: 'var(--text-muted)' }}>
-              Activate your subscription, lock in your charity split, and head straight to the dashboard.
+              Your selected charity percentage is shown below so the subscription split stays clear
+              before you continue.
             </p>
           </div>
 
@@ -115,29 +122,30 @@ export default function RegisterPlan() {
               <h3 className="text-lg font-bold text-gray-900">
                 {charityPct > 0 ? 'Your charity contribution' : 'No charity contribution selected'}
               </h3>
-              {charityPct > 0 ? (
-                <>
-                  <p className="mt-2 text-sm text-gray-600">
-                    {charityPct}% of your subscription is reserved for charity. You can choose a specific organisation later
-                    from your dashboard.
+              <p className="mt-2 text-sm text-gray-600">
+                {charityPct > 0
+                  ? `You reserved ${charityPct}% for charity. You will choose the actual organisation on your dashboard after signup.`
+                  : 'You skipped charity for now, so the full monthly amount goes into the prize pool until you change it later.'}
+              </p>
+
+              <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div className="rounded-2xl bg-green-50 p-4">
+                  <p className="text-xs font-bold uppercase tracking-[0.2em] text-green-700">
+                    Monthly to charity
                   </p>
-                  <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
-                    <div className="rounded-2xl bg-green-50 p-4">
-                      <p className="text-xs font-bold uppercase tracking-[0.2em] text-green-700">Monthly to Charity</p>
-                      <p className="mt-2 text-3xl font-extrabold text-green-800">£{monthlyCharityAmount.toFixed(2)}</p>
-                    </div>
-                    <div className="rounded-2xl bg-amber-50 p-4">
-                      <p className="text-xs font-bold uppercase tracking-[0.2em] text-amber-700">Monthly to Prize Pool</p>
-                      <p className="mt-2 text-3xl font-extrabold text-amber-800">£{monthlyPrizePoolAmount.toFixed(2)}</p>
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <p className="mt-2 text-sm text-gray-600">
-                  You are still fully eligible for the monthly draw. With no charity contribution selected, the full £9 goes
-                  into the prize pool.
-                </p>
-              )}
+                  <p className="mt-2 text-3xl font-extrabold text-green-800">
+                    £{monthlyCharityAmount.toFixed(2)}
+                  </p>
+                </div>
+                <div className="rounded-2xl bg-amber-50 p-4">
+                  <p className="text-xs font-bold uppercase tracking-[0.2em] text-amber-700">
+                    Monthly to prize pool
+                  </p>
+                  <p className="mt-2 text-3xl font-extrabold text-amber-800">
+                    £{monthlyPrizePoolAmount.toFixed(2)}
+                  </p>
+                </div>
+              </div>
             </div>
 
             <div
@@ -147,18 +155,20 @@ export default function RegisterPlan() {
                 boxShadow: 'var(--shadow-hover)',
               }}
             >
-              <p className="text-xs font-bold uppercase tracking-[0.22em] text-green-100">Why It Matters</p>
+              <p className="text-xs font-bold uppercase tracking-[0.22em] text-green-100">
+                Why it matters
+              </p>
               <h3 className="mt-3 text-2xl font-extrabold text-white" style={{ fontFamily: 'var(--font-display)' }}>
                 Transparent from the start
               </h3>
               <p className="mt-4 text-sm leading-6 text-green-50">
-                Your prize pool contribution is the amount left after your charity percentage is reserved. Higher charity
-                giving means a smaller jackpot contribution, by design.
+                The prize pool gets what remains after your charity percentage is set aside. That
+                makes the split visible before you commit.
               </p>
               <div className="mt-6 rounded-2xl bg-white/10 p-4 text-sm text-green-50">
                 <p className="font-semibold">Prize pool grows with every subscriber.</p>
                 <p className="mt-2 text-green-100">
-                  The monthly jackpot is built from actual prize-pool contributions, not raw subscription revenue.
+                  Monthly jackpots are built from actual prize-pool contributions, not raw revenue.
                 </p>
               </div>
             </div>
@@ -181,14 +191,14 @@ export default function RegisterPlan() {
                   ? [
                       `£${monthlyPrizePoolAmount.toFixed(2)} -> prize pool`,
                       `£${monthlyCharityAmount.toFixed(2)} -> charity (${charityPct}%)`,
-                      "You're in every monthly draw",
+                      'Cancel anytime',
                     ]
-                  : ['£9.00 -> prize pool', '£0.00 -> charity', "You're in every monthly draw"]
+                  : ['£9.00 -> prize pool', 'Cancel anytime']
               }
               features={[
-                'Transparent monthly breakdown',
-                charityPct > 0 ? `${charityPct}% donation setting saved` : 'No charity contribution selected',
-                'Cancel anytime',
+                'Entered into every monthly draw',
+                charityPct > 0 ? `${charityPct}% reserved for charity` : 'Full amount to prize pool',
+                'Pick your charity after signup',
               ]}
               onSelect={() => handleSelectPlan('monthly')}
               isLoading={loading === 'monthly'}
@@ -201,13 +211,13 @@ export default function RegisterPlan() {
                   ? [
                       `£${yearlyPrizePoolAmount.toFixed(2)} -> prize pool / year`,
                       `£${yearlyCharityAmount.toFixed(2)} -> charity / year (${charityPct}%)`,
-                      "You're in every monthly draw",
+                      'Cancel anytime',
                     ]
-                  : ['£86.00 -> prize pool / year', '£0.00 -> charity / year', "You're in every monthly draw"]
+                  : ['£86.00 -> prize pool / year', 'Cancel anytime']
               }
               features={[
-                'Transparent yearly breakdown',
-                charityPct > 0 ? `${charityPct}% donation setting saved` : 'No charity contribution selected',
+                'Entered into every monthly draw',
+                charityPct > 0 ? `${charityPct}% reserved for charity` : 'Full amount to prize pool',
                 '2 months free (£22 savings)',
               ]}
               featured

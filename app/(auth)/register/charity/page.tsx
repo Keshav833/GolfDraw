@@ -1,10 +1,15 @@
 'use client';
+
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { toast } from 'sonner';
+import { CONTRIBUTION_OPTIONS } from '@/lib/types/charity';
 
-const options = [10, 15, 30];
+const optionLabels: Record<(typeof CONTRIBUTION_OPTIONS)[number], string> = {
+  10: 'A great start',
+  15: 'Most popular',
+  30: 'Generous giver',
+};
 
 export default function RegisterCharity() {
   const router = useRouter();
@@ -13,66 +18,54 @@ export default function RegisterCharity() {
 
   useEffect(() => {
     const pendingRegistration = sessionStorage.getItem('pending_registration');
+
     if (!pendingRegistration) {
       router.replace('/register');
     }
   }, [router]);
 
-  const saveAndContinue = async (pct: number) => {
+  const handleContinue = (pct: number) => {
     setSaving(true);
     router.push(`/register/plan?charity_pct=${pct}`);
-  };
-
-  const handleSkip = async () => {
-    await saveAndContinue(0);
-  };
-
-  const handleContinue = async () => {
-    if (!selectedPct) {
-      toast.error('Please choose a percentage or skip for now');
-      return;
-    }
-
-    await saveAndContinue(selectedPct);
   };
 
   return (
     <div
       className="min-h-screen px-4 py-10 sm:px-6 lg:px-8"
       style={{
-        width: 'min(1120px, calc(100vw - 32px))',
+        width: 'min(1080px, calc(100vw - 32px))',
         position: 'relative',
         left: '50%',
         transform: 'translateX(-50%)',
       }}
     >
-      <div className="mx-auto max-w-4xl space-y-8">
+      <div className="mx-auto max-w-5xl space-y-8">
         <div
-          className="overflow-hidden rounded-[32px] border border-white/60 p-8 sm:p-10"
+          className="rounded-[32px] border border-white/60 p-8 sm:p-10"
           style={{
             background:
-              'radial-gradient(circle at top left, rgba(125,224,170,0.38), transparent 32%), linear-gradient(145deg, rgba(255,255,255,0.78), rgba(224,229,236,0.92))',
+              'radial-gradient(circle at top left, rgba(125,224,170,0.34), transparent 32%), linear-gradient(145deg, rgba(255,255,255,0.8), rgba(224,229,236,0.94))',
             boxShadow: 'var(--shadow-out)',
           }}
         >
-          <div className="mx-auto max-w-2xl text-center">
+          <div className="mx-auto max-w-3xl text-center">
             <p className="text-sm font-bold uppercase tracking-[0.28em]" style={{ color: 'var(--accent-dark)' }}>
               Step 2 of 3
             </p>
-            <h2
+            <h1
               className="mt-4 text-4xl font-extrabold sm:text-5xl"
               style={{ fontFamily: 'var(--font-display)', color: 'var(--text-main)' }}
             >
               Give a little back
-            </h2>
+            </h1>
             <p className="mt-4 text-base sm:text-lg" style={{ color: 'var(--text-muted)' }}>
-              Choose how much of your subscription goes to charity each month. You can pick a specific
-              organisation later from your dashboard.
+              Choose how much of your subscription goes to charity each month. You can pick your
+              charity after signing up.
             </p>
           </div>
 
-          <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
-            {options.map((pct) => (
+          <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-3">
+            {CONTRIBUTION_OPTIONS.map((pct) => (
               <button
                 key={pct}
                 type="button"
@@ -88,76 +81,47 @@ export default function RegisterCharity() {
                   color: selectedPct === pct ? '#ffffff' : 'var(--text-main)',
                 }}
               >
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <div className="text-3xl font-extrabold">{pct}%</div>
-                    <div
-                      className="mt-2 text-sm"
-                      style={{ color: selectedPct === pct ? 'rgba(240,255,247,0.88)' : 'var(--text-muted)' }}
-                    >
-                      £{((9 * pct) / 100).toFixed(2)}/mo
-                    </div>
-                  </div>
-                  <div
-                    className="rounded-full px-3 py-1 text-[11px] font-bold uppercase tracking-[0.2em]"
-                    style={{
-                      background: selectedPct === pct ? 'rgba(255,255,255,0.16)' : 'rgba(58,166,96,0.12)',
-                      color: selectedPct === pct ? '#ffffff' : 'var(--accent-dark)',
-                    }}
-                  >
-                    {pct === 15 ? 'Popular' : pct === 30 ? 'Maximum' : 'Starter'}
-                  </div>
-                </div>
+                <div className="text-4xl font-extrabold">{pct}%</div>
                 <p
-                  className="mt-8 text-sm leading-6"
+                  className="mt-3 text-base font-medium"
                   style={{ color: selectedPct === pct ? 'rgba(240,255,247,0.92)' : 'var(--text-muted)' }}
                 >
-                  {pct === 10
-                    ? 'Keeps most of your payment in the prize pool while still making a monthly contribution.'
-                    : pct === 15
-                      ? 'Balanced giving. A clear contribution without shrinking the prize pool too aggressively.'
-                      : 'Highest giving level for members who want a larger share of each subscription reserved for charity.'}
+                  £{((9 * pct) / 100).toFixed(2)} per month
+                </p>
+                <p
+                  className="mt-8 text-sm font-semibold uppercase tracking-[0.22em]"
+                  style={{ color: selectedPct === pct ? '#ffffff' : 'var(--accent-dark)' }}
+                >
+                  {optionLabels[pct]}
                 </p>
               </button>
             ))}
           </div>
 
-          <div className="mt-8 rounded-[24px] px-6 py-5" style={{ boxShadow: 'var(--shadow-in-sm)' }}>
-            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <p className="text-xs font-bold uppercase tracking-[0.22em]" style={{ color: 'var(--accent-dark)' }}>
-                  Current Selection
-                </p>
-                <p className="mt-2 text-lg font-semibold" style={{ color: 'var(--text-main)' }}>
-                  {selectedPct ? `${selectedPct}% reserved for charity` : 'No charity contribution selected yet'}
-                </p>
-              </div>
-              <p className="text-sm sm:text-right" style={{ color: 'var(--text-muted)' }}>
-                {selectedPct
-                  ? `£${(9 - (9 * selectedPct) / 100).toFixed(2)} goes to the prize pool each month.`
-                  : 'Skip for now if you want the full £9 to go to the prize pool.'}
-              </p>
-            </div>
+          <div className="mt-8 text-center">
+            <button
+              type="button"
+              onClick={() => handleContinue(0)}
+              disabled={saving}
+              className="text-sm font-medium text-gray-600 underline-offset-4 hover:text-gray-900 hover:underline"
+            >
+              Skip for now — I&apos;ll decide later
+            </button>
           </div>
         </div>
 
-        <div className="mx-auto flex max-w-3xl flex-col justify-center gap-4 sm:flex-row">
+        <div className="flex justify-center">
           <Button
-            onClick={handleSkip}
             size="lg"
-            variant="outline"
+            onClick={() => handleContinue(selectedPct ?? 0)}
             disabled={saving}
-            className="min-w-[180px] border-white/50 bg-white/60"
+            className="min-w-[240px] bg-green-800 text-white hover:bg-green-700"
           >
-            Skip for now
-          </Button>
-          <Button
-            onClick={handleContinue}
-            size="lg"
-            disabled={!selectedPct || saving}
-            className="min-w-[220px] bg-green-800 text-white hover:bg-green-700"
-          >
-            {saving ? 'Saving...' : 'Continue to Plan'}
+            {saving
+              ? 'Continuing...'
+              : selectedPct
+                ? `Continue with ${selectedPct}%`
+                : 'Continue'}
           </Button>
         </div>
       </div>

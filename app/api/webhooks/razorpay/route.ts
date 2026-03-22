@@ -1,7 +1,11 @@
-import { NextResponse } from 'next/server';
-import { createServerClient } from '@supabase/ssr';
+import { format } from 'date-fns';
+import { createClient } from '@supabase/supabase-js';
 import { verifyWebhookSignature } from '@/lib/razorpay/verify';
 import { sendWelcomeEmail } from '@/lib/email/templates';
+
+function createAdminClient() {
+  return createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
+}
 
 export async function POST(req: Request) {
   try {
@@ -9,81 +13,165 @@ export async function POST(req: Request) {
     const signature = req.headers.get('x-razorpay-signature');
 
     if (!verifyWebhookSignature(body, signature)) {
-       return new Response('Invalid signature', { status: 400 });
+      return new Response('Invalid signature', { status: 400 });
     }
 
     const event = JSON.parse(body);
-    
-    const supabase = createServerClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, { cookies: { getAll() { return [] }, setAll() {} } });
+    const supabase = createAdminClient();
 
-    // Process entirely async to unblock razorpay
     (async () => {
       try {
         if (event.event === 'subscription.activated') {
-          const sub = event.payload.subscription.entity;
-          const user_id = sub.notes?.user_id;
-          
-          if (!user_id) return;
+          const subscriptionEntity = event.payload.subscription.entity;
+          const userId = subscriptionEntity.notes?.user_id;
 
-          // UPSERT subscription
-          const { data: subRecord } = await supabase.from('subscriptions').upsert({
-            user_id,
-            razorpay_subscription_id: sub.id,
-            plan_type: sub.notes?.plan_type || 'monthly',
-            status: 'active'
-          }, { onConflict: 'razorpay_subscription_id' }).select().single();
+          if (!userId) {
+            return;
+          }
 
-          await supabase.from('users').update({ subscription_status: 'active' }).eq('id', user_id);
+          const planType = subscriptionEntity.notes?.plan_type === 'yearly' ? 'yearly' : 'monthly';
+          const currentMonth = format(new Date(), 'yyyy-MM');
 
-          // Get user details for charity & email
-          const { data: userRecord } = await supabase.from('users').select('*').eq('id', user_id).single();
+          const { data: subscriptionRecord } = await supabase
+            .from('subscriptions')
+            .upsert(
+              {
+                user_id: userId,
+                razorpay_subscription_id: subscriptionEntity.id,
+                plan_type: planType,
+                status: 'active',
+              },
+              { onConflict: 'razorpay_subscription_id' }
+            )
+            .select()
+            .single();
 
-          if (userRecord && subRecord) {
-            // Log ledger contribution (simulate amount ~£9 for monthly)
-            const amt = sub.notes?.plan_type === 'yearly' ? 86 : 9;
-            const charityPct = Number(userRecord.charity_contribution_pct) || 0;
-            const prizePoolAmount = amt * (1 - charityPct / 100);
+          await supabase.from('users').update({ subscription_status: 'active' }).eq('id', userId);
+
+          const { data: userRecord } = await supabase
+            .from('users')
+            .select('email, full_name, charity_contribution_pct, charity_id')
+            .eq('id', userId)
+            .single();
+
+          if (subscriptionRecord && userRecord) {
+            const total = planType === 'yearly' ? 86 : 9;
+            const pct = Number(userRecord.charity_contribution_pct ?? 0);
+            const charityAmount = total * (pct / 100);
+            const prizePoolAmount = total - charityAmount;
+
             await supabase.from('prize_pool_ledger').insert({
-              subscription_id: subRecord.id,
+              subscription_id: subscriptionRecord.id,
               amount: prizePoolAmount,
               type: 'contribution',
-              period: new Date().toISOString().substring(0, 7)
+              period: currentMonth,
             });
+
+            if (pct > 0) {
+              await supabase.from('charity_allocations').insert({
+                user_id: userId,
+                charity_id: userRecord.charity_id,
+                amount: charityAmount,
+                period: currentMonth,
+              });
+            }
 
             await sendWelcomeEmail(userRecord.email, userRecord.full_name || 'Golfer');
           }
-
         } else if (event.event === 'subscription.charged') {
-          const sub = event.payload.subscription.entity;
-          const user_id = sub.notes?.user_id;
+          const subscriptionEntity = event.payload.subscription.entity;
+          const userId = subscriptionEntity.notes?.user_id;
 
-          if (user_id) {
-            await supabase.from('subscriptions').update({
-              current_period_end: new Date(sub.current_end * 1000).toISOString()
-            }).eq('razorpay_subscription_id', sub.id);
+          await supabase
+            .from('subscriptions')
+            .update({
+              current_period_end: new Date(subscriptionEntity.current_end * 1000).toISOString(),
+            })
+            .eq('razorpay_subscription_id', subscriptionEntity.id);
+
+          if (userId) {
+            const { data: subscriptionRecord } = await supabase
+              .from('subscriptions')
+              .select('id, plan_type')
+              .eq('razorpay_subscription_id', subscriptionEntity.id)
+              .single();
+
+            const { data: userRecord } = await supabase
+              .from('users')
+              .select('charity_contribution_pct, charity_id')
+              .eq('id', userId)
+              .single();
+
+            if (subscriptionRecord && userRecord) {
+              const currentMonth = format(new Date(), 'yyyy-MM');
+              const total = subscriptionRecord.plan_type === 'yearly' ? 86 : 9;
+              const pct = Number(userRecord.charity_contribution_pct ?? 0);
+              const charityAmount = total * (pct / 100);
+              const prizePoolAmount = total - charityAmount;
+
+              await supabase.from('prize_pool_ledger').insert({
+                subscription_id: subscriptionRecord.id,
+                amount: prizePoolAmount,
+                type: 'contribution',
+                period: currentMonth,
+              });
+
+              if (pct > 0) {
+                await supabase.from('charity_allocations').insert({
+                  user_id: userId,
+                  charity_id: userRecord.charity_id,
+                  amount: charityAmount,
+                  period: currentMonth,
+                });
+              }
+            }
           }
         } else if (event.event === 'subscription.cancelled') {
-           const sub = event.payload.subscription.entity;
-           await supabase.from('subscriptions').update({ status: 'cancelled', cancelled_at: new Date().toISOString() }).eq('razorpay_subscription_id', sub.id);
-           if (sub.notes?.user_id) {
-             await supabase.from('users').update({ subscription_status: 'cancelled' }).eq('id', sub.notes.user_id);
-           }
+          const subscriptionEntity = event.payload.subscription.entity;
+
+          await supabase
+            .from('subscriptions')
+            .update({ status: 'cancelled', cancelled_at: new Date().toISOString() })
+            .eq('razorpay_subscription_id', subscriptionEntity.id);
+
+          if (subscriptionEntity.notes?.user_id) {
+            await supabase
+              .from('users')
+              .update({ subscription_status: 'cancelled' })
+              .eq('id', subscriptionEntity.notes.user_id);
+          }
         } else if (event.event === 'subscription.halted') {
-           const sub = event.payload.subscription.entity;
-           await supabase.from('subscriptions').update({ status: 'inactive' }).eq('razorpay_subscription_id', sub.id);
-           if (sub.notes?.user_id) {
-             await supabase.from('users').update({ subscription_status: 'inactive' }).eq('id', sub.notes.user_id);
-           }
+          const subscriptionEntity = event.payload.subscription.entity;
+
+          await supabase
+            .from('subscriptions')
+            .update({ status: 'inactive' })
+            .eq('razorpay_subscription_id', subscriptionEntity.id);
+
+          if (subscriptionEntity.notes?.user_id) {
+            await supabase
+              .from('users')
+              .update({ subscription_status: 'inactive' })
+              .eq('id', subscriptionEntity.notes.user_id);
+          }
         } else if (event.event === 'payment.failed') {
-           // We could mark it past due, but let razorpay retry logic handle it or just update sync
+          const paymentEntity = event.payload.payment?.entity;
+          const subscriptionId = paymentEntity?.subscription_id;
+
+          if (subscriptionId) {
+            await supabase
+              .from('subscriptions')
+              .update({ status: 'past_due' })
+              .eq('razorpay_subscription_id', subscriptionId);
+          }
         }
-      } catch (err) {
-        console.error("Webhook processing error", err);
+      } catch (error) {
+        console.error('Webhook processing error', error);
       }
     })();
 
     return new Response('OK', { status: 200 });
-  } catch (err: any) {
+  } catch {
     return new Response('Error', { status: 500 });
   }
 }
