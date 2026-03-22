@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Eye, EyeOff, ArrowLeft, Loader2, ShieldCheck } from 'lucide-react';
+import { Eye, EyeOff, ArrowLeft, Loader2 } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 
 interface Props {
@@ -63,29 +64,23 @@ export default function AdminLoginForm({ accessDenied }: Props) {
   return (
     <div className="w-full max-w-[420px] flex flex-col items-center">
       {/* Logo / Brand */}
-      <div className="mb-10 flex flex-col items-center gap-4">
-        <div
-          className="h-20 w-20 rounded-2xl flex items-center justify-center"
-          style={{
-            background: 'rgba(255,255,255,0.08)',
-            border: '1px solid rgba(255,255,255,0.15)',
-            boxShadow:
-              '0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.12)',
-            backdropFilter: 'blur(12px)',
-          }}
-        >
-          <ShieldCheck size={36} className="text-[#7de0aa]" />
-        </div>
+      <div className="mb-6 flex flex-col items-center gap-3">
+       
+        
+          <Image
+            src="/images/GolfDraw.png"
+            alt="GolfDraw Logo"
+            width={80}
+            height={80}
+            className="object-contain"
+            priority
+          />
+        
 
         <div className="text-center">
-          <h1
-            className="text-[30px] text-white tracking-[-0.5px]"
-            style={{ fontFamily: '"DM Serif Display", serif' }}
-          >
-            GolfDraw
-          </h1>
+         
           <div
-            className="mt-2 inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold uppercase tracking-widest"
+            className="mt-1.5 inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold uppercase tracking-widest"
             style={{
               background:
                 'linear-gradient(135deg, rgba(180,140,40,0.25), rgba(220,180,60,0.15))',
@@ -99,7 +94,7 @@ export default function AdminLoginForm({ accessDenied }: Props) {
         </div>
       </div>
 
-      <div className="w-full text-center mb-8">
+      <div className="w-full text-center mb-5">
         <h2
           className="text-[22px] text-white tracking-[-0.3px]"
           style={{ fontFamily: '"DM Serif Display", serif' }}
@@ -113,7 +108,7 @@ export default function AdminLoginForm({ accessDenied }: Props) {
 
       {/* Card */}
       <div
-        className="w-full rounded-[28px] p-8"
+        className="w-full rounded-[28px] p-6"
         style={{
           background: 'rgba(255,255,255,0.06)',
           border: '1px solid rgba(255,255,255,0.12)',
@@ -236,8 +231,9 @@ export default function AdminLoginForm({ accessDenied }: Props) {
       </div>
 
       <Link
+
         href="/"
-        className="mt-7 flex items-center gap-2 text-[12px] font-semibold text-white/30 hover:text-white/60 transition-colors"
+        className="mt-5 flex items-center gap-2 text-[12px] font-semibold text-white/30 hover:text-white/60 transition-colors"
       >
         <ArrowLeft size={13} />
         Back to main site
