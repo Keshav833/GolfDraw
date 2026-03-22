@@ -1,14 +1,14 @@
-import { Users, PoundSterling, Heart, Trophy } from 'lucide-react'
+import { Users, PoundSterling, Heart, Trophy } from 'lucide-react';
 
 interface StatCardsProps {
   data: {
     subscriptions: {
-      active: number
-    }
-    mrr: number
-    charity_total: number
-    prizes_total: number
-  }
+      active: number;
+    };
+    mrr: number;
+    charity_total: number;
+    prizes_total: number;
+  };
 }
 
 export default function StatCards({ data }: StatCardsProps) {
@@ -37,12 +37,12 @@ export default function StatCards({ data }: StatCardsProps) {
       subtext: 'Across all draws',
       icon: <Trophy className="h-6 w-6 text-amber-500" />,
     },
-  ]
+  ];
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       {stats.map((stat, i) => (
-        <div 
+        <div
           key={i}
           className="bg-[var(--bg)] p-6 rounded-2xl shadow-[var(--raised-md)]"
         >
@@ -51,11 +51,15 @@ export default function StatCards({ data }: StatCardsProps) {
               {stat.icon}
             </div>
           </div>
-          <p className="text-sm font-medium text-[var(--text-muted)] mb-1">{stat.label}</p>
-          <h3 className="text-2xl font-bold text-[var(--text)] mb-1">{stat.value}</h3>
+          <p className="text-sm font-medium text-[var(--text-muted)] mb-1">
+            {stat.label}
+          </p>
+          <h3 className="text-2xl font-bold text-[var(--text)] mb-1">
+            {stat.value}
+          </h3>
           <p className="text-xs text-[var(--text-muted)]">{stat.subtext}</p>
         </div>
       ))}
     </div>
-  )
+  );
 }

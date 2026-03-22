@@ -1,8 +1,13 @@
 export default function HomePage() {
   return (
     <>
-      <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet" />
-      <style dangerouslySetInnerHTML={{ __html: `
+      <link
+        href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap"
+        rel="stylesheet"
+      />
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
         .landing-page *, .landing-page *::before, .landing-page *::after { box-sizing: border-box; margin: 0; padding: 0; }
         
         :root {
@@ -376,25 +381,43 @@ export default function HomePage() {
           .cta-actions .btn { width: 100%; }
           .footer-top { grid-template-columns: 1fr; }
         }
-      `}} />
+      `,
+        }}
+      />
 
       <div className="landing-page">
         <nav className="nav">
           <a href="#" className="nav-logo">
             <div className="nav-logo-mark" style={{ overflow: 'hidden' }}>
-              <img src="/images/GolfDraw.png" alt="GolfDraw" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <img
+                src="/images/GolfDraw.png"
+                alt="GolfDraw"
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              />
             </div>
             <span className="nav-logo-text">GolfDraw</span>
           </a>
           <ul className="nav-links">
-            <li><a href="#how-it-works">How it works</a></li>
-            <li><a href="#prizes">Prizes</a></li>
-            <li><a href="#charities">Charities</a></li>
-            <li><a href="#pricing">Pricing</a></li>
+            <li>
+              <a href="#how-it-works">How it works</a>
+            </li>
+            <li>
+              <a href="#prizes">Prizes</a>
+            </li>
+            <li>
+              <a href="#charities">Charities</a>
+            </li>
+            <li>
+              <a href="#pricing">Pricing</a>
+            </li>
           </ul>
           <div className="nav-actions">
-            <a href="/login" className="btn btn-ghost">Sign in</a>
-            <a href="/login" className="btn btn-primary">Get started</a>
+            <a href="/login" className="btn btn-ghost">
+              Sign in
+            </a>
+            <a href="/login" className="btn btn-primary">
+              Get started
+            </a>
           </div>
         </nav>
 
@@ -405,16 +428,24 @@ export default function HomePage() {
               Monthly draw live — £4,200 jackpot
             </div>
             <h1 className="hero-h1 animate-fade-up delay-1">
-              Golf scores.<br />
-              <em>Real prizes.</em><br />
+              Golf scores.
+              <br />
+              <em>Real prizes.</em>
+              <br />
               Good causes.
             </h1>
             <p className="hero-sub animate-fade-up delay-2">
-              Track your golf scores, enter monthly prize draws, and automatically contribute to a charity you believe in — all with one subscription.
+              Track your golf scores, enter monthly prize draws, and
+              automatically contribute to a charity you believe in — all with
+              one subscription.
             </p>
             <div className="hero-actions animate-fade-up delay-3">
-              <a href="/login" className="btn btn-primary btn-large">Start playing — £9/mo</a>
-              <a href="#how-it-works" className="btn btn-ghost btn-large">See how it works</a>
+              <a href="/login" className="btn btn-primary btn-large">
+                Start playing — £9/mo
+              </a>
+              <a href="#how-it-works" className="btn btn-ghost btn-large">
+                See how it works
+              </a>
             </div>
             <div className="trust-row animate-fade-up delay-4">
               <div className="avatars">
@@ -424,7 +455,9 @@ export default function HomePage() {
                 <div className="av">DL</div>
                 <div className="av">SW</div>
               </div>
-              <span className="trust-text"><strong>2,400+</strong> golfers already playing</span>
+              <span className="trust-text">
+                <strong>2,400+</strong> golfers already playing
+              </span>
             </div>
           </div>
 
@@ -432,7 +465,9 @@ export default function HomePage() {
             <div className="neu-card animate-fade-up delay-2">
               <div className="card-label">This month's jackpot</div>
               <div className="card-value">£4,200</div>
-              <div className="card-sub">5-match prize · rolls over if unclaimed</div>
+              <div className="card-sub">
+                5-match prize · rolls over if unclaimed
+              </div>
             </div>
 
             <div className="neu-card animate-fade-up delay-3">
@@ -456,7 +491,9 @@ export default function HomePage() {
                 <div className="bar-track">
                   <div className="bar-fill" style={{ width: '15%' }}></div>
                 </div>
-                <div className="bar-note">£1.35 donated this month · min 10%</div>
+                <div className="bar-note">
+                  £1.35 donated this month · min 10%
+                </div>
               </div>
             </div>
           </div>
@@ -484,27 +521,46 @@ export default function HomePage() {
         <section className="section" id="how-it-works">
           <div className="section-tag">How it works</div>
           <h2 className="section-h2">Four steps to your first draw</h2>
-          <p className="section-sub">No complicated rules. Subscribe, play golf, and we handle the rest — draws run automatically every month.</p>
+          <p className="section-sub">
+            No complicated rules. Subscribe, play golf, and we handle the rest —
+            draws run automatically every month.
+          </p>
           <div className="steps">
             <div className="step">
               <div className="step-num">1</div>
               <h3>Subscribe</h3>
-              <p>Choose a monthly or yearly plan. Your subscription funds the monthly prize pool and contributes to your chosen charity — automatically.</p>
+              <p>
+                Choose a monthly or yearly plan. Your subscription funds the
+                monthly prize pool and contributes to your chosen charity —
+                automatically.
+              </p>
             </div>
             <div className="step">
               <div className="step-num">2</div>
               <h3>Track your scores</h3>
-              <p>Submit your score after each round (1–45). We keep your last 5 — newest scores replace the oldest automatically. No manual management needed.</p>
+              <p>
+                Submit your score after each round (1–45). We keep your last 5 —
+                newest scores replace the oldest automatically. No manual
+                management needed.
+              </p>
             </div>
             <div className="step">
               <div className="step-num">3</div>
               <h3>Enter the draw</h3>
-              <p>Active subscribers are entered every month automatically. A draw number is matched against your scores — 3, 4, or 5 matches wins a prize.</p>
+              <p>
+                Active subscribers are entered every month automatically. A draw
+                number is matched against your scores — 3, 4, or 5 matches wins
+                a prize.
+              </p>
             </div>
             <div className="step">
               <div className="step-num">4</div>
               <h3>Win & give back</h3>
-              <p>Winners upload a score screenshot for verification, then receive their prize. Your charity gets its share every single month regardless.</p>
+              <p>
+                Winners upload a score screenshot for verification, then receive
+                their prize. Your charity gets its share every single month
+                regardless.
+              </p>
             </div>
           </div>
         </section>
@@ -513,31 +569,69 @@ export default function HomePage() {
           <div className="feature-card">
             <div className="feature-icon">
               <svg width="24" height="24" viewBox="0 0 22 22" fill="none">
-                <circle cx="11" cy="11" r="5" stroke="var(--accent)" strokeWidth="1.5" />
-                <path d="M11 3.5v2M11 16.5v2M3.5 11h2M16.5 11h2" stroke="var(--accent)" strokeWidth="1.5" strokeLinecap="round" />
+                <circle
+                  cx="11"
+                  cy="11"
+                  r="5"
+                  stroke="var(--accent)"
+                  strokeWidth="1.5"
+                />
+                <path
+                  d="M11 3.5v2M11 16.5v2M3.5 11h2M16.5 11h2"
+                  stroke="var(--accent)"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                />
               </svg>
             </div>
             <h3>Rolling 5-score window</h3>
-            <p>Only your most recent 5 scores count toward each draw. Play more rounds and your window naturally improves — older rounds roll off automatically with zero admin on your part.</p>
+            <p>
+              Only your most recent 5 scores count toward each draw. Play more
+              rounds and your window naturally improves — older rounds roll off
+              automatically with zero admin on your part.
+            </p>
           </div>
           <div className="feature-card">
             <div className="feature-icon">
               <svg width="24" height="24" viewBox="0 0 22 22" fill="none">
-                <path d="M4 18 L11 4 L18 18" stroke="#534AB7" strokeWidth="1.5" strokeLinejoin="round" fill="none" />
-                <path d="M7 13h8" stroke="#534AB7" strokeWidth="1.5" strokeLinecap="round" />
+                <path
+                  d="M4 18 L11 4 L18 18"
+                  stroke="#534AB7"
+                  strokeWidth="1.5"
+                  strokeLinejoin="round"
+                  fill="none"
+                />
+                <path
+                  d="M7 13h8"
+                  stroke="#534AB7"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                />
               </svg>
             </div>
             <h3>Jackpot rollover</h3>
-            <p>No 5-match winner in a month? The jackpot carries forward and compounds into the next pool. It keeps growing until someone hits the magic number — making each draw more exciting than the last.</p>
+            <p>
+              No 5-match winner in a month? The jackpot carries forward and
+              compounds into the next pool. It keeps growing until someone hits
+              the magic number — making each draw more exciting than the last.
+            </p>
           </div>
           <div className="feature-card">
             <div className="feature-icon">
               <svg width="24" height="24" viewBox="0 0 22 22" fill="none">
-                <path d="M11 3L13.5 9H19.5L14.5 13L16.5 19L11 15.5L5.5 19L7.5 13L2.5 9H8.5Z" fill="#854F0B" opacity="0.85" />
+                <path
+                  d="M11 3L13.5 9H19.5L14.5 13L16.5 19L11 15.5L5.5 19L7.5 13L2.5 9H8.5Z"
+                  fill="#854F0B"
+                  opacity="0.85"
+                />
               </svg>
             </div>
             <h3>Verified winners only</h3>
-            <p>Every winner uploads a screenshot of their official scorecard. Our admin team reviews and approves before any payment is released — completely transparent and fair for all players.</p>
+            <p>
+              Every winner uploads a screenshot of their official scorecard. Our
+              admin team reviews and approves before any payment is released —
+              completely transparent and fair for all players.
+            </p>
           </div>
         </section>
 
@@ -545,7 +639,17 @@ export default function HomePage() {
           <div>
             <div className="section-tag">Prize structure</div>
             <h2 className="section-h2">How the pool is split</h2>
-            <p style={{ fontSize: '16px', color: 'var(--text-muted)', lineHeight: '1.6', marginBottom: '8px' }}>Every subscription contributes to the monthly prize pool, distributed across three match tiers.</p>
+            <p
+              style={{
+                fontSize: '16px',
+                color: 'var(--text-muted)',
+                lineHeight: '1.6',
+                marginBottom: '8px',
+              }}
+            >
+              Every subscription contributes to the monthly prize pool,
+              distributed across three match tiers.
+            </p>
             <div className="prize-tiers">
               <div className="prize-tier">
                 <div className="tier-badge gold">5</div>
@@ -559,7 +663,9 @@ export default function HomePage() {
                 <div className="tier-badge silver">4</div>
                 <div className="tier-info">
                   <div className="tier-name">4-match prize</div>
-                  <div className="tier-desc">Split equally among all 4-match winners</div>
+                  <div className="tier-desc">
+                    Split equally among all 4-match winners
+                  </div>
                 </div>
                 <div className="tier-pct">35%</div>
               </div>
@@ -567,7 +673,9 @@ export default function HomePage() {
                 <div className="tier-badge bronze">3</div>
                 <div className="tier-info">
                   <div className="tier-name">3-match prize</div>
-                  <div className="tier-desc">Split equally among all 3-match winners</div>
+                  <div className="tier-desc">
+                    Split equally among all 3-match winners
+                  </div>
                 </div>
                 <div className="tier-pct">25%</div>
               </div>
@@ -604,25 +712,61 @@ export default function HomePage() {
           <div className="pricing-header">
             <div className="section-tag">Pricing</div>
             <h2 className="section-h2">Simple, transparent plans</h2>
-            <p style={{ fontSize: '16px', color: 'var(--text-muted)' }}>No hidden fees. Cancel anytime.</p>
+            <p style={{ fontSize: '16px', color: 'var(--text-muted)' }}>
+              No hidden fees. Cancel anytime.
+            </p>
           </div>
           <div className="plans-grid">
             <div className="plan-card">
               <div className="plan-name">Monthly</div>
-              <div className="plan-price"><sup>£</sup>9<sub> / month</sub></div>
+              <div className="plan-price">
+                <sup>£</sup>9<sub> / month</sub>
+              </div>
               <div className="plan-desc">Billed monthly. Cancel anytime.</div>
-              <a href="/login" className="btn btn-ghost plan-btn">Get started</a>
+              <a href="/login" className="btn btn-ghost plan-btn">
+                Get started
+              </a>
               <div className="plan-features">
                 <div className="plan-feat">
-                  <div className="feat-check"><svg width="10" height="8" viewBox="0 0 8 6" fill="none"><path d="M1 3l2 2 4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg></div>
+                  <div className="feat-check">
+                    <svg width="10" height="8" viewBox="0 0 8 6" fill="none">
+                      <path
+                        d="M1 3l2 2 4-4"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </div>
                   Monthly prize draw entry
                 </div>
                 <div className="plan-feat">
-                  <div className="feat-check"><svg width="10" height="8" viewBox="0 0 8 6" fill="none"><path d="M1 3l2 2 4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg></div>
+                  <div className="feat-check">
+                    <svg width="10" height="8" viewBox="0 0 8 6" fill="none">
+                      <path
+                        d="M1 3l2 2 4-4"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </div>
                   Score tracking (rolling 5)
                 </div>
                 <div className="plan-feat">
-                  <div className="feat-check"><svg width="10" height="8" viewBox="0 0 8 6" fill="none"><path d="M1 3l2 2 4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg></div>
+                  <div className="feat-check">
+                    <svg width="10" height="8" viewBox="0 0 8 6" fill="none">
+                      <path
+                        d="M1 3l2 2 4-4"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </div>
                   Minimum 10% to charity
                 </div>
               </div>
@@ -630,20 +774,56 @@ export default function HomePage() {
             <div className="plan-card featured">
               <div className="plan-badge">Best value — save 20%</div>
               <div className="plan-name">Yearly</div>
-              <div className="plan-price"><sup>£</sup>86<sub> / year</sub></div>
-              <div className="plan-desc">That's £7.17/mo · billed annually.</div>
-              <a href="/login" className="btn btn-primary plan-btn">Get started</a>
+              <div className="plan-price">
+                <sup>£</sup>86<sub> / year</sub>
+              </div>
+              <div className="plan-desc">
+                That's £7.17/mo · billed annually.
+              </div>
+              <a href="/login" className="btn btn-primary plan-btn">
+                Get started
+              </a>
               <div className="plan-features">
                 <div className="plan-feat">
-                  <div className="feat-check"><svg width="10" height="8" viewBox="0 0 8 6" fill="none"><path d="M1 3l2 2 4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg></div>
+                  <div className="feat-check">
+                    <svg width="10" height="8" viewBox="0 0 8 6" fill="none">
+                      <path
+                        d="M1 3l2 2 4-4"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </div>
                   Everything in monthly
                 </div>
                 <div className="plan-feat">
-                  <div className="feat-check"><svg width="10" height="8" viewBox="0 0 8 6" fill="none"><path d="M1 3l2 2 4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg></div>
+                  <div className="feat-check">
+                    <svg width="10" height="8" viewBox="0 0 8 6" fill="none">
+                      <path
+                        d="M1 3l2 2 4-4"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </div>
                   12 draws for the price of 10
                 </div>
                 <div className="plan-feat">
-                  <div className="feat-check"><svg width="10" height="8" viewBox="0 0 8 6" fill="none"><path d="M1 3l2 2 4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg></div>
+                  <div className="feat-check">
+                    <svg width="10" height="8" viewBox="0 0 8 6" fill="none">
+                      <path
+                        d="M1 3l2 2 4-4"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </div>
                   Priority verification
                 </div>
               </div>
@@ -652,29 +832,54 @@ export default function HomePage() {
         </section>
 
         <section className="section" id="charities">
-          <div className="section-tag" style={{ textAlign: 'center' }}>Giving back</div>
-          <h2 className="section-h2" style={{ textAlign: 'center' }}>Choose a cause you care about</h2>
-          <p className="section-sub" style={{ textAlign: 'center', margin: '0 auto 40px' }}>At least 10% of every subscription goes directly to your chosen charity each month — automatically, every billing cycle.</p>
+          <div className="section-tag" style={{ textAlign: 'center' }}>
+            Giving back
+          </div>
+          <h2 className="section-h2" style={{ textAlign: 'center' }}>
+            Choose a cause you care about
+          </h2>
+          <p
+            className="section-sub"
+            style={{ textAlign: 'center', margin: '0 auto 40px' }}
+          >
+            At least 10% of every subscription goes directly to your chosen
+            charity each month — automatically, every billing cycle.
+          </p>
           <div className="charity-grid">
             <div className="charity-card">
               <div className="charity-logo">⛳</div>
               <div className="charity-cname">St Andrews Links Trust</div>
               <div className="charity-cat">Golf & sport · Scotland</div>
-              <div className="charity-bar-bg"><div className="charity-bar-fill" style={{ width: '72%' }}></div></div>
+              <div className="charity-bar-bg">
+                <div
+                  className="charity-bar-fill"
+                  style={{ width: '72%' }}
+                ></div>
+              </div>
               <div className="charity-support">72% of members support this</div>
             </div>
             <div className="charity-card">
               <div className="charity-logo">🧠</div>
               <div className="charity-cname">Alzheimer's Research UK</div>
               <div className="charity-cat">Health & research · UK</div>
-              <div className="charity-bar-bg"><div className="charity-bar-fill" style={{ width: '48%' }}></div></div>
+              <div className="charity-bar-bg">
+                <div
+                  className="charity-bar-fill"
+                  style={{ width: '48%' }}
+                ></div>
+              </div>
               <div className="charity-support">48% of members support this</div>
             </div>
             <div className="charity-card">
               <div className="charity-logo">🏅</div>
               <div className="charity-cname">Youth Sport Trust</div>
               <div className="charity-cat">Youth & education · UK</div>
-              <div className="charity-bar-bg"><div className="charity-bar-fill" style={{ width: '31%' }}></div></div>
+              <div className="charity-bar-bg">
+                <div
+                  className="charity-bar-fill"
+                  style={{ width: '31%' }}
+                ></div>
+              </div>
               <div className="charity-support">31% of members support this</div>
             </div>
           </div>
@@ -684,12 +889,20 @@ export default function HomePage() {
         </section>
 
         <section className="testimonials">
-          <div className="section-tag" style={{ textAlign: 'center' }}>What players say</div>
-          <h2 className="section-h2" style={{ textAlign: 'center' }}>Golfers love GolfDraw</h2>
+          <div className="section-tag" style={{ textAlign: 'center' }}>
+            What players say
+          </div>
+          <h2 className="section-h2" style={{ textAlign: 'center' }}>
+            Golfers love GolfDraw
+          </h2>
           <div className="testimonial-grid">
             <div className="testimonial-card">
               <div className="testimonial-stars">★★★★★</div>
-              <p className="testimonial-text">"Won £340 in the 4-match draw last month. The verification process was painless — uploaded my screenshot and had the money within a week."</p>
+              <p className="testimonial-text">
+                "Won £340 in the 4-match draw last month. The verification
+                process was painless — uploaded my screenshot and had the money
+                within a week."
+              </p>
               <div className="testimonial-author">
                 <div className="t-av">JM</div>
                 <div>
@@ -700,7 +913,11 @@ export default function HomePage() {
             </div>
             <div className="testimonial-card">
               <div className="testimonial-stars">★★★★★</div>
-              <p className="testimonial-text">"Love that 15% of my subscription goes to the junior golf foundation I care about. Feels like playing for something bigger than just the prize."</p>
+              <p className="testimonial-text">
+                "Love that 15% of my subscription goes to the junior golf
+                foundation I care about. Feels like playing for something bigger
+                than just the prize."
+              </p>
               <div className="testimonial-author">
                 <div className="t-av">KR</div>
                 <div>
@@ -711,7 +928,11 @@ export default function HomePage() {
             </div>
             <div className="testimonial-card">
               <div className="testimonial-stars">★★★★★</div>
-              <p className="testimonial-text">"Simple concept, executed really well. I just play golf and submit my score — everything else is handled. The jackpot is now at £4k and I'm feeling lucky."</p>
+              <p className="testimonial-text">
+                "Simple concept, executed really well. I just play golf and
+                submit my score — everything else is handled. The jackpot is now
+                at £4k and I'm feeling lucky."
+              </p>
               <div className="testimonial-author">
                 <div className="t-av">AP</div>
                 <div>
@@ -727,12 +948,19 @@ export default function HomePage() {
           <div className="cta-wrapper">
             <div className="cta-eyebrow">Join today</div>
             <h2 className="cta-h2">Ready to play your first draw?</h2>
-            <p className="cta-sub">Join 2,400+ golfers tracking scores, winning prizes, and giving back to causes they care about.</p>
+            <p className="cta-sub">
+              Join 2,400+ golfers tracking scores, winning prizes, and giving
+              back to causes they care about.
+            </p>
             <div className="cta-actions">
-              <a href="/login" className="btn btn-primary btn-xl">Start for £9 / month</a>
+              <a href="/login" className="btn btn-primary btn-xl">
+                Start for £9 / month
+              </a>
               <button className="btn btn-ghost btn-xl">Learn more</button>
             </div>
-            <p className="cta-note">No commitment · Cancel anytime · First draw entry immediate</p>
+            <p className="cta-note">
+              No commitment · Cancel anytime · First draw entry immediate
+            </p>
           </div>
         </section>
 
@@ -740,43 +968,91 @@ export default function HomePage() {
           <div className="footer-inner">
             <div className="footer-top">
               <div className="footer-brand">
-                <a href="#" className="nav-logo" style={{ textDecoration: 'none', display: 'inline-flex' }}>
-                  <div className="nav-logo-mark" style={{ width: '32px', height: '32px', overflow: 'hidden' }}>
-                    <img src="/images/GolfDraw.png" alt="GolfDraw" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <a
+                  href="#"
+                  className="nav-logo"
+                  style={{ textDecoration: 'none', display: 'inline-flex' }}
+                >
+                  <div
+                    className="nav-logo-mark"
+                    style={{
+                      width: '32px',
+                      height: '32px',
+                      overflow: 'hidden',
+                    }}
+                  >
+                    <img
+                      src="/images/GolfDraw.png"
+                      alt="GolfDraw"
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                      }}
+                    />
                   </div>
-                  <span className="nav-logo-text" style={{ fontSize: '18px' }}>GolfDraw</span>
+                  <span className="nav-logo-text" style={{ fontSize: '18px' }}>
+                    GolfDraw
+                  </span>
                 </a>
-                <p>Golf performance tracking meets monthly prize draws and charitable giving. One subscription, three good things.</p>
+                <p>
+                  Golf performance tracking meets monthly prize draws and
+                  charitable giving. One subscription, three good things.
+                </p>
               </div>
               <div className="footer-col">
                 <h4>Product</h4>
                 <ul>
-                  <li><a href="#">How it works</a></li>
-                  <li><a href="#">Prize draws</a></li>
-                  <li><a href="#">Score tracking</a></li>
-                  <li><a href="#">Pricing</a></li>
+                  <li>
+                    <a href="#">How it works</a>
+                  </li>
+                  <li>
+                    <a href="#">Prize draws</a>
+                  </li>
+                  <li>
+                    <a href="#">Score tracking</a>
+                  </li>
+                  <li>
+                    <a href="#">Pricing</a>
+                  </li>
                 </ul>
               </div>
               <div className="footer-col">
                 <h4>Charities</h4>
                 <ul>
-                  <li><a href="#">Browse directory</a></li>
-                  <li><a href="#">Partner with us</a></li>
-                  <li><a href="#">Impact reports</a></li>
+                  <li>
+                    <a href="#">Browse directory</a>
+                  </li>
+                  <li>
+                    <a href="#">Partner with us</a>
+                  </li>
+                  <li>
+                    <a href="#">Impact reports</a>
+                  </li>
                 </ul>
               </div>
               <div className="footer-col">
                 <h4>Company</h4>
                 <ul>
-                  <li><a href="#">About</a></li>
-                  <li><a href="#">Contact</a></li>
-                  <li><a href="#">Privacy policy</a></li>
-                  <li><a href="#">Terms of service</a></li>
+                  <li>
+                    <a href="#">About</a>
+                  </li>
+                  <li>
+                    <a href="#">Contact</a>
+                  </li>
+                  <li>
+                    <a href="#">Privacy policy</a>
+                  </li>
+                  <li>
+                    <a href="#">Terms of service</a>
+                  </li>
                 </ul>
               </div>
             </div>
             <div className="footer-bottom">
-              <span className="footer-copy">© 2025 GolfDraw Ltd. All rights reserved.</span>
+              <span className="footer-copy">
+                © 2025 GolfDraw Ltd. All rights reserved.
+              </span>
               <div className="footer-legal">
                 <a href="#">Privacy</a>
                 <a href="#">Terms</a>

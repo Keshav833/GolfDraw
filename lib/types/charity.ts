@@ -2,7 +2,11 @@ export type Charity = {
   id: string;
   name: string;
   description: string;
-  category: 'Golf & Sport' | 'Health & Research' | 'Youth & Education' | 'Environment';
+  category:
+    | 'Golf & Sport'
+    | 'Health & Research'
+    | 'Youth & Education'
+    | 'Environment';
   country: string;
   website?: string | null;
   is_active: boolean;

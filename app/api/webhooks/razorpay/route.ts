@@ -4,7 +4,10 @@ import { verifyWebhookSignature } from '@/lib/razorpay/verify';
 import { sendWelcomeEmail } from '@/lib/email/templates';
 
 function createAdminClient() {
-  return createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
 }
 
 export async function POST(req: Request) {
@@ -29,7 +32,10 @@ export async function POST(req: Request) {
             return;
           }
 
-          const planType = subscriptionEntity.notes?.plan_type === 'yearly' ? 'yearly' : 'monthly';
+          const planType =
+            subscriptionEntity.notes?.plan_type === 'yearly'
+              ? 'yearly'
+              : 'monthly';
           const currentMonth = format(new Date(), 'yyyy-MM');
 
           const { data: subscriptionRecord } = await supabase
@@ -46,7 +52,10 @@ export async function POST(req: Request) {
             .select()
             .single();
 
-          await supabase.from('users').update({ subscription_status: 'active' }).eq('id', userId);
+          await supabase
+            .from('users')
+            .update({ subscription_status: 'active' })
+            .eq('id', userId);
 
           const { data: userRecord } = await supabase
             .from('users')
@@ -76,7 +85,10 @@ export async function POST(req: Request) {
               });
             }
 
-            await sendWelcomeEmail(userRecord.email, userRecord.full_name || 'Golfer');
+            await sendWelcomeEmail(
+              userRecord.email,
+              userRecord.full_name || 'Golfer'
+            );
           }
         } else if (event.event === 'subscription.charged') {
           const subscriptionEntity = event.payload.subscription.entity;
@@ -85,7 +97,9 @@ export async function POST(req: Request) {
           await supabase
             .from('subscriptions')
             .update({
-              current_period_end: new Date(subscriptionEntity.current_end * 1000).toISOString(),
+              current_period_end: new Date(
+                subscriptionEntity.current_end * 1000
+              ).toISOString(),
             })
             .eq('razorpay_subscription_id', subscriptionEntity.id);
 
@@ -131,7 +145,10 @@ export async function POST(req: Request) {
 
           await supabase
             .from('subscriptions')
-            .update({ status: 'cancelled', cancelled_at: new Date().toISOString() })
+            .update({
+              status: 'cancelled',
+              cancelled_at: new Date().toISOString(),
+            })
             .eq('razorpay_subscription_id', subscriptionEntity.id);
 
           if (subscriptionEntity.notes?.user_id) {

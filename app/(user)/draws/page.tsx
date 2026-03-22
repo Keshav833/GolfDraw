@@ -60,7 +60,10 @@ export default async function DrawsPage() {
     match_category: '3-match' | '4-match' | '5-match';
     prize_amount: number | null;
     payment_status: 'pending' | 'approved' | 'paid' | 'rejected';
-    draw: { month: string; draw_number: number }[] | { month: string; draw_number: number } | null;
+    draw:
+      | { month: string; draw_number: number }[]
+      | { month: string; draw_number: number }
+      | null;
     verification:
       | Array<{
           id: string;
@@ -77,22 +80,31 @@ export default async function DrawsPage() {
 
   return (
     <PageShell
-      userName={user.user_metadata?.full_name || user.email || 'GolfDraw member'}
-      membershipLabel={
-        subscriptionResult.data?.plan_type === 'yearly' ? 'Yearly member' : 'Monthly member'
+      userName={
+        user.user_metadata?.full_name || user.email || 'GolfDraw member'
       }
-      statusLabel={subscriptionResult.data?.status?.replace('_', ' ') || 'Active'}
+      membershipLabel={
+        subscriptionResult.data?.plan_type === 'yearly'
+          ? 'Yearly member'
+          : 'Monthly member'
+      }
+      statusLabel={
+        subscriptionResult.data?.status?.replace('_', ' ') || 'Active'
+      }
       title="Draw history"
       subtitle="View past draws, match results, and any prize claims that still need action."
     >
       <div className="space-y-5">
         {results.length ? (
           results.map((result) => {
-            const draw = Array.isArray(result.draw) ? result.draw[0] : result.draw;
+            const draw = Array.isArray(result.draw)
+              ? result.draw[0]
+              : result.draw;
             const verification = Array.isArray(result.verification)
               ? result.verification[0]
               : result.verification;
-            const canUpload = result.payment_status === 'pending' && !verification;
+            const canUpload =
+              result.payment_status === 'pending' && !verification;
             const canReupload = result.payment_status === 'rejected';
 
             return (
@@ -103,8 +115,12 @@ export default async function DrawsPage() {
               >
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                   <div>
-                    <h3 className="text-lg font-semibold text-[#2a3a2a]">{draw?.month} draw</h3>
-                    <p className="mt-1 text-sm text-[#6a7a6a]">Draw #{Number(draw?.draw_number ?? 0)}</p>
+                    <h3 className="text-lg font-semibold text-[#2a3a2a]">
+                      {draw?.month} draw
+                    </h3>
+                    <p className="mt-1 text-sm text-[#6a7a6a]">
+                      Draw #{Number(draw?.draw_number ?? 0)}
+                    </p>
                   </div>
                   <div className="flex flex-wrap items-center gap-4">
                     <MatchBadge category={result.match_category} />
@@ -117,8 +133,12 @@ export default async function DrawsPage() {
                 <div className="mt-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
                   <div className="text-sm text-[#6a7a6a]">
                     {canUpload ? 'Upload proof to claim' : null}
-                    {verification?.status === 'pending' ? 'Awaiting your proof review' : null}
-                    {result.payment_status === 'approved' ? 'Being processed' : null}
+                    {verification?.status === 'pending'
+                      ? 'Awaiting your proof review'
+                      : null}
+                    {result.payment_status === 'approved'
+                      ? 'Being processed'
+                      : null}
                     {result.payment_status === 'paid' ? 'Paid ✓' : null}
                     {result.payment_status === 'rejected'
                       ? `Rejected${verification?.rejection_note ? `: ${verification.rejection_note}` : ''}`
@@ -129,7 +149,10 @@ export default async function DrawsPage() {
                     <Link
                       href={`/draws/verify/${result.id}`}
                       className="inline-flex rounded-[14px] px-4 py-2 text-sm font-medium text-[#2a3a2a]"
-                      style={{ background: 'var(--dashboard-bg)', boxShadow: raisedXs }}
+                      style={{
+                        background: 'var(--dashboard-bg)',
+                        boxShadow: raisedXs,
+                      }}
                     >
                       {canReupload ? 'Re-upload' : 'Upload now'}
                     </Link>
@@ -143,7 +166,8 @@ export default async function DrawsPage() {
             className="rounded-[18px] bg-[var(--dashboard-bg)] px-6 py-10 text-center text-[#6a7a6a]"
             style={{ boxShadow: raisedSm }}
           >
-            No draw history yet. Your first result will appear here after the next draw closes.
+            No draw history yet. Your first result will appear here after the
+            next draw closes.
           </div>
         )}
       </div>

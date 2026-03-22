@@ -39,10 +39,16 @@ export function RejectModal({
 
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/20 px-4 backdrop-blur-sm">
-      <div className="w-full max-w-xl rounded-[24px] bg-[var(--dashboard-bg)] p-6" style={{ boxShadow: raisedSm }}>
-        <h2 className="text-2xl font-semibold text-[#2a3a2a]">Reject verification</h2>
+      <div
+        className="w-full max-w-xl rounded-[24px] bg-[var(--dashboard-bg)] p-6"
+        style={{ boxShadow: raisedSm }}
+      >
+        <h2 className="text-2xl font-semibold text-[#2a3a2a]">
+          Reject verification
+        </h2>
         <p className="mt-2 text-sm text-[#6a7a6a]">
-          This will notify {winnerName} and they can re-upload if needed. Prize amount: £{prizeAmount.toFixed(2)}.
+          This will notify {winnerName} and they can re-upload if needed. Prize
+          amount: £{prizeAmount.toFixed(2)}.
         </p>
 
         <div className="mt-5 flex flex-wrap gap-2">
@@ -60,7 +66,9 @@ export function RejectModal({
         </div>
 
         <div className="mt-5">
-          <label className="text-sm font-medium text-[#2a3a2a]">Additional note (required)</label>
+          <label className="text-sm font-medium text-[#2a3a2a]">
+            Additional note (required)
+          </label>
           <textarea
             value={note}
             onChange={(event) => setNote(event.target.value)}

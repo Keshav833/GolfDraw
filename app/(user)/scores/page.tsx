@@ -31,8 +31,14 @@ export default async function ScoresPage() {
   return (
     <ScoresPageClient
       initialScores={(data ?? []) as Score[]}
-      userName={user.user_metadata?.full_name || user.email || 'GolfDraw member'}
-      membershipLabel={subscription?.plan_type === 'yearly' ? 'Yearly member' : 'Monthly member'}
+      userName={
+        user.user_metadata?.full_name || user.email || 'GolfDraw member'
+      }
+      membershipLabel={
+        subscription?.plan_type === 'yearly'
+          ? 'Yearly member'
+          : 'Monthly member'
+      }
       statusLabel={subscription?.status?.replace('_', ' ') || 'Active'}
     />
   );

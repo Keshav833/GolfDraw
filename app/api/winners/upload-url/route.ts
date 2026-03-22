@@ -14,7 +14,10 @@ export async function GET(req: Request) {
 
     if (!user) {
       return NextResponse.json(
-        { data: null, error: { message: 'Unauthorized', code: 'UNAUTHORIZED' } },
+        {
+          data: null,
+          error: { message: 'Unauthorized', code: 'UNAUTHORIZED' },
+        },
         { status: 401 }
       );
     }
@@ -24,7 +27,13 @@ export async function GET(req: Request) {
 
     if (!parsedId.success) {
       return NextResponse.json(
-        { data: null, error: { message: 'Invalid draw_result_id', code: 'VALIDATION_ERROR' } },
+        {
+          data: null,
+          error: {
+            message: 'Invalid draw_result_id',
+            code: 'VALIDATION_ERROR',
+          },
+        },
         { status: 422 }
       );
     }
@@ -32,7 +41,10 @@ export async function GET(req: Request) {
     const ownership = await getOwnedPendingDrawResult(parsedId.data, user.id);
     if (!ownership.data) {
       return NextResponse.json(
-        { data: null, error: { message: 'Draw result not found', code: 'NOT_FOUND' } },
+        {
+          data: null,
+          error: { message: 'Draw result not found', code: 'NOT_FOUND' },
+        },
         { status: 404 }
       );
     }
@@ -45,7 +57,8 @@ export async function GET(req: Request) {
         {
           data: null,
           error: {
-            message: 'This prize has already been processed — no upload needed.',
+            message:
+              'This prize has already been processed — no upload needed.',
             code: 'ALREADY_PROCESSED',
           },
         },
@@ -53,12 +66,17 @@ export async function GET(req: Request) {
       );
     }
 
-    const existingVerification = await getVerificationForDrawResult(parsedId.data);
+    const existingVerification = await getVerificationForDrawResult(
+      parsedId.data
+    );
     if (existingVerification?.status === 'approved') {
       return NextResponse.json(
         {
           data: null,
-          error: { message: 'This prize has already been verified.', code: 'ALREADY_VERIFIED' },
+          error: {
+            message: 'This prize has already been verified.',
+            code: 'ALREADY_VERIFIED',
+          },
         },
         { status: 400 }
       );
@@ -96,7 +114,10 @@ export async function GET(req: Request) {
       {
         data: null,
         error: {
-          message: error instanceof Error ? error.message : 'Failed to create upload URL',
+          message:
+            error instanceof Error
+              ? error.message
+              : 'Failed to create upload URL',
           code: 'ERR',
         },
       },

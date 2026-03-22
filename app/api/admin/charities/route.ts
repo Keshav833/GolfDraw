@@ -1,60 +1,71 @@
-import { NextResponse } from 'next/server'
-import { z } from 'zod'
-import { requireAdmin } from '@/lib/auth/requireAdmin'
-import { supabaseAdmin } from '@/lib/supabase/admin'
+import { NextResponse } from 'next/server';
+import { z } from 'zod';
+import { requireAdmin } from '@/lib/auth/requireAdmin';
+import { supabaseAdmin } from '@/lib/supabase/admin';
 
 const charitySchema = z.object({
   name: z.string().min(1),
   description: z.string().max(300).optional(),
-  category: z.enum(['Golf & Sport', 'Health & Research', 'Youth & Education', 'Environment']),
+  category: z.enum([
+    'Golf & Sport',
+    'Health & Research',
+    'Youth & Education',
+    'Environment',
+  ]),
   country: z.string().min(1),
   website: z.string().url().optional().or(z.literal('')),
-  is_active: z.boolean().default(true)
-})
+  is_active: z.boolean().default(true),
+});
 
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
-    await requireAdmin()
+    await requireAdmin();
 
     const { data: charities, error } = await supabaseAdmin
       .from('charities')
-      .select(`
+      .select(
+        `
         *,
         users:users(id)
-      `)
-      .order('name')
+      `
+      )
+      .order('name');
 
-    if (error) throw error
+    if (error) throw error;
 
     // Map member_count
-    const mappedCharities = charities?.map(c => ({
+    const mappedCharities = charities?.map((c) => ({
       ...c,
-      member_count: c.users?.length || 0
-    }))
+      member_count: c.users?.length || 0,
+    }));
 
     return NextResponse.json({
       data: { charities: mappedCharities },
-      error: null
-    })
-
+      error: null,
+    });
   } catch (err: any) {
-    console.error('Charities GET Error:', err)
-    const status = err.message === 'UNAUTHENTICATED' ? 401 : err.message === 'FORBIDDEN' ? 403 : 500
+    console.error('Charities GET Error:', err);
+    const status =
+      err.message === 'UNAUTHENTICATED'
+        ? 401
+        : err.message === 'FORBIDDEN'
+          ? 403
+          : 500;
     return NextResponse.json(
       { data: null, error: { message: err.message } },
       { status }
-    )
+    );
   }
 }
 
 export async function POST(request: Request) {
   try {
-    await requireAdmin()
-    
-    const body = await request.json()
-    const validated = charitySchema.parse(body)
+    await requireAdmin();
+
+    const body = await request.json();
+    const validated = charitySchema.parse(body);
 
     const { data, error } = await supabaseAdmin
       .from('charities')
@@ -64,27 +75,34 @@ export async function POST(request: Request) {
         category: validated.category,
         country: validated.country,
         website: validated.website || null,
-        is_active: validated.is_active
+        is_active: validated.is_active,
       })
       .select()
-      .single()
+      .single();
 
-    if (error) throw error
+    if (error) throw error;
 
     return NextResponse.json({
       data,
-      error: null
-    })
-
+      error: null,
+    });
   } catch (err: any) {
-    console.error('Charities POST Error:', err)
+    console.error('Charities POST Error:', err);
     if (err instanceof z.ZodError) {
-      return NextResponse.json({ data: null, error: { message: err.errors[0].message } }, { status: 400 })
+      return NextResponse.json(
+        { data: null, error: { message: err.errors[0].message } },
+        { status: 400 }
+      );
     }
-    const status = err.message === 'UNAUTHENTICATED' ? 401 : err.message === 'FORBIDDEN' ? 403 : 500
+    const status =
+      err.message === 'UNAUTHENTICATED'
+        ? 401
+        : err.message === 'FORBIDDEN'
+          ? 403
+          : 500;
     return NextResponse.json(
       { data: null, error: { message: err.message } },
       { status }
-    )
+    );
   }
 }

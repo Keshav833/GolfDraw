@@ -1,6 +1,11 @@
 import { z } from 'zod';
 import { NextResponse } from 'next/server';
-import { createServiceSupabase, drawError, isValidMonth, requireAdminUser } from '@/lib/draw/api';
+import {
+  createServiceSupabase,
+  drawError,
+  isValidMonth,
+  requireAdminUser,
+} from '@/lib/draw/api';
 import { createDraftDraw } from '@/lib/draw/workflow';
 
 const schema = z.object({
@@ -21,7 +26,11 @@ export async function POST(req: Request) {
     const parsed = schema.safeParse(await req.json());
 
     if (!parsed.success) {
-      return drawError(422, parsed.error.issues[0]?.message ?? 'Invalid request', 'VALIDATION_ERROR');
+      return drawError(
+        422,
+        parsed.error.issues[0]?.message ?? 'Invalid request',
+        'VALIDATION_ERROR'
+      );
     }
 
     const serviceSupabase = createServiceSupabase();
@@ -39,7 +48,11 @@ export async function POST(req: Request) {
     }
 
     if (existingDraw) {
-      return drawError(409, 'A draw already exists for this month', 'DUPLICATE_DRAW');
+      return drawError(
+        409,
+        'A draw already exists for this month',
+        'DUPLICATE_DRAW'
+      );
     }
 
     const { draw, config } = await createDraftDraw({

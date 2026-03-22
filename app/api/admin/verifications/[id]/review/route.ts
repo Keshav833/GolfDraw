@@ -6,11 +6,17 @@ import { getAdminVerificationRecord } from '@/lib/verification/helpers';
 
 const schema = z.discriminatedUnion('action', [
   z.object({ action: z.literal('approve') }),
-  z.object({ action: z.literal('reject'), rejection_note: z.string().min(1).max(500) }),
+  z.object({
+    action: z.literal('reject'),
+    rejection_note: z.string().min(1).max(500),
+  }),
   z.object({ action: z.literal('re_review') }),
 ]);
 
-export async function POST(req: Request, { params }: { params: { id: string } }) {
+export async function POST(
+  req: Request,
+  { params }: { params: { id: string } }
+) {
   const adminCheck = await requireAdminUser();
   if ('response' in adminCheck) {
     return adminCheck.response;
@@ -34,13 +40,19 @@ export async function POST(req: Request, { params }: { params: { id: string } })
     const verificationRecord = await getAdminVerificationRecord(params.id);
     if (!verificationRecord) {
       return NextResponse.json(
-        { data: null, error: { message: 'Verification not found', code: 'NOT_FOUND' } },
+        {
+          data: null,
+          error: { message: 'Verification not found', code: 'NOT_FOUND' },
+        },
         { status: 404 }
       );
     }
     if (!verificationRecord.verification) {
       return NextResponse.json(
-        { data: null, error: { message: 'Verification not found', code: 'NOT_FOUND' } },
+        {
+          data: null,
+          error: { message: 'Verification not found', code: 'NOT_FOUND' },
+        },
         { status: 404 }
       );
     }
@@ -53,20 +65,26 @@ export async function POST(req: Request, { params }: { params: { id: string } })
       return NextResponse.json(
         {
           data: null,
-          error: { message: 'Verification has already been reviewed.', code: 'ALREADY_REVIEWED' },
+          error: {
+            message: 'Verification has already been reviewed.',
+            code: 'ALREADY_REVIEWED',
+          },
         },
         { status: 400 }
       );
     }
 
     const supabase = createServiceSupabase();
-    const { data: rpcData, error } = await supabase.rpc('review_winner_verification', {
-      p_verification_id: params.id,
-      p_action: parsed.data.action,
-      p_rejection_note:
-        'rejection_note' in parsed.data ? parsed.data.rejection_note : null,
-      p_reviewed_by: adminCheck.user.id,
-    });
+    const { data: rpcData, error } = await supabase.rpc(
+      'review_winner_verification',
+      {
+        p_verification_id: params.id,
+        p_action: parsed.data.action,
+        p_rejection_note:
+          'rejection_note' in parsed.data ? parsed.data.rejection_note : null,
+        p_reviewed_by: adminCheck.user.id,
+      }
+    );
 
     if (error) {
       return NextResponse.json(
@@ -101,7 +119,9 @@ export async function POST(req: Request, { params }: { params: { id: string } })
         data: null,
         error: {
           message:
-            error instanceof Error ? error.message : 'Failed to review verification',
+            error instanceof Error
+              ? error.message
+              : 'Failed to review verification',
           code: 'ERR',
         },
       },

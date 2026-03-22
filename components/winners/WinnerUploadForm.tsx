@@ -43,11 +43,15 @@ export function WinnerUploadForm({
     setUploading(true);
 
     try {
-      const urlRes = await fetch(`/api/winners/upload-url?draw_result_id=${drawResultId}`);
+      const urlRes = await fetch(
+        `/api/winners/upload-url?draw_result_id=${drawResultId}`
+      );
       const urlJson = await urlRes.json();
 
       if (!urlRes.ok || !urlJson.data) {
-        throw new Error(urlJson.error?.message ?? 'Could not create upload URL');
+        throw new Error(
+          urlJson.error?.message ?? 'Could not create upload URL'
+        );
       }
 
       const uploadRes = await fetch(urlJson.data.upload_url, {
@@ -75,7 +79,9 @@ export function WinnerUploadForm({
       }
 
       setStatus('pending');
-      toast.success('Proof uploaded! We will review it within 2 business days.');
+      toast.success(
+        'Proof uploaded! We will review it within 2 business days.'
+      );
     } catch (error) {
       toast.error(error instanceof Error ? error.message : 'Upload failed');
     } finally {
@@ -85,16 +91,22 @@ export function WinnerUploadForm({
 
   if (status === 'pending' || status === 'approved') {
     return (
-      <div className="rounded-[20px] bg-[var(--dashboard-bg)] p-8 text-center" style={{ boxShadow: raisedSm }}>
+      <div
+        className="rounded-[20px] bg-[var(--dashboard-bg)] p-8 text-center"
+        style={{ boxShadow: raisedSm }}
+      >
         <div
           className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[var(--dashboard-green-700)] text-2xl text-white"
           style={{ boxShadow: raisedXs }}
         >
           ✓
         </div>
-        <h2 className="mt-5 text-2xl font-semibold text-[#2a3a2a]">Proof received!</h2>
+        <h2 className="mt-5 text-2xl font-semibold text-[#2a3a2a]">
+          Proof received!
+        </h2>
         <p className="mx-auto mt-3 max-w-xl text-sm text-[#6a7a6a]">
-          We&apos;ll review your scorecard within 2 business days. You&apos;ll receive an email when it has been processed.
+          We&apos;ll review your scorecard within 2 business days. You&apos;ll
+          receive an email when it has been processed.
         </p>
         <Link
           href="/dashboard"
@@ -109,7 +121,10 @@ export function WinnerUploadForm({
 
   return (
     <div className="space-y-5">
-      <section className="rounded-[20px] bg-[var(--dashboard-bg)] p-6 sm:p-8" style={{ boxShadow: raisedSm }}>
+      <section
+        className="rounded-[20px] bg-[var(--dashboard-bg)] p-6 sm:p-8"
+        style={{ boxShadow: raisedSm }}
+      >
         <div className="flex items-start gap-4">
           <div
             className="flex h-14 w-14 items-center justify-center rounded-[16px] bg-[#f0c040] text-2xl text-[#5d4700]"
@@ -118,7 +133,9 @@ export function WinnerUploadForm({
             🏆
           </div>
           <div>
-            <h1 className="text-3xl font-semibold text-[#2a3a2a]">You won £{prizeAmount.toFixed(2)}!</h1>
+            <h1 className="text-3xl font-semibold text-[#2a3a2a]">
+              You won £{prizeAmount.toFixed(2)}!
+            </h1>
             <p className="mt-1 text-sm text-[#1a5e38]">
               {matchCategory} in the {drawMonth} draw
             </p>
@@ -129,17 +146,25 @@ export function WinnerUploadForm({
         </div>
       </section>
 
-      <section className="rounded-[20px] bg-[var(--dashboard-bg)] p-6" style={{ boxShadow: raisedSm }}>
+      <section
+        className="rounded-[20px] bg-[var(--dashboard-bg)] p-6"
+        style={{ boxShadow: raisedSm }}
+      >
         <h2 className="text-lg font-semibold text-[#2a3a2a]">What to upload</h2>
         <ul className="mt-4 space-y-2 text-sm text-[#6a7a6a]">
           <li>- A clear photo or screenshot of your official scorecard</li>
-          <li>- Must show your name, the date, and the score of {drawNumber}</li>
+          <li>
+            - Must show your name, the date, and the score of {drawNumber}
+          </li>
           <li>- Accepted formats: JPG, PNG, WebP, PDF</li>
           <li>- Max file size: 10MB</li>
         </ul>
       </section>
 
-      <section className="rounded-[20px] bg-[var(--dashboard-bg)] p-6" style={{ boxShadow: raisedSm }}>
+      <section
+        className="rounded-[20px] bg-[var(--dashboard-bg)] p-6"
+        style={{ boxShadow: raisedSm }}
+      >
         <label
           className="flex min-h-[220px] cursor-pointer flex-col items-center justify-center rounded-[20px] px-6 py-8 text-center"
           style={{ boxShadow: insetShadow }}
@@ -150,7 +175,9 @@ export function WinnerUploadForm({
             className="hidden"
             onChange={(event) => setFile(event.target.files?.[0] ?? null)}
           />
-          <div className="text-lg font-semibold text-[#2a3a2a]">Click to select or drag and drop</div>
+          <div className="text-lg font-semibold text-[#2a3a2a]">
+            Click to select or drag and drop
+          </div>
           <p className="mt-2 text-sm text-[#6a7a6a]">
             Private upload. Your file goes directly to secure storage.
           </p>
@@ -180,7 +207,10 @@ export function WinnerUploadForm({
         onClick={handleUpload}
         disabled={!file || uploading}
         className="inline-flex min-w-[180px] rounded-[14px] px-6 py-3 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-60"
-        style={{ background: 'var(--dashboard-green-700)', boxShadow: raisedXs }}
+        style={{
+          background: 'var(--dashboard-green-700)',
+          boxShadow: raisedXs,
+        }}
       >
         {uploading ? 'Uploading...' : 'Upload proof'}
       </button>

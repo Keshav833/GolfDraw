@@ -1,6 +1,11 @@
 import { z } from 'zod';
 import { NextResponse } from 'next/server';
-import { createServiceSupabase, currentUtcMonth, drawError, isValidMonth } from '@/lib/draw/api';
+import {
+  createServiceSupabase,
+  currentUtcMonth,
+  drawError,
+  isValidMonth,
+} from '@/lib/draw/api';
 import { createDraftDraw, publishStoredDraw } from '@/lib/draw/workflow';
 
 const schema = z
@@ -23,14 +28,22 @@ export async function POST(req: Request) {
     const parsed = schema.safeParse(await req.json().catch(() => undefined));
 
     if (!parsed.success) {
-      return drawError(422, parsed.error.issues[0]?.message ?? 'Invalid request', 'VALIDATION_ERROR');
+      return drawError(
+        422,
+        parsed.error.issues[0]?.message ?? 'Invalid request',
+        'VALIDATION_ERROR'
+      );
     }
 
     const month = parsed.data?.month ?? currentUtcMonth();
     const mode = parsed.data?.mode ?? 'random';
 
     if (!isValidMonth(month)) {
-      return drawError(422, 'Month must be in YYYY-MM format', 'VALIDATION_ERROR');
+      return drawError(
+        422,
+        'Month must be in YYYY-MM format',
+        'VALIDATION_ERROR'
+      );
     }
 
     const serviceSupabase = createServiceSupabase();

@@ -9,8 +9,10 @@ import { StatusBadge } from '@/components/subscription/StatusBadge';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
-const raisedSm = '3px 3px 8px var(--dashboard-shadow-dark), -3px -3px 8px var(--dashboard-shadow-light)';
-const raisedXs = '2px 2px 5px var(--dashboard-shadow-dark), -2px -2px 5px var(--dashboard-shadow-light)';
+const raisedSm =
+  '3px 3px 8px var(--dashboard-shadow-dark), -3px -3px 8px var(--dashboard-shadow-light)';
+const raisedXs =
+  '2px 2px 5px var(--dashboard-shadow-dark), -2px -2px 5px var(--dashboard-shadow-light)';
 const insetShadow =
   'inset 3px 3px 7px var(--dashboard-shadow-dark), inset -3px -3px 7px var(--dashboard-shadow-light)';
 
@@ -33,7 +35,11 @@ type AccountResponse = {
 };
 
 export default function AccountPage() {
-  const { data: res, isLoading, refetch } = useQuery<AccountResponse>({
+  const {
+    data: res,
+    isLoading,
+    refetch,
+  } = useQuery<AccountResponse>({
     queryKey: ['me'],
     queryFn: () => fetch('/api/users/me').then((response) => response.json()),
   });
@@ -47,7 +53,9 @@ export default function AccountPage() {
       return;
     }
 
-    const response = await fetch('/api/subscriptions/cancel', { method: 'DELETE' });
+    const response = await fetch('/api/subscriptions/cancel', {
+      method: 'DELETE',
+    });
 
     if (response.ok) {
       toast.success('Subscription cancelled successfully.');
@@ -107,13 +115,15 @@ export default function AccountPage() {
       : subscription?.plan_type === 'monthly'
         ? 'Monthly member'
         : 'No active plan';
-  const statusLabel =
-    subscription?.status
-      ? subscription.status.replace('_', ' ').replace(/\b\w/g, (char) => char.toUpperCase())
-      : 'Inactive';
+  const statusLabel = subscription?.status
+    ? subscription.status
+        .replace('_', ' ')
+        .replace(/\b\w/g, (char) => char.toUpperCase())
+    : 'Inactive';
   const contributionPct = Number(user?.charity_contribution_pct ?? 0);
   const renewalDate =
-    subscription?.current_period_end && !Number.isNaN(new Date(subscription.current_period_end).getTime())
+    subscription?.current_period_end &&
+    !Number.isNaN(new Date(subscription.current_period_end).getTime())
       ? format(new Date(subscription.current_period_end), 'd MMM yyyy')
       : null;
 
@@ -133,7 +143,9 @@ export default function AccountPage() {
           <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#9aaa9a]">
             Profile
           </p>
-          <h2 className="mt-2 text-xl font-semibold text-[#2a3a2a]">Your details</h2>
+          <h2 className="mt-2 text-xl font-semibold text-[#2a3a2a]">
+            Your details
+          </h2>
           <p className="mt-1 text-sm text-[#6a7a6a]">
             Basic account details used across your GolfDraw profile.
           </p>
@@ -143,7 +155,9 @@ export default function AccountPage() {
               className="rounded-[16px] bg-[var(--dashboard-bg)] px-4 py-4"
               style={{ boxShadow: insetShadow }}
             >
-              <p className="text-[11px] uppercase tracking-[0.14em] text-[#9aaa9a]">Full name</p>
+              <p className="text-[11px] uppercase tracking-[0.14em] text-[#9aaa9a]">
+                Full name
+              </p>
               <p className="mt-2 text-base font-semibold text-[#2a3a2a]">
                 {user?.full_name || 'Not set'}
               </p>
@@ -152,8 +166,12 @@ export default function AccountPage() {
               className="rounded-[16px] bg-[var(--dashboard-bg)] px-4 py-4"
               style={{ boxShadow: insetShadow }}
             >
-              <p className="text-[11px] uppercase tracking-[0.14em] text-[#9aaa9a]">Email</p>
-              <p className="mt-2 text-base font-semibold text-[#2a3a2a]">{user?.email}</p>
+              <p className="text-[11px] uppercase tracking-[0.14em] text-[#9aaa9a]">
+                Email
+              </p>
+              <p className="mt-2 text-base font-semibold text-[#2a3a2a]">
+                {user?.email}
+              </p>
             </div>
           </div>
         </section>
@@ -167,15 +185,24 @@ export default function AccountPage() {
               <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#9aaa9a]">
                 Subscription
               </p>
-              <h2 className="mt-2 text-xl font-semibold text-[#2a3a2a]">Plan and billing</h2>
+              <h2 className="mt-2 text-xl font-semibold text-[#2a3a2a]">
+                Plan and billing
+              </h2>
             </div>
             <StatusBadge status={subscription?.status || 'inactive'} />
           </div>
 
-          <div className="mt-6 rounded-[16px] bg-[var(--dashboard-bg)] px-4 py-4" style={{ boxShadow: insetShadow }}>
-            <p className="text-[11px] uppercase tracking-[0.14em] text-[#9aaa9a]">Current plan</p>
+          <div
+            className="mt-6 rounded-[16px] bg-[var(--dashboard-bg)] px-4 py-4"
+            style={{ boxShadow: insetShadow }}
+          >
+            <p className="text-[11px] uppercase tracking-[0.14em] text-[#9aaa9a]">
+              Current plan
+            </p>
             <p className="mt-2 text-lg font-semibold capitalize text-[#2a3a2a]">
-              {subscription?.plan_type ? `${subscription.plan_type} plan` : 'None selected'}
+              {subscription?.plan_type
+                ? `${subscription.plan_type} plan`
+                : 'None selected'}
             </p>
             <p className="mt-1 text-sm text-[#6a7a6a]">
               {subscription?.plan_type === 'yearly'
@@ -185,10 +212,14 @@ export default function AccountPage() {
                   : 'Subscribe to enter upcoming draws.'}
             </p>
             {renewalDate && subscription?.status === 'active' ? (
-              <p className="mt-3 text-sm text-[#1a5e38]">Renews on {renewalDate}</p>
+              <p className="mt-3 text-sm text-[#1a5e38]">
+                Renews on {renewalDate}
+              </p>
             ) : null}
             {renewalDate && subscription?.status === 'cancelled' ? (
-              <p className="mt-3 text-sm text-[#b45309]">Access until {renewalDate}</p>
+              <p className="mt-3 text-sm text-[#b45309]">
+                Access until {renewalDate}
+              </p>
             ) : null}
           </div>
 
@@ -201,7 +232,9 @@ export default function AccountPage() {
               )}
               style={{ boxShadow: raisedXs }}
             >
-              {subscription?.status === 'active' ? 'Change plan' : 'Choose a plan'}
+              {subscription?.status === 'active'
+                ? 'Change plan'
+                : 'Choose a plan'}
             </Link>
             {subscription?.status === 'active' ? (
               <Button
@@ -225,9 +258,12 @@ export default function AccountPage() {
               <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#9aaa9a]">
                 Charity &amp; giving
               </p>
-              <h2 className="mt-2 text-xl font-semibold text-[#2a3a2a]">Your current allocation</h2>
+              <h2 className="mt-2 text-xl font-semibold text-[#2a3a2a]">
+                Your current allocation
+              </h2>
               <p className="mt-1 text-sm text-[#6a7a6a]">
-                Update your chosen charity and reserved contribution from the charity page.
+                Update your chosen charity and reserved contribution from the
+                charity page.
               </p>
             </div>
 
@@ -248,7 +284,9 @@ export default function AccountPage() {
               className="rounded-[16px] bg-[var(--dashboard-bg)] px-4 py-4"
               style={{ boxShadow: insetShadow }}
             >
-              <p className="text-[11px] uppercase tracking-[0.14em] text-[#9aaa9a]">Current charity</p>
+              <p className="text-[11px] uppercase tracking-[0.14em] text-[#9aaa9a]">
+                Current charity
+              </p>
               <p className="mt-2 text-base font-semibold text-[#2a3a2a]">
                 {charity?.name ?? 'None selected'}
               </p>
@@ -257,8 +295,12 @@ export default function AccountPage() {
               className="rounded-[16px] bg-[var(--dashboard-bg)] px-4 py-4"
               style={{ boxShadow: insetShadow }}
             >
-              <p className="text-[11px] uppercase tracking-[0.14em] text-[#9aaa9a]">Contribution</p>
-              <p className="mt-2 text-base font-semibold text-[#2a3a2a]">{contributionPct}%</p>
+              <p className="text-[11px] uppercase tracking-[0.14em] text-[#9aaa9a]">
+                Contribution
+              </p>
+              <p className="mt-2 text-base font-semibold text-[#2a3a2a]">
+                {contributionPct}%
+              </p>
             </div>
           </div>
         </section>

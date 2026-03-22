@@ -1,6 +1,10 @@
 import type { Score } from '@/lib/types/score';
 
-export type SubscriptionStatus = 'active' | 'past_due' | 'inactive' | 'cancelled';
+export type SubscriptionStatus =
+  | 'active'
+  | 'past_due'
+  | 'inactive'
+  | 'cancelled';
 
 export type DashboardSubscription = {
   id: string;
@@ -13,7 +17,11 @@ export type DashboardSubscription = {
 export type DashboardCharity = {
   id: string;
   name: string;
-  category: 'Golf & Sport' | 'Health & Research' | 'Youth & Education' | 'Environment';
+  category:
+    | 'Golf & Sport'
+    | 'Health & Research'
+    | 'Youth & Education'
+    | 'Environment';
   country: string;
 } | null;
 

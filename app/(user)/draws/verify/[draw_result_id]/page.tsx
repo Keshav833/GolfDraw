@@ -65,7 +65,9 @@ export default async function VerifyWinnerPage({
     redirect('/dashboard');
   }
 
-  const draw = Array.isArray(drawResult.draw) ? drawResult.draw[0] : drawResult.draw;
+  const draw = Array.isArray(drawResult.draw)
+    ? drawResult.draw[0]
+    : drawResult.draw;
   const verification = Array.isArray(drawResult.verification)
     ? drawResult.verification[0]
     : drawResult.verification;
@@ -73,17 +75,25 @@ export default async function VerifyWinnerPage({
   const shellProps = {
     userName: user.user_metadata?.full_name || user.email || 'GolfDraw member',
     membershipLabel:
-      subscriptionResult.data?.plan_type === 'yearly' ? 'Yearly member' : 'Monthly member',
+      subscriptionResult.data?.plan_type === 'yearly'
+        ? 'Yearly member'
+        : 'Monthly member',
     statusLabel: subscriptionResult.data?.status?.replace('_', ' ') || 'Active',
     title: 'Prize verification',
-    subtitle: 'Upload your scorecard so the GolfDraw team can verify and release your prize.',
+    subtitle:
+      'Upload your scorecard so the GolfDraw team can verify and release your prize.',
   };
 
   if (drawResult.payment_status === 'paid') {
     return (
       <PageShell {...shellProps}>
-        <div className="rounded-[20px] bg-[var(--dashboard-bg)] p-8 text-center" style={{ boxShadow: raisedSm }}>
-          <h1 className="text-2xl font-semibold text-[#2a3a2a]">Already paid</h1>
+        <div
+          className="rounded-[20px] bg-[var(--dashboard-bg)] p-8 text-center"
+          style={{ boxShadow: raisedSm }}
+        >
+          <h1 className="text-2xl font-semibold text-[#2a3a2a]">
+            Already paid
+          </h1>
           <p className="mt-3 text-sm text-[#6a7a6a]">
             This prize has already been paid. No further upload is needed.
           </p>
@@ -99,11 +109,19 @@ export default async function VerifyWinnerPage({
     );
   }
 
-  if (verification?.status === 'approved' && drawResult.payment_status !== 'rejected') {
+  if (
+    verification?.status === 'approved' &&
+    drawResult.payment_status !== 'rejected'
+  ) {
     return (
       <PageShell {...shellProps}>
-        <div className="rounded-[20px] bg-[var(--dashboard-bg)] p-8 text-center" style={{ boxShadow: raisedSm }}>
-          <h1 className="text-2xl font-semibold text-[#2a3a2a]">Under review</h1>
+        <div
+          className="rounded-[20px] bg-[var(--dashboard-bg)] p-8 text-center"
+          style={{ boxShadow: raisedSm }}
+        >
+          <h1 className="text-2xl font-semibold text-[#2a3a2a]">
+            Under review
+          </h1>
           <p className="mt-3 text-sm text-[#6a7a6a]">
             Your proof has already been approved and payment is being prepared.
           </p>

@@ -75,16 +75,21 @@ export async function POST(req: Request) {
         const selectedPlan = plan_type === 'yearly' ? 'yearly' : 'monthly';
         const demoSubscriptionId = `demo_${selectedPlan}_${authData.user.id}`;
 
-        const { error: subError } = await supabaseAdmin.from('subscriptions').insert({
-          user_id: authData.user.id,
-          razorpay_subscription_id: demoSubscriptionId,
-          plan_type: selectedPlan,
-          status: 'active',
-        });
+        const { error: subError } = await supabaseAdmin
+          .from('subscriptions')
+          .insert({
+            user_id: authData.user.id,
+            razorpay_subscription_id: demoSubscriptionId,
+            plan_type: selectedPlan,
+            status: 'active',
+          });
 
         if (subError) {
           return NextResponse.json(
-            { data: null, error: { message: subError.message, code: 'DB_ERR' } },
+            {
+              data: null,
+              error: { message: subError.message, code: 'DB_ERR' },
+            },
             { status: 500 }
           );
         }
@@ -94,7 +99,10 @@ export async function POST(req: Request) {
     return NextResponse.json({ data: authData, error: null });
   } catch (err: any) {
     return NextResponse.json(
-      { data: null, error: { message: err.message || 'Server error', code: 'ERR' } },
+      {
+        data: null,
+        error: { message: err.message || 'Server error', code: 'ERR' },
+      },
       { status: 500 }
     );
   }

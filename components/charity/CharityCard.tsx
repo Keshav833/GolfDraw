@@ -10,7 +10,8 @@ const categoryStyles: Record<Charity['category'], string> = {
   Environment: 'bg-[#dff1ee] text-[#0c6560]',
 };
 
-const raisedSm = '3px 3px 8px var(--dashboard-shadow-dark), -3px -3px 8px var(--dashboard-shadow-light)';
+const raisedSm =
+  '3px 3px 8px var(--dashboard-shadow-dark), -3px -3px 8px var(--dashboard-shadow-light)';
 const insetShadow =
   'inset 3px 3px 7px var(--dashboard-shadow-dark), inset -3px -3px 7px var(--dashboard-shadow-light)';
 
@@ -32,7 +33,9 @@ export function CharityCard({
         boxShadow: selected
           ? '3px 3px 7px rgba(10,50,20,0.3), -2px -2px 5px rgba(60,140,80,0.2)'
           : raisedSm,
-        border: selected ? '1px solid rgba(26,94,56,0.25)' : '1px solid transparent',
+        border: selected
+          ? '1px solid rgba(26,94,56,0.25)'
+          : '1px solid transparent',
       }}
     >
       {selected ? (
@@ -51,7 +54,9 @@ export function CharityCard({
 
       <div className="mt-4 flex-1">
         <h3 className="text-[15px] font-bold text-[#2a3a2a]">{charity.name}</h3>
-        <p className="mt-2 line-clamp-2 text-sm leading-6 text-[#6a7a6a]">{charity.description}</p>
+        <p className="mt-2 line-clamp-2 text-sm leading-6 text-[#6a7a6a]">
+          {charity.description}
+        </p>
         <div
           className="mt-3 inline-flex items-center gap-1 rounded-full bg-[var(--dashboard-bg)] px-2.5 py-1 text-xs text-[#6a7a6a]"
           style={{ boxShadow: insetShadow }}

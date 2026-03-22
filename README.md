@@ -1,4 +1,5 @@
 ![alt text](public/images/image.png)
+
 # ⛳ GolfDraw — Golf Performance, Prizes & Charity Platform
 
 A subscription-based web platform combining golf score tracking, monthly prize draws, and charitable giving. Built with Next.js, Supabase, and Stripe.
@@ -34,18 +35,21 @@ GolfDraw lets golfers track their scores, participate in monthly prize draws, an
 ## Features
 
 ### Subscription System
+
 - Monthly and yearly plans via Stripe
 - Lifecycle states: `active`, `past_due`, `inactive`, `cancelled`
 - Access control gated by subscription status
 - Billing portal for self-service plan management
 
 ### Score Management
+
 - Users submit golf scores (range: 1–45)
 - Rolling window: only the last 5 scores are retained per user
 - New scores automatically replace the oldest
 - Displayed in reverse chronological order
 
 ### Draw & Reward System
+
 - Monthly draws with two modes:
   - **Random** — cryptographic lottery with stored seed for auditability
   - **Algorithmic** — score-weighted draw bias (configurable)
@@ -54,32 +58,37 @@ GolfDraw lets golfers track their scores, participate in monthly prize draws, an
 - Simulation mode lets admins preview results before publishing
 
 ### Prize Pool
-| Category | Pool Share | Rollover |
-|----------|-----------|---------|
-| 5-match (jackpot) | 40% | ✅ Yes |
-| 4-match | 35% | ❌ No |
-| 3-match | 25% | ❌ No |
+
+| Category          | Pool Share | Rollover |
+| ----------------- | ---------- | -------- |
+| 5-match (jackpot) | 40%        | ✅ Yes   |
+| 4-match           | 35%        | ❌ No    |
+| 3-match           | 25%        | ❌ No    |
 
 Winners in each category split the pool equally.
 
 ### Charity System
+
 - Users select a charity at signup from a curated directory
 - Minimum 10% of subscription revenue is allocated to the user's chosen charity
 - Users can optionally increase their contribution percentage
 - Charity profiles include descriptions, categories, and country filters
 
 ### Winner Verification
+
 - Winners upload proof (score screenshot)
 - Admin approval/rejection workflow
 - Payment states: `pending` → `approved` → `paid`
 
 ### User Dashboard
+
 - Subscription status and billing management
 - Score submission and history
 - Charity selection and allocation overview
 - Draw participation history and winnings
 
 ### Admin Dashboard
+
 - User and subscription management
 - Draw configuration, simulation, and publishing
 - Winner verification queue
@@ -89,18 +98,18 @@ Winners in each category split the pool equally.
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|-----------|
-| Frontend | Next.js 14 (App Router), TypeScript, Tailwind CSS, shadcn/ui |
-| State management | TanStack Query (React Query) |
-| Backend | Next.js API Routes (REST) |
-| Database | Supabase (PostgreSQL) with Row-Level Security |
-| Auth | Supabase Auth (JWT) |
-| Payments | Stripe (Subscriptions + Webhooks) |
-| File storage | Supabase Storage / Cloudflare R2 |
-| Background jobs | pg_cron + Supabase Edge Functions |
-| Email | Resend (transactional) |
-| Deployment | Vercel (frontend) + Supabase Cloud (backend) |
+| Layer            | Technology                                                   |
+| ---------------- | ------------------------------------------------------------ |
+| Frontend         | Next.js 14 (App Router), TypeScript, Tailwind CSS, shadcn/ui |
+| State management | TanStack Query (React Query)                                 |
+| Backend          | Next.js API Routes (REST)                                    |
+| Database         | Supabase (PostgreSQL) with Row-Level Security                |
+| Auth             | Supabase Auth (JWT)                                          |
+| Payments         | Stripe (Subscriptions + Webhooks)                            |
+| File storage     | Supabase Storage / Cloudflare R2                             |
+| Background jobs  | pg_cron + Supabase Edge Functions                            |
+| Email            | Resend (transactional)                                       |
+| Deployment       | Vercel (frontend) + Supabase Cloud (backend)                 |
 
 ---
 
@@ -264,16 +273,16 @@ golfdraw/
 
 ### Core tables
 
-| Table | Purpose |
-|-------|---------|
-| `users` | User profiles, charity selection, contribution % |
-| `subscriptions` | Subscription state linked to Stripe |
-| `scores` | Golf scores (max 5 per user, enforced by trigger) |
-| `charities` | Charity directory |
-| `draws` | Draw configuration and status |
-| `draw_results` | Winners per draw, payment status |
-| `winner_verifications` | Proof uploads and admin review |
-| `prize_pool_ledger` | Append-only accounting of prize pool contributions |
+| Table                  | Purpose                                            |
+| ---------------------- | -------------------------------------------------- |
+| `users`                | User profiles, charity selection, contribution %   |
+| `subscriptions`        | Subscription state linked to Stripe                |
+| `scores`               | Golf scores (max 5 per user, enforced by trigger)  |
+| `charities`            | Charity directory                                  |
+| `draws`                | Draw configuration and status                      |
+| `draw_results`         | Winners per draw, payment status                   |
+| `winner_verifications` | Proof uploads and admin review                     |
+| `prize_pool_ledger`    | Append-only accounting of prize pool contributions |
 
 ### Key constraints
 

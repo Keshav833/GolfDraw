@@ -10,7 +10,9 @@ export async function getEligibleUsers(): Promise<EligibleUser[]> {
     .eq('subscription_status', 'active');
 
   if (usersError || !activeUsers) {
-    throw new Error(`Failed to fetch active users: ${usersError?.message ?? 'Unknown error'}`);
+    throw new Error(
+      `Failed to fetch active users: ${usersError?.message ?? 'Unknown error'}`
+    );
   }
 
   if (activeUsers.length === 0) {

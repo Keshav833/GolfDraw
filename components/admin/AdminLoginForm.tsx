@@ -1,62 +1,67 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { Eye, EyeOff, ArrowLeft, Loader2, ShieldCheck } from 'lucide-react'
-import Link from 'next/link'
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { Eye, EyeOff, ArrowLeft, Loader2, ShieldCheck } from 'lucide-react';
+import Link from 'next/link';
 
 interface Props {
-  accessDenied: boolean
+  accessDenied: boolean;
 }
 
 export default function AdminLoginForm({ accessDenied }: Props) {
-  const router = useRouter()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [showPassword, setShowPassword] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(accessDenied ? 'access_denied' : null)
+  const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(
+    accessDenied ? 'access_denied' : null
+  );
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
-    setError(null)
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
 
     try {
       const res = await fetch('/api/admin/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email.trim(), password })
-      })
+        body: JSON.stringify({ email: email.trim(), password }),
+      });
 
-      const json = await res.json()
+      const json = await res.json();
 
       if (!res.ok) {
-        setError(json.error?.message || 'default')
-        return
+        setError(json.error?.message || 'default');
+        return;
       }
 
-      router.push('/admin')
-      router.refresh()
+      router.push('/admin');
+      router.refresh();
     } catch {
-      setError('default')
+      setError('default');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const getErrorMessage = () => {
     switch (error) {
-      case 'invalid_credentials': return 'Incorrect email or password'
-      case 'access_denied': return 'This account does not have admin access'
-      case 'too_many_requests': return 'Too many attempts. Please wait and try again'
-      default: return 'Something went wrong. Please try again'
+      case 'invalid_credentials':
+        return 'Incorrect email or password';
+      case 'access_denied':
+        return 'This account does not have admin access';
+      case 'too_many_requests':
+        return 'Too many attempts. Please wait and try again';
+      default:
+        return 'Something went wrong. Please try again';
     }
-  }
+  };
 
   return (
     <div className="w-full max-w-[420px] flex flex-col items-center">
-
       {/* Logo / Brand */}
       <div className="mb-10 flex flex-col items-center gap-4">
         <div
@@ -64,7 +69,8 @@ export default function AdminLoginForm({ accessDenied }: Props) {
           style={{
             background: 'rgba(255,255,255,0.08)',
             border: '1px solid rgba(255,255,255,0.15)',
-            boxShadow: '0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.12)',
+            boxShadow:
+              '0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.12)',
             backdropFilter: 'blur(12px)',
           }}
         >
@@ -81,7 +87,8 @@ export default function AdminLoginForm({ accessDenied }: Props) {
           <div
             className="mt-2 inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold uppercase tracking-widest"
             style={{
-              background: 'linear-gradient(135deg, rgba(180,140,40,0.25), rgba(220,180,60,0.15))',
+              background:
+                'linear-gradient(135deg, rgba(180,140,40,0.25), rgba(220,180,60,0.15))',
               border: '1px solid rgba(200,160,50,0.4)',
               color: '#d4a94a',
             }}
@@ -99,7 +106,9 @@ export default function AdminLoginForm({ accessDenied }: Props) {
         >
           Secure Sign In
         </h2>
-        <p className="text-[13px] text-white/45 mt-1">Access the GolfDraw admin dashboard</p>
+        <p className="text-[13px] text-white/45 mt-1">
+          Access the GolfDraw admin dashboard
+        </p>
       </div>
 
       {/* Card */}
@@ -108,12 +117,12 @@ export default function AdminLoginForm({ accessDenied }: Props) {
         style={{
           background: 'rgba(255,255,255,0.06)',
           border: '1px solid rgba(255,255,255,0.12)',
-          boxShadow: '0 20px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1)',
+          boxShadow:
+            '0 20px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1)',
           backdropFilter: 'blur(24px)',
         }}
       >
         <form onSubmit={handleSubmit} className="space-y-5">
-
           {/* Email */}
           <div className="space-y-1.5">
             <label className="text-[11px] font-semibold text-white/40 uppercase tracking-widest ml-1">
@@ -128,17 +137,21 @@ export default function AdminLoginForm({ accessDenied }: Props) {
                 border: '1px solid rgba(255,255,255,0.1)',
                 boxShadow: 'inset 0 2px 8px rgba(0,0,0,0.3)',
               }}
-              onFocus={e => {
-                e.currentTarget.style.border = '1px solid rgba(125,224,170,0.5)'
-                e.currentTarget.style.boxShadow = 'inset 0 2px 8px rgba(0,0,0,0.3), 0 0 0 3px rgba(125,224,170,0.08)'
+              onFocus={(e) => {
+                e.currentTarget.style.border =
+                  '1px solid rgba(125,224,170,0.5)';
+                e.currentTarget.style.boxShadow =
+                  'inset 0 2px 8px rgba(0,0,0,0.3), 0 0 0 3px rgba(125,224,170,0.08)';
               }}
-              onBlur={e => {
-                e.currentTarget.style.border = '1px solid rgba(255,255,255,0.1)'
-                e.currentTarget.style.boxShadow = 'inset 0 2px 8px rgba(0,0,0,0.3)'
+              onBlur={(e) => {
+                e.currentTarget.style.border =
+                  '1px solid rgba(255,255,255,0.1)';
+                e.currentTarget.style.boxShadow =
+                  'inset 0 2px 8px rgba(0,0,0,0.3)';
               }}
               placeholder="admin@golfdraw.com"
               value={email}
-              onChange={e => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
 
@@ -157,17 +170,21 @@ export default function AdminLoginForm({ accessDenied }: Props) {
                   border: '1px solid rgba(255,255,255,0.1)',
                   boxShadow: 'inset 0 2px 8px rgba(0,0,0,0.3)',
                 }}
-                onFocus={e => {
-                  e.currentTarget.style.border = '1px solid rgba(125,224,170,0.5)'
-                  e.currentTarget.style.boxShadow = 'inset 0 2px 8px rgba(0,0,0,0.3), 0 0 0 3px rgba(125,224,170,0.08)'
+                onFocus={(e) => {
+                  e.currentTarget.style.border =
+                    '1px solid rgba(125,224,170,0.5)';
+                  e.currentTarget.style.boxShadow =
+                    'inset 0 2px 8px rgba(0,0,0,0.3), 0 0 0 3px rgba(125,224,170,0.08)';
                 }}
-                onBlur={e => {
-                  e.currentTarget.style.border = '1px solid rgba(255,255,255,0.1)'
-                  e.currentTarget.style.boxShadow = 'inset 0 2px 8px rgba(0,0,0,0.3)'
+                onBlur={(e) => {
+                  e.currentTarget.style.border =
+                    '1px solid rgba(255,255,255,0.1)';
+                  e.currentTarget.style.boxShadow =
+                    'inset 0 2px 8px rgba(0,0,0,0.3)';
                 }}
                 placeholder="••••••••"
                 value={password}
-                onChange={e => setPassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
               />
               <button
                 type="button"
@@ -201,7 +218,8 @@ export default function AdminLoginForm({ accessDenied }: Props) {
             className="w-full py-3.5 rounded-xl text-[14px] font-bold text-white transition-all active:scale-[0.98] disabled:opacity-50 disabled:scale-100 flex items-center justify-center gap-2 mt-2"
             style={{
               background: 'linear-gradient(135deg, #1a5e38, #0f3d24)',
-              boxShadow: '0 4px 20px rgba(10,50,30,0.6), inset 0 1px 0 rgba(125,224,170,0.2)',
+              boxShadow:
+                '0 4px 20px rgba(10,50,30,0.6), inset 0 1px 0 rgba(125,224,170,0.2)',
               border: '1px solid rgba(125,224,170,0.2)',
             }}
           >
@@ -225,5 +243,5 @@ export default function AdminLoginForm({ accessDenied }: Props) {
         Back to main site
       </Link>
     </div>
-  )
+  );
 }

@@ -19,9 +19,15 @@ const patchSchema = z.object({
   charity_contribution_pct: z
     .number()
     .int()
-    .refine((value) => CONTRIBUTION_OPTIONS.includes(value as (typeof CONTRIBUTION_OPTIONS)[number]), {
-      message: 'Must be 10, 15, or 30',
-    })
+    .refine(
+      (value) =>
+        CONTRIBUTION_OPTIONS.includes(
+          value as (typeof CONTRIBUTION_OPTIONS)[number]
+        ),
+      {
+        message: 'Must be 10, 15, or 30',
+      }
+    )
     .optional(),
 });
 
@@ -42,10 +48,9 @@ function createSupabaseServerClient() {
   );
 }
 
-function jsonResponse<T extends UserCharityGetResponse | UserCharityPatchResponse>(
-  body: T,
-  status: number
-) {
+function jsonResponse<
+  T extends UserCharityGetResponse | UserCharityPatchResponse,
+>(body: T, status: number) {
   return NextResponse.json(body, { status });
 }
 
@@ -57,7 +62,10 @@ export async function GET() {
     } = await supabase.auth.getUser();
 
     if (!user) {
-      return jsonResponse({ data: null, error: { message: 'Unauthorized', code: '401' } }, 401);
+      return jsonResponse(
+        { data: null, error: { message: 'Unauthorized', code: '401' } },
+        401
+      );
     }
 
     const { data, error } = await supabase
@@ -87,7 +95,10 @@ export async function GET() {
     );
   } catch (error: any) {
     return jsonResponse(
-      { data: null, error: { message: error.message ?? 'Server error', code: 'ERR' } },
+      {
+        data: null,
+        error: { message: error.message ?? 'Server error', code: 'ERR' },
+      },
       500
     );
   }
@@ -98,7 +109,7 @@ function firstCharity(value: Charity | Charity[] | null | undefined) {
     return null;
   }
 
-  return Array.isArray(value) ? value[0] ?? null : value;
+  return Array.isArray(value) ? (value[0] ?? null) : value;
 }
 
 export async function PATCH(req: Request) {
@@ -109,7 +120,10 @@ export async function PATCH(req: Request) {
     } = await supabase.auth.getUser();
 
     if (!user) {
-      return jsonResponse({ data: null, error: { message: 'Unauthorized', code: '401' } }, 401);
+      return jsonResponse(
+        { data: null, error: { message: 'Unauthorized', code: '401' } },
+        401
+      );
     }
 
     const rawBody = await req.json();
@@ -120,7 +134,9 @@ export async function PATCH(req: Request) {
         {
           data: null,
           error: {
-            message: parsedBody.error.issues.map((issue) => issue.message).join(', '),
+            message: parsedBody.error.issues
+              .map((issue) => issue.message)
+              .join(', '),
             code: 'VALIDATION_ERR',
           },
         },
@@ -159,7 +175,10 @@ export async function PATCH(req: Request) {
     );
   } catch (error: any) {
     return jsonResponse(
-      { data: null, error: { message: error.message ?? 'Server error', code: 'ERR' } },
+      {
+        data: null,
+        error: { message: error.message ?? 'Server error', code: 'ERR' },
+      },
       500
     );
   }

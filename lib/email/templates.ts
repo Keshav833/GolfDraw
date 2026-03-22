@@ -15,10 +15,10 @@ export async function sendWelcomeEmail(to: string, name: string) {
           <p>Your subscription is active and your first draw entry is confirmed.</p>
           <p>Remember to log your scores after your next round to maximize your chances.</p>
         </div>
-      `
+      `,
     });
   } catch (err) {
-    console.error("Resend delivery failed:", err);
+    console.error('Resend delivery failed:', err);
     return null;
   }
 }

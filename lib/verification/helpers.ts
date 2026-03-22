@@ -1,6 +1,9 @@
 import { createClient } from '@/lib/supabase/server';
 import { createServiceSupabase, createSessionSupabase } from '@/lib/draw/api';
-import type { DrawResultWithWinner, WinnerVerification } from '@/lib/types/verification';
+import type {
+  DrawResultWithWinner,
+  WinnerVerification,
+} from '@/lib/types/verification';
 
 export function getFileFolderAndName(filePath: string) {
   const lastSlash = filePath.lastIndexOf('/');
@@ -19,7 +22,10 @@ export async function getAuthenticatedUser() {
   return { supabase, user };
 }
 
-export async function getOwnedPendingDrawResult(drawResultId: string, userId: string) {
+export async function getOwnedPendingDrawResult(
+  drawResultId: string,
+  userId: string
+) {
   const supabase = createClient();
 
   const { data, error } = await supabase
@@ -30,7 +36,7 @@ export async function getOwnedPendingDrawResult(drawResultId: string, userId: st
     .single();
 
   if (error || !data) {
-    return { data: null, error: 'not_found' as 'not_found' };
+    return { data: null, error: 'not_found' as const };
   }
 
   return { data, error: null as null };
@@ -87,9 +93,15 @@ export async function getAdminVerificationRecord(verificationId: string) {
     return null;
   }
 
-  const drawResult = Array.isArray(data.draw_result) ? data.draw_result[0] : data.draw_result;
-  const draw = Array.isArray(drawResult?.draw) ? drawResult.draw[0] : drawResult?.draw;
-  const user = Array.isArray(drawResult?.user) ? drawResult.user[0] : drawResult?.user;
+  const drawResult = Array.isArray(data.draw_result)
+    ? data.draw_result[0]
+    : data.draw_result;
+  const draw = Array.isArray(drawResult?.draw)
+    ? drawResult.draw[0]
+    : drawResult?.draw;
+  const user = Array.isArray(drawResult?.user)
+    ? drawResult.user[0]
+    : drawResult?.user;
 
   return {
     id: drawResult.id,

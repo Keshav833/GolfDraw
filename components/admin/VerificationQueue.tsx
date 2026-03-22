@@ -20,18 +20,28 @@ export function VerificationQueue({
 }) {
   const [status, setStatus] = useState<(typeof FILTERS)[number]>(initialStatus);
   const [page, setPage] = useState(1);
-  const [activeViewer, setActiveViewer] = useState<DrawResultWithWinner | null>(null);
+  const [activeViewer, setActiveViewer] = useState<DrawResultWithWinner | null>(
+    null
+  );
   const queryClient = useQueryClient();
 
   const { data, isLoading } = useQuery({
     queryKey: ['admin-verifications', status, page],
     queryFn: async () => {
-      const res = await fetch(`/api/admin/verifications?status=${status}&page=${page}`);
+      const res = await fetch(
+        `/api/admin/verifications?status=${status}&page=${page}`
+      );
       const json = await res.json();
       if (!res.ok || !json.data) {
-        throw new Error(json.error?.message ?? 'Failed to load verification queue');
+        throw new Error(
+          json.error?.message ?? 'Failed to load verification queue'
+        );
       }
-      return json.data as { items: DrawResultWithWinner[]; total: number; page: number };
+      return json.data as {
+        items: DrawResultWithWinner[];
+        total: number;
+        page: number;
+      };
     },
   });
 
@@ -45,13 +55,18 @@ export function VerificationQueue({
       action: 'approve' | 'reject' | 're_review';
       rejectionNote?: string;
     }) => {
-      const res = await fetch(`/api/admin/verifications/${verificationId}/review`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(
-          action === 'reject' ? { action, rejection_note: rejectionNote } : { action }
-        ),
-      });
+      const res = await fetch(
+        `/api/admin/verifications/${verificationId}/review`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(
+            action === 'reject'
+              ? { action, rejection_note: rejectionNote }
+              : { action }
+          ),
+        }
+      );
       const json = await res.json();
       if (!res.ok) {
         throw new Error(json.error?.message ?? 'Review failed');
@@ -68,9 +83,12 @@ export function VerificationQueue({
 
   const paidMutation = useMutation({
     mutationFn: async (verificationId: string) => {
-      const res = await fetch(`/api/admin/verifications/${verificationId}/paid`, {
-        method: 'POST',
-      });
+      const res = await fetch(
+        `/api/admin/verifications/${verificationId}/paid`,
+        {
+          method: 'POST',
+        }
+      );
       const json = await res.json();
       if (!res.ok) {
         throw new Error(json.error?.message ?? 'Failed to mark paid');
@@ -95,7 +113,9 @@ export function VerificationQueue({
     <div className="mx-auto max-w-7xl px-4 py-8">
       <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
-          <h1 className="text-3xl font-semibold text-[#2a3a2a]">Winner verifications</h1>
+          <h1 className="text-3xl font-semibold text-[#2a3a2a]">
+            Winner verifications
+          </h1>
           <p className="mt-1 text-sm text-[#6a7a6a]">
             Review uploaded scorecards and move verified winners to payment.
           </p>
@@ -114,12 +134,16 @@ export function VerificationQueue({
               }`}
               style={{
                 background:
-                  status === filter ? 'var(--dashboard-green-700)' : 'var(--dashboard-bg)',
+                  status === filter
+                    ? 'var(--dashboard-green-700)'
+                    : 'var(--dashboard-bg)',
                 boxShadow: raisedXs,
               }}
             >
               {filter[0].toUpperCase() + filter.slice(1)}
-              {filter === 'pending' && pendingCount !== undefined ? ` (${pendingCount})` : ''}
+              {filter === 'pending' && pendingCount !== undefined
+                ? ` (${pendingCount})`
+                : ''}
             </button>
           ))}
         </div>
@@ -128,7 +152,10 @@ export function VerificationQueue({
       <div className="space-y-4">
         {isLoading ? (
           Array.from({ length: 4 }).map((_, index) => (
-            <div key={index} className="h-32 animate-pulse rounded-[20px] bg-[#d9ddd9]" />
+            <div
+              key={index}
+              className="h-32 animate-pulse rounded-[20px] bg-[#d9ddd9]"
+            />
           ))
         ) : data?.items.length ? (
           data.items.map((item) => (
@@ -151,7 +178,9 @@ export function VerificationQueue({
                       .toUpperCase()}
                   </div>
                   <div>
-                    <p className="font-semibold text-[#2a3a2a]">{item.user.full_name}</p>
+                    <p className="font-semibold text-[#2a3a2a]">
+                      {item.user.full_name}
+                    </p>
                     <p className="text-sm text-[#6a7a6a]">{item.user.email}</p>
                   </div>
                 </div>
@@ -170,14 +199,21 @@ export function VerificationQueue({
                   >
                     {item.match_category}
                   </div>
-                  <p className="mt-3 text-sm text-[#2a3a2a]">{item.draw.month}</p>
-                  <p className="text-xs text-[#6a7a6a]">Draw #{item.draw.draw_number}</p>
+                  <p className="mt-3 text-sm text-[#2a3a2a]">
+                    {item.draw.month}
+                  </p>
+                  <p className="text-xs text-[#6a7a6a]">
+                    Draw #{item.draw.draw_number}
+                  </p>
                   <p className="mt-2 text-xs text-[#6a7a6a]">
                     Uploaded{' '}
                     {item.verification
-                      ? formatDistanceToNow(new Date(item.verification.created_at), {
-                          addSuffix: true,
-                        })
+                      ? formatDistanceToNow(
+                          new Date(item.verification.created_at),
+                          {
+                            addSuffix: true,
+                          }
+                        )
                       : 'just now'}
                   </p>
                 </div>
@@ -197,7 +233,10 @@ export function VerificationQueue({
                         type="button"
                         onClick={() => setActiveViewer(item)}
                         className="rounded-[14px] px-4 py-2 text-sm text-[#2a3a2a]"
-                        style={{ background: 'var(--dashboard-bg)', boxShadow: raisedXs }}
+                        style={{
+                          background: 'var(--dashboard-bg)',
+                          boxShadow: raisedXs,
+                        }}
                       >
                         View proof
                       </button>
@@ -205,7 +244,9 @@ export function VerificationQueue({
                     {item.verification?.status === 'approved' ? (
                       <button
                         type="button"
-                        onClick={() => paidMutation.mutate(item.verification!.id)}
+                        onClick={() =>
+                          paidMutation.mutate(item.verification!.id)
+                        }
                         className="rounded-[14px] px-4 py-2 text-sm text-white"
                         style={{ background: '#2563eb', boxShadow: raisedXs }}
                       >
@@ -222,7 +263,10 @@ export function VerificationQueue({
                           })
                         }
                         className="rounded-[14px] px-4 py-2 text-sm text-[#2a3a2a]"
-                        style={{ background: 'var(--dashboard-bg)', boxShadow: raisedXs }}
+                        style={{
+                          background: 'var(--dashboard-bg)',
+                          boxShadow: raisedXs,
+                        }}
                       >
                         Re-review
                       </button>

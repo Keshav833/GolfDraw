@@ -27,13 +27,25 @@ export function runDrawEngine(config: DrawConfig): DrawResult {
   );
 
   const matches = detectMatches(config.eligible_users, drawNumber);
-  const fiveMatchUsers = matches.filter((match) => match.category === '5-match');
-  const fourMatchUsers = matches.filter((match) => match.category === '4-match');
-  const threeMatchUsers = matches.filter((match) => match.category === '3-match');
+  const fiveMatchUsers = matches.filter(
+    (match) => match.category === '5-match'
+  );
+  const fourMatchUsers = matches.filter(
+    (match) => match.category === '4-match'
+  );
+  const threeMatchUsers = matches.filter(
+    (match) => match.category === '3-match'
+  );
 
   const prizePerFive = splitPrize(prizeBuckets.jackpot, fiveMatchUsers.length);
-  const prizePerFour = splitPrize(prizeBuckets.four_match, fourMatchUsers.length);
-  const prizePerThree = splitPrize(prizeBuckets.three_match, threeMatchUsers.length);
+  const prizePerFour = splitPrize(
+    prizeBuckets.four_match,
+    fourMatchUsers.length
+  );
+  const prizePerThree = splitPrize(
+    prizeBuckets.three_match,
+    threeMatchUsers.length
+  );
 
   const buildResults = (
     matchList: typeof matches,

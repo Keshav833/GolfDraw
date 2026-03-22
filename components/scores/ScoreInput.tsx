@@ -9,7 +9,8 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import type { Score, ScoreApiResponse } from '@/lib/types/score';
 
-const raisedSm = '3px 3px 8px var(--dashboard-shadow-dark), -3px -3px 8px var(--dashboard-shadow-light)';
+const raisedSm =
+  '3px 3px 8px var(--dashboard-shadow-dark), -3px -3px 8px var(--dashboard-shadow-light)';
 const insetShadow =
   'inset 3px 3px 7px var(--dashboard-shadow-dark), inset -3px -3px 7px var(--dashboard-shadow-light)';
 
@@ -39,7 +40,11 @@ const scoreInputSchema = z.object({
 
 type ScoreInputForm = z.infer<typeof scoreInputSchema>;
 
-export function ScoreInput({ onSuccess }: { onSuccess: (scores: Score[]) => void }) {
+export function ScoreInput({
+  onSuccess,
+}: {
+  onSuccess: (scores: Score[]) => void;
+}) {
   const valueField = formValueParser();
   const form = useForm<ScoreInputForm>({
     resolver: zodResolver(scoreInputSchema),
@@ -107,7 +112,9 @@ export function ScoreInput({ onSuccess }: { onSuccess: (scores: Score[]) => void
           {mutation.isPending ? 'Saving...' : 'Submit score'}
         </Button>
       </div>
-      {valueError ? <p className="text-sm text-[#b04747]">{valueError}</p> : null}
+      {valueError ? (
+        <p className="text-sm text-[#b04747]">{valueError}</p>
+      ) : null}
     </form>
   );
 }

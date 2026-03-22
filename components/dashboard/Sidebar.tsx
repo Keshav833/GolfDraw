@@ -5,9 +5,12 @@ import { usePathname } from 'next/navigation';
 import { LayoutGrid, LogOut } from 'lucide-react';
 import { signOut } from '@/app/(auth)/actions';
 
-const raised = '5px 5px 12px var(--dashboard-shadow-dark), -5px -5px 12px var(--dashboard-shadow-light)';
-const raisedSm = '3px 3px 8px var(--dashboard-shadow-dark), -3px -3px 8px var(--dashboard-shadow-light)';
-const insetShadow = 'inset 3px 3px 7px var(--dashboard-shadow-dark), inset -3px -3px 7px var(--dashboard-shadow-light)';
+const raised =
+  '5px 5px 12px var(--dashboard-shadow-dark), -5px -5px 12px var(--dashboard-shadow-light)';
+const raisedSm =
+  '3px 3px 8px var(--dashboard-shadow-dark), -3px -3px 8px var(--dashboard-shadow-light)';
+const insetShadow =
+  'inset 3px 3px 7px var(--dashboard-shadow-dark), inset -3px -3px 7px var(--dashboard-shadow-light)';
 
 interface SidebarProps {
   userName: string;
@@ -16,7 +19,12 @@ interface SidebarProps {
   initials: string;
 }
 
-export function Sidebar({ userName, membershipLabel, statusLabel, initials }: SidebarProps) {
+export function Sidebar({
+  userName,
+  membershipLabel,
+  statusLabel,
+  initials,
+}: SidebarProps) {
   const pathname = usePathname();
 
   return (
@@ -39,7 +47,7 @@ export function Sidebar({ userName, membershipLabel, statusLabel, initials }: Si
 
         {/* Mobile Logout */}
         <form action={signOut} className="lg:hidden">
-          <button 
+          <button
             type="submit"
             className="flex h-[34px] w-[34px] items-center justify-center rounded-[10px] bg-[var(--dashboard-bg)] text-[#6a7a6a] transition hover:text-[#1a5e38]"
             style={{ boxShadow: raisedSm }}
@@ -78,13 +86,33 @@ export function Sidebar({ userName, membershipLabel, statusLabel, initials }: Si
 
         <nav className="flex flex-col gap-1 overflow-y-auto no-scrollbar flex-1 relative group pb-10">
           <NavLabel label="Main" />
-          <NavItem href="/dashboard" label="Overview" active={pathname === '/dashboard'} />
-          <NavItem href="/scores" label="My Scores" active={pathname === '/scores'} />
+          <NavItem
+            href="/dashboard"
+            label="Overview"
+            active={pathname === '/dashboard'}
+          />
+          <NavItem
+            href="/scores"
+            label="My Scores"
+            active={pathname === '/scores'}
+          />
           <NavItem href="/draws" label="Draws" active={pathname === '/draws'} />
-          <NavItem href="/charity" label="Charity" active={pathname === '/charity'} />
+          <NavItem
+            href="/charity"
+            label="Charity"
+            active={pathname === '/charity'}
+          />
           <NavLabel label="Account" />
-          <NavItem href="/account" label="Billing" active={pathname === '/account' || pathname === '/register/plan'} />
-          <NavItem href="/account/profile" label="Profile" active={pathname === '/account/profile'} />
+          <NavItem
+            href="/account"
+            label="Billing"
+            active={pathname === '/account' || pathname === '/register/plan'}
+          />
+          <NavItem
+            href="/account/profile"
+            label="Profile"
+            active={pathname === '/account/profile'}
+          />
           <div className="absolute bottom-0 left-0 right-0 h-10 bg-gradient-to-t from-[var(--dashboard-bg)] to-transparent pointer-events-none sticky z-10" />
         </nav>
 
@@ -92,7 +120,7 @@ export function Sidebar({ userName, membershipLabel, statusLabel, initials }: Si
           <div className="my-3 h-px bg-gradient-to-r from-transparent via-[var(--dashboard-shadow-dark)] to-transparent opacity-50" />
 
           <form action={signOut}>
-            <button 
+            <button
               type="submit"
               className="flex w-full items-center gap-[9px] rounded-[12px] px-3 py-[12px] text-[13px] text-[#6a7a6a] hover:text-[#1a5e38] transition-all bg-[var(--dashboard-bg)] hover:shadow-[3px_3px_8px_var(--dashboard-shadow-dark),-3px_-3px_8px_var(--dashboard-shadow-light)] active:shadow-[inset_2px_2px_5px_var(--dashboard-shadow-dark),inset_-2px_-2px_5px_var(--dashboard-shadow-light)]"
             >
@@ -107,7 +135,11 @@ export function Sidebar({ userName, membershipLabel, statusLabel, initials }: Si
 }
 
 function NavLabel({ label }: { label: string }) {
-  return <div className="px-2 py-[10px] text-[10px] uppercase tracking-[0.8px] text-[#9aaa9a]">{label}</div>;
+  return (
+    <div className="px-2 py-[10px] text-[10px] uppercase tracking-[0.8px] text-[#9aaa9a]">
+      {label}
+    </div>
+  );
 }
 
 function NavItem({
@@ -123,7 +155,9 @@ function NavItem({
     <Link
       href={href}
       className={`flex items-center gap-[9px] rounded-[12px] px-3 py-[10px] text-[13px] transition ${
-        active ? 'font-medium text-[#1a5e38]' : 'text-[#6a7a6a] hover:text-[#2a3a2a]'
+        active
+          ? 'font-medium text-[#1a5e38]'
+          : 'text-[#6a7a6a] hover:text-[#2a3a2a]'
       }`}
       style={{ boxShadow: active ? insetShadow : 'none' }}
     >

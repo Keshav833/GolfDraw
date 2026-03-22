@@ -16,7 +16,10 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
 
   if (error || !verification) {
     return NextResponse.json(
-      { data: null, error: { message: 'Verification not found', code: 'NOT_FOUND' } },
+      {
+        data: null,
+        error: { message: 'Verification not found', code: 'NOT_FOUND' },
+      },
       { status: 404 }
     );
   }

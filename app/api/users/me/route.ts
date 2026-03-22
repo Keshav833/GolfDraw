@@ -28,30 +28,34 @@ export async function GET() {
     );
   }
 
-  const [{ data: userProfile }, { data: subscription }, { data: scores }, { data: charityJoin }] =
-    await Promise.all([
-      supabase.from('users').select('*').eq('id', user.id).single(),
-      supabase
-        .from('subscriptions')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false })
-        .limit(1)
-        .maybeSingle(),
-      supabase
-        .from('scores')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('submitted_at', { ascending: false })
-        .limit(5),
-      supabase
-        .from('users')
-        .select(
-          'charity_contribution_pct, charities(id, name, description, category, country, is_active, created_at)'
-        )
-        .eq('id', user.id)
-        .single(),
-    ]);
+  const [
+    { data: userProfile },
+    { data: subscription },
+    { data: scores },
+    { data: charityJoin },
+  ] = await Promise.all([
+    supabase.from('users').select('*').eq('id', user.id).single(),
+    supabase
+      .from('subscriptions')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle(),
+    supabase
+      .from('scores')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('submitted_at', { ascending: false })
+      .limit(5),
+    supabase
+      .from('users')
+      .select(
+        'charity_contribution_pct, charities(id, name, description, category, country, is_active, created_at)'
+      )
+      .eq('id', user.id)
+      .single(),
+  ]);
 
   return NextResponse.json({
     data: {
@@ -64,7 +68,11 @@ export async function GET() {
       subscription: subscription || null,
       scores: scores || [],
       charity: firstCharity(charityJoin?.charities),
-      charity_pct: Number(charityJoin?.charity_contribution_pct ?? userProfile?.charity_contribution_pct ?? 0),
+      charity_pct: Number(
+        charityJoin?.charity_contribution_pct ??
+          userProfile?.charity_contribution_pct ??
+          0
+      ),
     },
     error: null,
   });
@@ -75,5 +83,5 @@ function firstCharity<T>(value: T | T[] | null | undefined) {
     return null;
   }
 
-  return Array.isArray(value) ? value[0] ?? null : value;
+  return Array.isArray(value) ? (value[0] ?? null) : value;
 }

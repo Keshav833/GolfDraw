@@ -2,8 +2,18 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import { runDrawEngine } from '@/lib/draw/engine';
 import { calculatePrizeBuckets } from '@/lib/draw/prizes';
 import { generateDrawNumber } from '@/lib/draw/random';
-import { getEligibleUsers, getPrizePoolTotal, getRolloverAmount } from '@/lib/draw/snapshot';
-import type { DrawConfig, DrawMode, DrawResult, DrawStatus, MatchCategory } from '@/lib/types/draw';
+import {
+  getEligibleUsers,
+  getPrizePoolTotal,
+  getRolloverAmount,
+} from '@/lib/draw/snapshot';
+import type {
+  DrawConfig,
+  DrawMode,
+  DrawResult,
+  DrawStatus,
+  MatchCategory,
+} from '@/lib/types/draw';
 
 type StoredDrawRow = {
   id: string;
@@ -68,7 +78,9 @@ export async function createDraftDraw(params: {
 
 export function normaliseStoredDraw(draw: StoredDrawRow): DrawConfig {
   const rawConfig = draw.config ?? {};
-  const prizePoolTotal = Number(draw.prize_pool_total ?? rawConfig.prize_pool_total ?? 0);
+  const prizePoolTotal = Number(
+    draw.prize_pool_total ?? rawConfig.prize_pool_total ?? 0
+  );
   const rolloverAmount = Number(rawConfig.rollover_amount ?? 0);
   const prizePool = calculatePrizeBuckets(prizePoolTotal, rolloverAmount);
 
@@ -78,10 +90,16 @@ export function normaliseStoredDraw(draw: StoredDrawRow): DrawConfig {
     prize_pool_total: prizePoolTotal,
     prize_pool: {
       jackpot: Number(rawConfig.prize_pool?.jackpot ?? prizePool.jackpot),
-      four_match: Number(rawConfig.prize_pool?.four_match ?? prizePool.four_match),
-      three_match: Number(rawConfig.prize_pool?.three_match ?? prizePool.three_match),
+      four_match: Number(
+        rawConfig.prize_pool?.four_match ?? prizePool.four_match
+      ),
+      three_match: Number(
+        rawConfig.prize_pool?.three_match ?? prizePool.three_match
+      ),
     },
-    eligible_users: Array.isArray(rawConfig.eligible_users) ? rawConfig.eligible_users : [],
+    eligible_users: Array.isArray(rawConfig.eligible_users)
+      ? rawConfig.eligible_users
+      : [],
     draw_number: draw.draw_number ?? rawConfig.draw_number,
     seed: draw.seed ?? rawConfig.seed,
     rollover_amount: rolloverAmount,
@@ -118,7 +136,9 @@ export async function publishStoredDraw(params: {
   }));
 
   if (drawResultInserts.length > 0) {
-    const { error } = await params.supabase.from('draw_results').insert(drawResultInserts);
+    const { error } = await params.supabase
+      .from('draw_results')
+      .insert(drawResultInserts);
 
     if (error) {
       throw new Error(error.message);
@@ -126,19 +146,25 @@ export async function publishStoredDraw(params: {
   }
 
   if (winningResults.length > 0) {
-    const winnerIds = Array.from(new Set(winningResults.map((winner) => winner.user_id)));
-    const { data: subscriptions, error: subscriptionsError } = await params.supabase
-      .from('subscriptions')
-      .select('id, user_id')
-      .in('user_id', winnerIds)
-      .eq('status', 'active');
+    const winnerIds = Array.from(
+      new Set(winningResults.map((winner) => winner.user_id))
+    );
+    const { data: subscriptions, error: subscriptionsError } =
+      await params.supabase
+        .from('subscriptions')
+        .select('id, user_id')
+        .in('user_id', winnerIds)
+        .eq('status', 'active');
 
     if (subscriptionsError) {
       throw new Error(subscriptionsError.message);
     }
 
     const subscriptionByUser = new Map(
-      (subscriptions ?? []).map((subscription) => [subscription.user_id, subscription.id])
+      (subscriptions ?? []).map((subscription) => [
+        subscription.user_id,
+        subscription.id,
+      ])
     );
 
     const payoutLedgerEntries = winningResults.map((winner) => ({
@@ -159,13 +185,15 @@ export async function publishStoredDraw(params: {
   }
 
   if (result.jackpot_rollover && result.rollover_amount > 0) {
-    const { error: rolloverError } = await params.supabase.from('prize_pool_ledger').insert({
-      subscription_id: null,
-      user_id: null,
-      amount: result.rollover_amount,
-      type: 'rollover',
-      period: params.draw.month,
-    });
+    const { error: rolloverError } = await params.supabase
+      .from('prize_pool_ledger')
+      .insert({
+        subscription_id: null,
+        user_id: null,
+        amount: result.rollover_amount,
+        type: 'rollover',
+        period: params.draw.month,
+      });
 
     if (rolloverError) {
       throw new Error(rolloverError.message);

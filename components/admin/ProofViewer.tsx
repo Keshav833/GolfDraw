@@ -42,7 +42,9 @@ export function ProofViewer({
 
     async function load() {
       try {
-        const res = await fetch(`/api/admin/verifications/${verificationId}/proof-url`);
+        const res = await fetch(
+          `/api/admin/verifications/${verificationId}/proof-url`
+        );
         const json = await res.json();
         if (!res.ok || !json.data) {
           throw new Error(json.error?.message ?? 'Could not load proof');
@@ -71,9 +73,15 @@ export function ProofViewer({
   return (
     <>
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 px-4 backdrop-blur-sm">
-        <div className="w-full max-w-5xl rounded-[24px] bg-[var(--dashboard-bg)] p-6" style={{ boxShadow: raisedSm }}>
+        <div
+          className="w-full max-w-5xl rounded-[24px] bg-[var(--dashboard-bg)] p-6"
+          style={{ boxShadow: raisedSm }}
+        >
           <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-            <div className="rounded-[20px] bg-[var(--dashboard-bg)] p-4" style={{ boxShadow: insetShadow }}>
+            <div
+              className="rounded-[20px] bg-[var(--dashboard-bg)] p-4"
+              style={{ boxShadow: insetShadow }}
+            >
               {loading ? (
                 <div className="h-[420px] animate-pulse rounded-[18px] bg-[#d9ddd9]" />
               ) : error ? (
@@ -92,7 +100,10 @@ export function ProofViewer({
                     target="_blank"
                     rel="noreferrer"
                     className="inline-flex rounded-[14px] px-4 py-2 text-sm text-[#2a3a2a]"
-                    style={{ background: 'var(--dashboard-bg)', boxShadow: raisedXs }}
+                    style={{
+                      background: 'var(--dashboard-bg)',
+                      boxShadow: raisedXs,
+                    }}
                   >
                     Open PDF
                   </a>
@@ -107,7 +118,9 @@ export function ProofViewer({
             </div>
 
             <div>
-              <h2 className="text-2xl font-semibold text-[#2a3a2a]">Review proof</h2>
+              <h2 className="text-2xl font-semibold text-[#2a3a2a]">
+                Review proof
+              </h2>
               <div
                 className="mt-5 space-y-3 rounded-[18px] bg-[var(--dashboard-bg)] p-5"
                 style={{ boxShadow: insetShadow }}
@@ -117,7 +130,9 @@ export function ProofViewer({
                 <p className="text-sm text-[#6a7a6a]">Match</p>
                 <p className="font-semibold text-[#2a3a2a]">{matchCategory}</p>
                 <p className="text-sm text-[#6a7a6a]">Prize</p>
-                <p className="font-semibold text-[#1a5e38]">£{prizeAmount.toFixed(2)}</p>
+                <p className="font-semibold text-[#1a5e38]">
+                  £{prizeAmount.toFixed(2)}
+                </p>
                 <p className="text-sm text-[#6a7a6a]">Draw</p>
                 <p className="font-semibold text-[#2a3a2a]">
                   {drawMonth} · Draw #{drawNumber}
@@ -129,7 +144,10 @@ export function ProofViewer({
                   type="button"
                   onClick={onApprove}
                   className="rounded-[14px] px-5 py-3 text-sm font-medium text-white"
-                  style={{ background: 'var(--dashboard-green-700)', boxShadow: raisedXs }}
+                  style={{
+                    background: 'var(--dashboard-green-700)',
+                    boxShadow: raisedXs,
+                  }}
                 >
                   Approve ✓
                 </button>
@@ -145,7 +163,10 @@ export function ProofViewer({
                   type="button"
                   onClick={onClose}
                   className="rounded-[14px] px-5 py-3 text-sm font-medium text-[#2a3a2a]"
-                  style={{ background: 'var(--dashboard-bg)', boxShadow: raisedXs }}
+                  style={{
+                    background: 'var(--dashboard-bg)',
+                    boxShadow: raisedXs,
+                  }}
                 >
                   Close
                 </button>

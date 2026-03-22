@@ -60,25 +60,45 @@ export async function GET(req: Request) {
 
     const items = ((data ?? []) as Array<Record<string, unknown>>)
       .map((item) => {
-        const drawResult = Array.isArray(item.draw_result) ? item.draw_result[0] : item.draw_result;
+        const drawResult = Array.isArray(item.draw_result)
+          ? item.draw_result[0]
+          : item.draw_result;
         if (!drawResult) {
           return null;
         }
 
         const draw = Array.isArray((drawResult as { draw?: unknown }).draw)
-          ? (drawResult as { draw?: Array<{ month: string; draw_number: number }> }).draw?.[0]
-          : (drawResult as { draw?: { month: string; draw_number: number } }).draw;
+          ? (
+              drawResult as {
+                draw?: Array<{ month: string; draw_number: number }>;
+              }
+            ).draw?.[0]
+          : (drawResult as { draw?: { month: string; draw_number: number } })
+              .draw;
         const user = Array.isArray((drawResult as { user?: unknown }).user)
-          ? (drawResult as { user?: Array<{ full_name: string; email: string }> }).user?.[0]
-          : (drawResult as { user?: { full_name: string; email: string } }).user;
+          ? (
+              drawResult as {
+                user?: Array<{ full_name: string; email: string }>;
+              }
+            ).user?.[0]
+          : (drawResult as { user?: { full_name: string; email: string } })
+              .user;
 
         return {
           id: String((drawResult as { id: string }).id),
           draw_id: String((drawResult as { draw_id: string }).draw_id),
           user_id: String((drawResult as { user_id: string }).user_id),
-          match_category: (drawResult as { match_category: '3-match' | '4-match' | '5-match' }).match_category,
-          prize_amount: Number((drawResult as { prize_amount: number }).prize_amount ?? 0),
-          payment_status: (drawResult as { payment_status: 'pending' | 'approved' | 'paid' | 'rejected' }).payment_status,
+          match_category: (
+            drawResult as { match_category: '3-match' | '4-match' | '5-match' }
+          ).match_category,
+          prize_amount: Number(
+            (drawResult as { prize_amount: number }).prize_amount ?? 0
+          ),
+          payment_status: (
+            drawResult as {
+              payment_status: 'pending' | 'approved' | 'paid' | 'rejected';
+            }
+          ).payment_status,
           user: {
             full_name: user?.full_name ?? 'Winner',
             email: user?.email ?? '',
@@ -116,7 +136,8 @@ export async function GET(req: Request) {
       {
         data: null,
         error: {
-          message: error instanceof Error ? error.message : 'Failed to load queue',
+          message:
+            error instanceof Error ? error.message : 'Failed to load queue',
           code: 'ERR',
         },
       },

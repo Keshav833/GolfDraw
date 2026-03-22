@@ -1,6 +1,10 @@
 import { z } from 'zod';
 import { NextResponse } from 'next/server';
-import { createServiceSupabase, drawError, requireAdminUser } from '@/lib/draw/api';
+import {
+  createServiceSupabase,
+  drawError,
+  requireAdminUser,
+} from '@/lib/draw/api';
 import { simulateStoredDraw } from '@/lib/draw/workflow';
 
 const schema = z.object({
@@ -17,7 +21,11 @@ export async function POST(req: Request) {
     const parsed = schema.safeParse(await req.json());
 
     if (!parsed.success) {
-      return drawError(422, parsed.error.issues[0]?.message ?? 'Invalid request', 'VALIDATION_ERROR');
+      return drawError(
+        422,
+        parsed.error.issues[0]?.message ?? 'Invalid request',
+        'VALIDATION_ERROR'
+      );
     }
 
     const serviceSupabase = createServiceSupabase();
@@ -32,7 +40,11 @@ export async function POST(req: Request) {
     }
 
     if (draw.status === 'published') {
-      return drawError(400, 'Published draws cannot be simulated again', 'INVALID_DRAW');
+      return drawError(
+        400,
+        'Published draws cannot be simulated again',
+        'INVALID_DRAW'
+      );
     }
 
     const result = simulateStoredDraw(draw);

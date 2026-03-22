@@ -1,20 +1,20 @@
 import Link from 'next/link';
 import type { DrawResult } from '@/lib/types/dashboard';
 
-const raisedXs = '2px 2px 5px var(--dashboard-shadow-dark), -2px -2px 5px var(--dashboard-shadow-light)';
+const raisedXs =
+  '2px 2px 5px var(--dashboard-shadow-dark), -2px -2px 5px var(--dashboard-shadow-light)';
 const insetShadow =
   'inset 3px 3px 7px var(--dashboard-shadow-dark), inset -3px -3px 7px var(--dashboard-shadow-light)';
 
-export function DrawHistoryList({
-  results,
-}: {
-  results: DrawResult[];
-}) {
+export function DrawHistoryList({ results }: { results: DrawResult[] }) {
   return (
     <div>
       <div className="mb-[10px] flex items-center justify-between gap-3">
         <h3 className="text-xs font-semibold text-[#2a3a2a]">Draw history</h3>
-        <Link href="/draws" className="text-[10px] text-[#6a7a6a] hover:text-[#2a3a2a]">
+        <Link
+          href="/draws"
+          className="text-[10px] text-[#6a7a6a] hover:text-[#2a3a2a]"
+        >
           All →
         </Link>
       </div>
@@ -24,7 +24,8 @@ export function DrawHistoryList({
           className="rounded-[12px] bg-[var(--dashboard-bg)] px-4 py-5 text-[11px] text-[#6a7a6a]"
           style={{ boxShadow: insetShadow }}
         >
-          No draws yet. Your first draw entry will appear here after the next monthly draw.
+          No draws yet. Your first draw entry will appear here after the next
+          monthly draw.
         </div>
       ) : (
         <div className="space-y-[6px]">
@@ -50,7 +51,13 @@ export function DrawHistoryList({
                   style={{ boxShadow: insetShadow }}
                 >
                   <span className="text-[11px] leading-none">
-                    {category === '5-match' ? '★' : category === '4-match' ? '✦' : category === '3-match' ? '•' : '○'}
+                    {category === '5-match'
+                      ? '★'
+                      : category === '4-match'
+                        ? '✦'
+                        : category === '3-match'
+                          ? '•'
+                          : '○'}
                   </span>
                 </div>
                 <div className="min-w-0 flex-1">
@@ -67,14 +74,19 @@ export function DrawHistoryList({
                     ) : (
                       <span
                         className="inline-block rounded-[20px] px-1.5 py-[1px] text-[9px] font-medium text-[#9aaa9a]"
-                        style={{ background: 'var(--dashboard-bg-dark)', boxShadow: insetShadow }}
+                        style={{
+                          background: 'var(--dashboard-bg-dark)',
+                          boxShadow: insetShadow,
+                        }}
                       >
                         No match
                       </span>
                     )}
                   </div>
                 </div>
-                <div className={`text-[11px] font-semibold ${prizeColor(result)}`}>
+                <div
+                  className={`text-[11px] font-semibold ${prizeColor(result)}`}
+                >
                   {prizeText(result)}
                 </div>
               </div>

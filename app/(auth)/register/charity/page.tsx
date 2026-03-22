@@ -49,18 +49,27 @@ export default function RegisterCharity() {
           }}
         >
           <div className="mx-auto max-w-3xl text-center">
-            <p className="text-sm font-bold uppercase tracking-[0.28em]" style={{ color: 'var(--accent-dark)' }}>
+            <p
+              className="text-sm font-bold uppercase tracking-[0.28em]"
+              style={{ color: 'var(--accent-dark)' }}
+            >
               Step 2 of 3
             </p>
             <h1
               className="mt-4 text-4xl font-extrabold sm:text-5xl"
-              style={{ fontFamily: 'var(--font-display)', color: 'var(--text-main)' }}
+              style={{
+                fontFamily: 'var(--font-display)',
+                color: 'var(--text-main)',
+              }}
             >
               Give a little back
             </h1>
-            <p className="mt-4 text-base sm:text-lg" style={{ color: 'var(--text-muted)' }}>
-              Choose how much of your subscription goes to charity each month. You can pick your
-              charity after signing up.
+            <p
+              className="mt-4 text-base sm:text-lg"
+              style={{ color: 'var(--text-muted)' }}
+            >
+              Choose how much of your subscription goes to charity each month.
+              You can pick your charity after signing up.
             </p>
           </div>
 
@@ -76,21 +85,33 @@ export default function RegisterCharity() {
                     selectedPct === pct
                       ? 'linear-gradient(160deg, #2d8c55 0%, #3aa660 100%)'
                       : 'linear-gradient(155deg, rgba(255,255,255,0.76), rgba(224,229,236,0.98))',
-                  borderColor: selectedPct === pct ? '#2d8c55' : 'rgba(255,255,255,0.62)',
-                  boxShadow: selectedPct === pct ? 'var(--shadow-hover)' : 'var(--shadow-out-sm)',
+                  borderColor:
+                    selectedPct === pct ? '#2d8c55' : 'rgba(255,255,255,0.62)',
+                  boxShadow:
+                    selectedPct === pct
+                      ? 'var(--shadow-hover)'
+                      : 'var(--shadow-out-sm)',
                   color: selectedPct === pct ? '#ffffff' : 'var(--text-main)',
                 }}
               >
                 <div className="text-4xl font-extrabold">{pct}%</div>
                 <p
                   className="mt-3 text-base font-medium"
-                  style={{ color: selectedPct === pct ? 'rgba(240,255,247,0.92)' : 'var(--text-muted)' }}
+                  style={{
+                    color:
+                      selectedPct === pct
+                        ? 'rgba(240,255,247,0.92)'
+                        : 'var(--text-muted)',
+                  }}
                 >
                   £{((9 * pct) / 100).toFixed(2)} per month
                 </p>
                 <p
                   className="mt-8 text-sm font-semibold uppercase tracking-[0.22em]"
-                  style={{ color: selectedPct === pct ? '#ffffff' : 'var(--accent-dark)' }}
+                  style={{
+                    color:
+                      selectedPct === pct ? '#ffffff' : 'var(--accent-dark)',
+                  }}
                 >
                   {optionLabels[pct]}
                 </p>

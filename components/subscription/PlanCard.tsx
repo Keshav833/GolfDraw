@@ -41,7 +41,9 @@ export function PlanCard({
       <div
         className="absolute inset-x-0 top-0 h-1.5"
         style={{
-          background: featured ? 'linear-gradient(90deg, #2d8c55, #7de0aa)' : 'rgba(58,166,96,0.18)',
+          background: featured
+            ? 'linear-gradient(90deg, #2d8c55, #7de0aa)'
+            : 'rgba(58,166,96,0.18)',
         }}
       />
       {featured ? (
@@ -55,14 +57,20 @@ export function PlanCard({
         <CardTitle className="capitalize text-2xl">{plan}</CardTitle>
         <CardDescription>
           <span className="text-3xl font-bold text-gray-900">£{price}</span>
-          <span className="text-sm text-gray-500"> / {plan === 'monthly' ? 'mo' : 'yr'}</span>
+          <span className="text-sm text-gray-500">
+            {' '}
+            / {plan === 'monthly' ? 'mo' : 'yr'}
+          </span>
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-1 flex-col">
         {breakdown?.length ? (
           <div className="mb-5 rounded-2xl border border-green-100/70 bg-white/80 p-4 text-sm text-gray-700">
             {breakdown.map((item, index) => (
-              <p key={index} className={index === 0 ? 'font-semibold text-gray-900' : 'mt-2'}>
+              <p
+                key={index}
+                className={index === 0 ? 'font-semibold text-gray-900' : 'mt-2'}
+              >
                 {item}
               </p>
             ))}

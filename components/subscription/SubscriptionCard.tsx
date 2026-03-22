@@ -13,7 +13,9 @@ export function SubscriptionCard({
     return (
       <Card className="border border-[#e3e7dd] bg-white shadow-sm">
         <CardContent className="space-y-4 p-6">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">Your plan</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">
+            Your plan
+          </p>
           <div>
             <h2 className="text-xl font-bold text-gray-950">No active plan</h2>
             <p className="mt-2 text-sm text-gray-600">
@@ -31,10 +33,14 @@ export function SubscriptionCard({
     );
   }
 
-  const planLabel = subscription.plan_type === 'yearly' ? 'Yearly plan' : 'Monthly plan';
-  const planPrice = subscription.plan_type === 'yearly' ? '£86 / year' : '£9 / month';
-  const showRenewal = subscription.status === 'active' && subscription.current_period_end;
-  const showCancellation = subscription.status === 'cancelled' && subscription.current_period_end;
+  const planLabel =
+    subscription.plan_type === 'yearly' ? 'Yearly plan' : 'Monthly plan';
+  const planPrice =
+    subscription.plan_type === 'yearly' ? '£86 / year' : '£9 / month';
+  const showRenewal =
+    subscription.status === 'active' && subscription.current_period_end;
+  const showCancellation =
+    subscription.status === 'cancelled' && subscription.current_period_end;
   const renewalDate = showRenewal
     ? format(new Date(subscription.current_period_end!), 'd MMM yyyy')
     : null;
@@ -46,7 +52,9 @@ export function SubscriptionCard({
     <Card className="border border-[#e3e7dd] bg-white shadow-sm">
       <CardContent className="space-y-5 p-6">
         <div className="flex items-start justify-between gap-4">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">Your plan</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">
+            Your plan
+          </p>
           <StatusBadge status={subscription.status} />
         </div>
 
@@ -64,7 +72,9 @@ export function SubscriptionCard({
         ) : null}
 
         {showCancellation ? (
-          <p className="text-sm text-gray-600">Access until {cancellationDate}</p>
+          <p className="text-sm text-gray-600">
+            Access until {cancellationDate}
+          </p>
         ) : null}
 
         <Link

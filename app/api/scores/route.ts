@@ -68,7 +68,10 @@ export async function GET() {
     } = await supabase.auth.getUser();
 
     if (!user) {
-      return jsonResponse({ data: null, error: { message: 'Unauthorized', code: '401' } }, 401);
+      return jsonResponse(
+        { data: null, error: { message: 'Unauthorized', code: '401' } },
+        401
+      );
     }
 
     const { data, error } = await supabase
@@ -79,13 +82,19 @@ export async function GET() {
       .limit(5);
 
     if (error) {
-      return jsonResponse({ data: null, error: { message: error.message, code: 'DB_ERR' } }, 500);
+      return jsonResponse(
+        { data: null, error: { message: error.message, code: 'DB_ERR' } },
+        500
+      );
     }
 
     return jsonResponse({ data: { scores: data ?? [] }, error: null }, 200);
   } catch (err: any) {
     return jsonResponse(
-      { data: null, error: { message: err.message || 'Server error', code: 'ERR' } },
+      {
+        data: null,
+        error: { message: err.message || 'Server error', code: 'ERR' },
+      },
       500
     );
   }
@@ -99,15 +108,23 @@ export async function POST(req: Request) {
     } = await supabase.auth.getUser();
 
     if (!user) {
-      return jsonResponse({ data: null, error: { message: 'Unauthorized', code: '401' } }, 401);
+      return jsonResponse(
+        { data: null, error: { message: 'Unauthorized', code: '401' } },
+        401
+      );
     }
 
     const rawBody = await req.json();
     const parsed = scoreSchema.safeParse(rawBody);
 
     if (!parsed.success) {
-      const message = parsed.error.issues.map((issue) => issue.message).join(', ');
-      return jsonResponse({ data: null, error: { message, code: 'VALIDATION_ERR' } }, 422);
+      const message = parsed.error.issues
+        .map((issue) => issue.message)
+        .join(', ');
+      return jsonResponse(
+        { data: null, error: { message, code: 'VALIDATION_ERR' } },
+        422
+      );
     }
 
     const { error: insertError } = await supabase.from('scores').insert({
@@ -130,13 +147,19 @@ export async function POST(req: Request) {
       .limit(5);
 
     if (error) {
-      return jsonResponse({ data: null, error: { message: error.message, code: 'DB_ERR' } }, 500);
+      return jsonResponse(
+        { data: null, error: { message: error.message, code: 'DB_ERR' } },
+        500
+      );
     }
 
     return jsonResponse({ data: { scores: data ?? [] }, error: null }, 201);
   } catch (err: any) {
     return jsonResponse(
-      { data: null, error: { message: err.message || 'Server error', code: 'ERR' } },
+      {
+        data: null,
+        error: { message: err.message || 'Server error', code: 'ERR' },
+      },
       500
     );
   }

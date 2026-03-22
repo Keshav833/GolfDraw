@@ -10,12 +10,24 @@ export async function POST(req: Request) {
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      { cookies: { getAll() { return cookieStore.getAll() }, setAll() {} } }
+      {
+        cookies: {
+          getAll() {
+            return cookieStore.getAll();
+          },
+          setAll() {},
+        },
+      }
     );
 
-    const { data: { user } } = await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
     if (!user) {
-      return NextResponse.json({ data: null, error: { message: 'Unauthorized', code: '401' } }, { status: 401 });
+      return NextResponse.json(
+        { data: null, error: { message: 'Unauthorized', code: '401' } },
+        { status: 401 }
+      );
     }
 
     const supabaseAdmin = createClient(
@@ -38,22 +50,37 @@ export async function POST(req: Request) {
       user_id: user.id,
       razorpay_subscription_id: demoSubscriptionId,
       plan_type: selectedPlan,
-      status: 'active'
+      status: 'active',
     };
 
     const subscriptionQuery = existingSubscription
-      ? supabaseAdmin.from('subscriptions').update(payload).eq('id', existingSubscription.id)
+      ? supabaseAdmin
+          .from('subscriptions')
+          .update(payload)
+          .eq('id', existingSubscription.id)
       : supabaseAdmin.from('subscriptions').insert(payload);
 
     const { error } = await subscriptionQuery;
     if (error) {
-      return NextResponse.json({ data: null, error: { message: error.message, code: 'DB_ERR' } }, { status: 500 });
+      return NextResponse.json(
+        { data: null, error: { message: error.message, code: 'DB_ERR' } },
+        { status: 500 }
+      );
     }
 
-    await supabaseAdmin.from('users').update({ subscription_status: 'active' }).eq('id', user.id);
+    await supabaseAdmin
+      .from('users')
+      .update({ subscription_status: 'active' })
+      .eq('id', user.id);
 
-    return NextResponse.json({ data: { activated: true, plan_type: selectedPlan }, error: null });
+    return NextResponse.json({
+      data: { activated: true, plan_type: selectedPlan },
+      error: null,
+    });
   } catch (err: any) {
-    return NextResponse.json({ data: null, error: { message: err.message, code: 'ERR' } }, { status: 500 });
+    return NextResponse.json(
+      { data: null, error: { message: err.message, code: 'ERR' } },
+      { status: 500 }
+    );
   }
 }

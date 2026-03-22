@@ -1,41 +1,41 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { 
-  Search, 
-  MoreHorizontal, 
+import { useState } from 'react';
+import {
+  Search,
+  MoreHorizontal,
   User as UserIcon,
   Trash2,
   ExternalLink,
   ChevronLeft,
-  ChevronRight
-} from 'lucide-react'
-import { formatDistanceToNow } from 'date-fns'
+  ChevronRight,
+} from 'lucide-react';
+import { formatDistanceToNow } from 'date-fns';
 
 interface User {
-  id: string
-  full_name: string | null
-  email: string
-  subscription_status: string
-  charity_contribution_pct: number
-  created_at: string
-  charity_name: string | null
-  plan_type: string | null
-  current_period_end: string | null
-  sub_status: string | null
-  score_count: number
-  total_won: number
+  id: string;
+  full_name: string | null;
+  email: string;
+  subscription_status: string;
+  charity_contribution_pct: number;
+  created_at: string;
+  charity_name: string | null;
+  plan_type: string | null;
+  current_period_end: string | null;
+  sub_status: string | null;
+  score_count: number;
+  total_won: number;
 }
 
 interface UserTableProps {
-  users: User[]
-  total: number
-  page: number
-  onPageChange: (page: number) => void
-  onSearch: (search: string) => void
-  onStatusFilter: (status: string) => void
-  onViewDetails: (user: User) => void
-  onCancelSubscription: (user: User) => void
+  users: User[];
+  total: number;
+  page: number;
+  onPageChange: (page: number) => void;
+  onSearch: (search: string) => void;
+  onStatusFilter: (status: string) => void;
+  onViewDetails: (user: User) => void;
+  onCancelSubscription: (user: User) => void;
 }
 
 export default function UserTable({
@@ -46,10 +46,10 @@ export default function UserTable({
   onSearch,
   onStatusFilter,
   onViewDetails,
-  onCancelSubscription
+  onCancelSubscription,
 }: UserTableProps) {
-  const [searchTerm, setSearchTerm] = useState('')
-  const [activeStatus, setActiveStatus] = useState('all')
+  const [searchTerm, setSearchTerm] = useState('');
+  const [activeStatus, setActiveStatus] = useState('all');
 
   const statusFilters = [
     { id: 'all', label: 'All' },
@@ -57,9 +57,9 @@ export default function UserTable({
     { id: 'past_due', label: 'Past Due' },
     { id: 'inactive', label: 'Inactive' },
     { id: 'cancelled', label: 'Cancelled' },
-  ]
+  ];
 
-  const totalPages = Math.ceil(total / 20)
+  const totalPages = Math.ceil(total / 20);
 
   return (
     <div className="space-y-6">
@@ -70,8 +70,8 @@ export default function UserTable({
             <button
               key={f.id}
               onClick={() => {
-                setActiveStatus(f.id)
-                onStatusFilter(f.id)
+                setActiveStatus(f.id);
+                onStatusFilter(f.id);
               }}
               className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
                 activeStatus === f.id
@@ -108,14 +108,16 @@ export default function UserTable({
                 <th className="px-6 py-4 font-semibold">Plan</th>
                 <th className="px-6 py-4 font-semibold">Charity</th>
                 <th className="px-6 py-4 font-semibold text-center">Scores</th>
-                <th className="px-6 py-4 font-semibold text-center">Total Won</th>
+                <th className="px-6 py-4 font-semibold text-center">
+                  Total Won
+                </th>
                 <th className="px-6 py-4 font-semibold">Joined</th>
                 <th className="px-6 py-4 font-semibold text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[var(--sd)]/50">
               {users.map((user) => (
-                <tr 
+                <tr
                   key={user.id}
                   className="group hover:bg-[var(--sd)]/10 transition-colors cursor-pointer"
                   onClick={() => onViewDetails(user)}
@@ -123,22 +125,29 @@ export default function UserTable({
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
                       <div className="h-10 w-10 flex items-center justify-center rounded-full bg-[var(--bg)] shadow-[var(--raised-sm)] text-[var(--green-700)] font-bold text-xs">
-                        {user.full_name?.substring(0, 2).toUpperCase() || user.email.substring(0, 2).toUpperCase()}
+                        {user.full_name?.substring(0, 2).toUpperCase() ||
+                          user.email.substring(0, 2).toUpperCase()}
                       </div>
                       <div className="flex flex-col">
-                        <span className="text-sm font-semibold text-[var(--text)]">{user.full_name || 'No Name'}</span>
-                        <span className="text-[11px] text-[var(--text-muted)]">{user.email}</span>
+                        <span className="text-sm font-semibold text-[var(--text)]">
+                          {user.full_name || 'No Name'}
+                        </span>
+                        <span className="text-[11px] text-[var(--text-muted)]">
+                          {user.email}
+                        </span>
                       </div>
                     </div>
                   </td>
                   <td className="px-6 py-4">
-                    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
-                      user.subscription_status === 'active' 
-                        ? 'bg-emerald-100 text-emerald-700' 
-                        : user.subscription_status === 'past_due'
-                        ? 'bg-amber-100 text-amber-700'
-                        : 'bg-slate-100 text-slate-500'
-                    }`}>
+                    <span
+                      className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                        user.subscription_status === 'active'
+                          ? 'bg-emerald-100 text-emerald-700'
+                          : user.subscription_status === 'past_due'
+                            ? 'bg-amber-100 text-amber-700'
+                            : 'bg-slate-100 text-slate-500'
+                      }`}
+                    >
                       {user.subscription_status}
                     </span>
                   </td>
@@ -148,27 +157,42 @@ export default function UserTable({
                         {user.plan_type}
                       </span>
                     ) : (
-                      <span className="text-xs text-[var(--text-muted)]/50">—</span>
+                      <span className="text-xs text-[var(--text-muted)]/50">
+                        —
+                      </span>
                     )}
                   </td>
                   <td className="px-6 py-4 text-xs">
                     <div className="flex flex-col">
-                      <span className="font-medium">{user.charity_name || 'None'}</span>
-                      <span className="text-[var(--text-muted)]">{user.charity_contribution_pct}%</span>
+                      <span className="font-medium">
+                        {user.charity_name || 'None'}
+                      </span>
+                      <span className="text-[var(--text-muted)]">
+                        {user.charity_contribution_pct}%
+                      </span>
                     </div>
                   </td>
                   <td className="px-6 py-4 text-center">
-                    <span className="text-sm font-semibold">{user.score_count}</span>
+                    <span className="text-sm font-semibold">
+                      {user.score_count}
+                    </span>
                   </td>
                   <td className="px-6 py-4 text-center">
-                    <span className="text-sm font-bold text-[var(--green-700)]">£{user.total_won.toFixed(2)}</span>
+                    <span className="text-sm font-bold text-[var(--green-700)]">
+                      £{user.total_won.toFixed(2)}
+                    </span>
                   </td>
                   <td className="px-6 py-4 text-xs text-[var(--text-muted)]">
-                    {formatDistanceToNow(new Date(user.created_at), { addSuffix: true })}
+                    {formatDistanceToNow(new Date(user.created_at), {
+                      addSuffix: true,
+                    })}
                   </td>
                   <td className="px-6 py-4 text-right">
-                    <div className="flex justify-end gap-2" onClick={(e) => e.stopPropagation()}>
-                      <button 
+                    <div
+                      className="flex justify-end gap-2"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <button
                         onClick={() => onViewDetails(user)}
                         className="p-2 rounded-lg bg-[var(--bg)] shadow-[var(--raised-sm)] text-[var(--text-muted)] hover:text-[var(--text)] transition-all"
                       >
@@ -185,17 +209,22 @@ export default function UserTable({
         {/* Pagination */}
         <div className="px-6 py-4 flex items-center justify-between border-t border-[var(--sd)]">
           <p className="text-xs text-[var(--text-muted)]">
-            Showing <span className="font-semibold">{Math.min(total, (page-1)*20 + 1)}-{Math.min(total, page*20)}</span> of <span className="font-semibold">{total}</span> users
+            Showing{' '}
+            <span className="font-semibold">
+              {Math.min(total, (page - 1) * 20 + 1)}-
+              {Math.min(total, page * 20)}
+            </span>{' '}
+            of <span className="font-semibold">{total}</span> users
           </p>
           <div className="flex gap-2">
-            <button 
+            <button
               disabled={page <= 1}
               onClick={() => onPageChange(page - 1)}
               className="p-2 rounded-lg bg-[var(--bg)] shadow-[var(--raised-sm)] disabled:opacity-50 text-[var(--text-muted)]"
             >
               <ChevronLeft size={16} />
             </button>
-            <button 
+            <button
               disabled={page >= totalPages}
               onClick={() => onPageChange(page + 1)}
               className="p-2 rounded-lg bg-[var(--bg)] shadow-[var(--raised-sm)] disabled:opacity-50 text-[var(--text-muted)]"
@@ -206,5 +235,5 @@ export default function UserTable({
         </div>
       </div>
     </div>
-  )
+  );
 }

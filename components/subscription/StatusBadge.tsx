@@ -2,14 +2,19 @@ import React from 'react';
 import { Badge } from '@/components/ui/badge';
 import type { SubscriptionStatus } from '@/lib/types/dashboard';
 
-const variantMap: Record<SubscriptionStatus, { label: string; className: string }> = {
+const variantMap: Record<
+  SubscriptionStatus,
+  { label: string; className: string }
+> = {
   active: {
     label: 'Active',
-    className: 'border-green-200 bg-green-100 text-green-800 hover:bg-green-100',
+    className:
+      'border-green-200 bg-green-100 text-green-800 hover:bg-green-100',
   },
   past_due: {
     label: 'Payment due',
-    className: 'border-amber-200 bg-amber-100 text-amber-800 hover:bg-amber-100',
+    className:
+      'border-amber-200 bg-amber-100 text-amber-800 hover:bg-amber-100',
   },
   inactive: {
     label: 'Inactive',
@@ -26,7 +31,8 @@ export function StatusBadge({
 }: {
   status: SubscriptionStatus | string;
 }) {
-  const normalizedStatus = (status?.toLowerCase?.() as SubscriptionStatus) || 'inactive';
+  const normalizedStatus =
+    (status?.toLowerCase?.() as SubscriptionStatus) || 'inactive';
   const variant = variantMap[normalizedStatus] ?? variantMap.inactive;
 
   return (

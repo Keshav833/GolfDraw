@@ -13,13 +13,19 @@ export async function POST(_: Request, { params }: { params: { id: string } }) {
     const verificationRecord = await getAdminVerificationRecord(params.id);
     if (!verificationRecord) {
       return NextResponse.json(
-        { data: null, error: { message: 'Verification not found', code: 'NOT_FOUND' } },
+        {
+          data: null,
+          error: { message: 'Verification not found', code: 'NOT_FOUND' },
+        },
         { status: 404 }
       );
     }
     if (!verificationRecord.verification) {
       return NextResponse.json(
-        { data: null, error: { message: 'Verification not found', code: 'NOT_FOUND' } },
+        {
+          data: null,
+          error: { message: 'Verification not found', code: 'NOT_FOUND' },
+        },
         { status: 404 }
       );
     }
@@ -38,9 +44,12 @@ export async function POST(_: Request, { params }: { params: { id: string } }) {
     }
 
     const supabase = createServiceSupabase();
-    const { data, error } = await supabase.rpc('mark_winner_verification_paid', {
-      p_verification_id: params.id,
-    });
+    const { data, error } = await supabase.rpc(
+      'mark_winner_verification_paid',
+      {
+        p_verification_id: params.id,
+      }
+    );
 
     if (error) {
       return NextResponse.json(
@@ -67,7 +76,8 @@ export async function POST(_: Request, { params }: { params: { id: string } }) {
       {
         data: null,
         error: {
-          message: error instanceof Error ? error.message : 'Failed to mark paid',
+          message:
+            error instanceof Error ? error.message : 'Failed to mark paid',
           code: 'ERR',
         },
       },

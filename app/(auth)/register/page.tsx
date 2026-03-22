@@ -28,36 +28,111 @@ export default function RegisterStep1() {
 
   return (
     <div className="flex flex-col w-full">
-       <div className="w-full flex justify-center mb-8">
-         <Link href="/" className="inline-flex items-center gap-3 text-decoration-none">
-            <div style={{ width: '48px', height: '48px', background: 'var(--bg)', borderRadius: '50%', boxShadow: 'var(--shadow-out-sm)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-              <img src="/images/GolfDraw.png" alt="GolfDraw" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-            </div>
-            <span style={{ fontFamily: 'var(--font-display)', fontSize: '28px', color: 'var(--text-main)' }}>GolfDraw</span>
-         </Link>
-       </div>
+      <div className="w-full flex justify-center mb-8">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-3 text-decoration-none"
+        >
+          <div
+            style={{
+              width: '48px',
+              height: '48px',
+              background: 'var(--bg)',
+              borderRadius: '50%',
+              boxShadow: 'var(--shadow-out-sm)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              overflow: 'hidden',
+            }}
+          >
+            <img
+              src="/images/GolfDraw.png"
+              alt="GolfDraw"
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            />
+          </div>
+          <span
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: '28px',
+              color: 'var(--text-main)',
+            }}
+          >
+            GolfDraw
+          </span>
+        </Link>
+      </div>
 
-       <div className="neu-panel space-y-8">
-         <div className="text-center">
-            <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--accent-dark)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>Step 1 of 3</p>
-            <h2 className="text-3xl font-extrabold font-serif" style={{ fontFamily: "var(--font-display)" }}>Create Account</h2>
-            <p className="mt-2 text-sm" style={{ color: "var(--text-muted)" }}>Register with your name, email, and password.</p>
-         </div>
-         <form className="mt-8 space-y-6" onSubmit={handleRegister}>
-           <div className="space-y-5">
-              <input type="text" name="full_name" placeholder="Full Name" required className="neu-input" />
-              <input type="email" name="email" placeholder="Email address" required className="neu-input" />
-              <input type="password" name="password" placeholder="Password (min 6 chars)" minLength={6} required className="neu-input" />
-           </div>
-           <button type="submit" className="neu-btn neu-btn-primary mt-8" disabled={loading}>
-             {loading ? 'Creating...' : 'Continue'}
-           </button>
-         </form>
-         <div className="text-center text-sm mt-6">
-           <span style={{ color: 'var(--text-muted)' }}>Already have an account? </span>
-           <Link href="/login" style={{ color: 'var(--accent-dark)', fontWeight: 600 }}>Log in</Link>
-         </div>
-       </div>
+      <div className="neu-panel space-y-8">
+        <div className="text-center">
+          <p
+            style={{
+              fontSize: '13px',
+              fontWeight: 700,
+              color: 'var(--accent-dark)',
+              textTransform: 'uppercase',
+              letterSpacing: '1px',
+              marginBottom: '8px',
+            }}
+          >
+            Step 1 of 3
+          </p>
+          <h2
+            className="text-3xl font-extrabold font-serif"
+            style={{ fontFamily: 'var(--font-display)' }}
+          >
+            Create Account
+          </h2>
+          <p className="mt-2 text-sm" style={{ color: 'var(--text-muted)' }}>
+            Register with your name, email, and password.
+          </p>
+        </div>
+        <form className="mt-8 space-y-6" onSubmit={handleRegister}>
+          <div className="space-y-5">
+            <input
+              type="text"
+              name="full_name"
+              placeholder="Full Name"
+              required
+              className="neu-input"
+            />
+            <input
+              type="email"
+              name="email"
+              placeholder="Email address"
+              required
+              className="neu-input"
+            />
+            <input
+              type="password"
+              name="password"
+              placeholder="Password (min 6 chars)"
+              minLength={6}
+              required
+              className="neu-input"
+            />
+          </div>
+          <button
+            type="submit"
+            className="neu-btn neu-btn-primary mt-8"
+            disabled={loading}
+          >
+            {loading ? 'Creating...' : 'Continue'}
+          </button>
+        </form>
+        <div className="text-center text-sm mt-6">
+          <span style={{ color: 'var(--text-muted)' }}>
+            Already have an account?{' '}
+          </span>
+          <Link
+            href="/login"
+            style={{ color: 'var(--accent-dark)', fontWeight: 600 }}
+          >
+            Log in
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }

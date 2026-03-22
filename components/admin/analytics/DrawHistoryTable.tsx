@@ -1,17 +1,17 @@
-import Link from 'next/link'
-import { format } from 'date-fns'
+import Link from 'next/link';
+import { format } from 'date-fns';
 
 interface DrawHistoryTableProps {
   data: Array<{
-    month: string
-    draw_id: string
-    status: string
-    prize_pool_total: number
-    total_winners: number
-    jackpot_winners: number
-    four_match_winners: number
-    three_match_winners: number
-  }>
+    month: string;
+    draw_id: string;
+    status: string;
+    prize_pool_total: number;
+    total_winners: number;
+    jackpot_winners: number;
+    four_match_winners: number;
+    three_match_winners: number;
+  }>;
 }
 
 export default function DrawHistoryTable({ data }: DrawHistoryTableProps) {
@@ -22,7 +22,9 @@ export default function DrawHistoryTable({ data }: DrawHistoryTableProps) {
           <thead>
             <tr className="text-[11px] uppercase tracking-wider text-[var(--text-muted)] border-b border-[var(--sd)]">
               <th className="px-6 py-4 font-semibold">Month</th>
-              <th className="px-6 py-4 font-semibold text-center">Prize Pool</th>
+              <th className="px-6 py-4 font-semibold text-center">
+                Prize Pool
+              </th>
               <th className="px-6 py-4 font-semibold text-center">3-Match</th>
               <th className="px-6 py-4 font-semibold text-center">4-Match</th>
               <th className="px-6 py-4 font-semibold text-center">Jackpot</th>
@@ -31,7 +33,7 @@ export default function DrawHistoryTable({ data }: DrawHistoryTableProps) {
           </thead>
           <tbody className="divide-y divide-[var(--sd)]/50">
             {data.map((draw) => (
-              <tr 
+              <tr
                 key={draw.draw_id}
                 className="group hover:bg-[var(--sd)]/10 transition-colors cursor-pointer"
               >
@@ -58,11 +60,13 @@ export default function DrawHistoryTable({ data }: DrawHistoryTableProps) {
                   </span>
                 </td>
                 <td className="px-6 py-4 text-center">
-                  <span className={`px-2.5 py-1 rounded-full text-xs font-bold shadow-[var(--raised-sm)] ${
-                    draw.jackpot_winners > 0 
-                      ? 'bg-amber-100 text-amber-700 shadow-amber-200' 
-                      : 'bg-[var(--bg)] text-[var(--text-muted)]'
-                  }`}>
+                  <span
+                    className={`px-2.5 py-1 rounded-full text-xs font-bold shadow-[var(--raised-sm)] ${
+                      draw.jackpot_winners > 0
+                        ? 'bg-amber-100 text-amber-700 shadow-amber-200'
+                        : 'bg-[var(--bg)] text-[var(--text-muted)]'
+                    }`}
+                  >
                     {draw.jackpot_winners}
                   </span>
                 </td>
@@ -77,5 +81,5 @@ export default function DrawHistoryTable({ data }: DrawHistoryTableProps) {
         </table>
       </div>
     </div>
-  )
+  );
 }

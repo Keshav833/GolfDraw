@@ -1,7 +1,13 @@
-export default function AuthLayout({ children }: { children: React.ReactNode }) {
+export default function AuthLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <>
-      <style dangerouslySetInnerHTML={{ __html: `
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
         .auth-page {
           --bg: #e0e5ec;
           --text-main: #334155;
@@ -74,12 +80,12 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
           color: var(--accent-dark);
           font-weight: 700;
         }
-      `}} />
+      `,
+        }}
+      />
       <div className="auth-page flex items-center justify-center p-4">
-        <div className="w-full max-w-md">
-          {children}
-        </div>
+        <div className="w-full max-w-md">{children}</div>
       </div>
     </>
-  )
+  );
 }

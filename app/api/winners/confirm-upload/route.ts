@@ -18,7 +18,10 @@ export async function POST(req: Request) {
 
     if (!user) {
       return NextResponse.json(
-        { data: null, error: { message: 'Unauthorized', code: 'UNAUTHORIZED' } },
+        {
+          data: null,
+          error: { message: 'Unauthorized', code: 'UNAUTHORIZED' },
+        },
         { status: 401 }
       );
     }
@@ -37,10 +40,16 @@ export async function POST(req: Request) {
       );
     }
 
-    const ownership = await getOwnedPendingDrawResult(parsed.data.draw_result_id, user.id);
+    const ownership = await getOwnedPendingDrawResult(
+      parsed.data.draw_result_id,
+      user.id
+    );
     if (!ownership.data) {
       return NextResponse.json(
-        { data: null, error: { message: 'Draw result not found', code: 'NOT_FOUND' } },
+        {
+          data: null,
+          error: { message: 'Draw result not found', code: 'NOT_FOUND' },
+        },
         { status: 404 }
       );
     }
@@ -52,7 +61,10 @@ export async function POST(req: Request) {
 
     if (listError) {
       return NextResponse.json(
-        { data: null, error: { message: listError.message, code: 'STORAGE_ERROR' } },
+        {
+          data: null,
+          error: { message: listError.message, code: 'STORAGE_ERROR' },
+        },
         { status: 500 }
       );
     }
@@ -62,25 +74,36 @@ export async function POST(req: Request) {
       return NextResponse.json(
         {
           data: null,
-          error: { message: 'Uploaded file not found in storage.', code: 'FILE_NOT_FOUND' },
+          error: {
+            message: 'Uploaded file not found in storage.',
+            code: 'FILE_NOT_FOUND',
+          },
         },
         { status: 400 }
       );
     }
 
-    const existingVerification = await getVerificationForDrawResult(parsed.data.draw_result_id);
+    const existingVerification = await getVerificationForDrawResult(
+      parsed.data.draw_result_id
+    );
 
     if (existingVerification?.status === 'approved') {
       return NextResponse.json(
         {
           data: null,
-          error: { message: 'This prize has already been verified.', code: 'ALREADY_VERIFIED' },
+          error: {
+            message: 'This prize has already been verified.',
+            code: 'ALREADY_VERIFIED',
+          },
         },
         { status: 400 }
       );
     }
 
-    if (existingVerification?.status === 'pending' || existingVerification?.status === 'rejected') {
+    if (
+      existingVerification?.status === 'pending' ||
+      existingVerification?.status === 'rejected'
+    ) {
       const { data, error } = await supabase
         .from('winner_verifications')
         .update({
@@ -113,7 +136,10 @@ export async function POST(req: Request) {
         .eq('id', parsed.data.draw_result_id);
 
       return NextResponse.json(
-        { data: { verification_id: data.id, status: data.status }, error: null },
+        {
+          data: { verification_id: data.id, status: data.status },
+          error: null,
+        },
         { status: 201 }
       );
     }
@@ -155,7 +181,8 @@ export async function POST(req: Request) {
       {
         data: null,
         error: {
-          message: error instanceof Error ? error.message : 'Failed to confirm upload',
+          message:
+            error instanceof Error ? error.message : 'Failed to confirm upload',
           code: 'ERR',
         },
       },

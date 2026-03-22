@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import { MatchBadge } from './MatchBadge';
 
-const raisedSm = '3px 3px 8px var(--dashboard-shadow-dark), -3px -3px 8px var(--dashboard-shadow-light)';
+const raisedSm =
+  '3px 3px 8px var(--dashboard-shadow-dark), -3px -3px 8px var(--dashboard-shadow-light)';
 const insetShadow =
   'inset 3px 3px 7px var(--dashboard-shadow-dark), inset -3px -3px 7px var(--dashboard-shadow-light)';
 
@@ -20,7 +21,8 @@ export function DrawCard({
   prize_amount,
   payment_status,
 }: DrawCardProps) {
-  const amount = prize_amount != null ? `£${Number(prize_amount).toFixed(2)}` : null;
+  const amount =
+    prize_amount != null ? `£${Number(prize_amount).toFixed(2)}` : null;
 
   return (
     <div
@@ -34,7 +36,10 @@ export function DrawCard({
             Winning number:{' '}
             <span
               className="inline-flex rounded-[8px] px-2 py-1 font-mono text-[#2a3a2a]"
-              style={{ background: 'var(--dashboard-bg)', boxShadow: insetShadow }}
+              style={{
+                background: 'var(--dashboard-bg)',
+                boxShadow: insetShadow,
+              }}
             >
               {draw_number}
             </span>
@@ -46,7 +51,9 @@ export function DrawCard({
           {amount ? (
             <div className="text-right">
               <p className="font-semibold text-[#1a5e38]">{amount}</p>
-              <p className="text-xs capitalize text-[#6a7a6a]">{payment_status.replace('_', ' ')}</p>
+              <p className="text-xs capitalize text-[#6a7a6a]">
+                {payment_status.replace('_', ' ')}
+              </p>
             </div>
           ) : null}
         </div>

@@ -6,9 +6,12 @@ import { usePathname } from 'next/navigation';
 import { signOut } from '@/app/(auth)/actions';
 import { Sidebar } from './Sidebar';
 
-const raised = '5px 5px 12px var(--dashboard-shadow-dark), -5px -5px 12px var(--dashboard-shadow-light)';
-const raisedSm = '3px 3px 8px var(--dashboard-shadow-dark), -3px -3px 8px var(--dashboard-shadow-light)';
-const raisedXs = '2px 2px 5px var(--dashboard-shadow-dark), -2px -2px 5px var(--dashboard-shadow-light)';
+const raised =
+  '5px 5px 12px var(--dashboard-shadow-dark), -5px -5px 12px var(--dashboard-shadow-light)';
+const raisedSm =
+  '3px 3px 8px var(--dashboard-shadow-dark), -3px -3px 8px var(--dashboard-shadow-light)';
+const raisedXs =
+  '2px 2px 5px var(--dashboard-shadow-dark), -2px -2px 5px var(--dashboard-shadow-light)';
 const insetShadow =
   'inset 3px 3px 7px var(--dashboard-shadow-dark), inset -3px -3px 7px var(--dashboard-shadow-light)';
 
@@ -43,7 +46,7 @@ export function PageShell({
         style={{ boxShadow: raised }}
       >
         <div className="flex h-full gap-5 lg:flex-row flex-col">
-          <Sidebar 
+          <Sidebar
             userName={userName}
             membershipLabel={membershipLabel}
             statusLabel={statusLabel}
@@ -60,18 +63,27 @@ export function PageShell({
                   >
                     {title}
                   </h1>
-                  <p className="mt-0.5 text-[11px] text-[#6a7a6a]">{subtitle}</p>
+                  <p className="mt-0.5 text-[11px] text-[#6a7a6a]">
+                    {subtitle}
+                  </p>
                 </div>
                 <div className="flex gap-2">
-                  <HeaderIcon href="/draws" icon={<Search className="h-3.5 w-3.5" />} />
-                  <HeaderIcon href="/draws" icon={<Bell className="h-3.5 w-3.5" />} />
-                  <HeaderIcon href="/account" icon={<User2 className="h-3.5 w-3.5" />} />
+                  <HeaderIcon
+                    href="/draws"
+                    icon={<Search className="h-3.5 w-3.5" />}
+                  />
+                  <HeaderIcon
+                    href="/draws"
+                    icon={<Bell className="h-3.5 w-3.5" />}
+                  />
+                  <HeaderIcon
+                    href="/account"
+                    icon={<User2 className="h-3.5 w-3.5" />}
+                  />
                 </div>
               </header>
 
-              <div className="pb-16">
-                {children}
-              </div>
+              <div className="pb-16">{children}</div>
             </main>
             <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-[var(--dashboard-bg)] to-transparent pointer-events-none z-10" />
           </div>
@@ -92,4 +104,3 @@ function HeaderIcon({ href, icon }: { href: string; icon: React.ReactNode }) {
     </Link>
   );
 }
-

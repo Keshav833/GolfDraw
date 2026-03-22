@@ -1,5 +1,7 @@
 function Pulse({ className }: { className: string }) {
-  return <div className={`animate-pulse rounded-[14px] bg-[#d9ddd9] ${className}`} />;
+  return (
+    <div className={`animate-pulse rounded-[14px] bg-[#d9ddd9] ${className}`} />
+  );
 }
 
 export function DashboardSkeleton() {

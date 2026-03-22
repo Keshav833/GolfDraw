@@ -56,10 +56,16 @@ export async function GET(req: Request) {
       );
     }
 
-    return jsonResponse({ data: { charities: (data ?? []) as Charity[] }, error: null }, 200);
+    return jsonResponse(
+      { data: { charities: (data ?? []) as Charity[] }, error: null },
+      200
+    );
   } catch (error: any) {
     return jsonResponse(
-      { data: null, error: { message: error.message ?? 'Server error', code: 'ERR' } },
+      {
+        data: null,
+        error: { message: error.message ?? 'Server error', code: 'ERR' },
+      },
       500
     );
   }

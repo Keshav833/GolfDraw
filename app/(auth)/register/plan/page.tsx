@@ -96,18 +96,27 @@ export default function RegisterPlan() {
           }}
         >
           <div className="mx-auto max-w-3xl text-center">
-            <p className="text-sm font-bold uppercase tracking-[0.28em]" style={{ color: 'var(--accent-dark)' }}>
+            <p
+              className="text-sm font-bold uppercase tracking-[0.28em]"
+              style={{ color: 'var(--accent-dark)' }}
+            >
               Step 3 of 3
             </p>
             <h2
               className="mt-4 text-4xl font-extrabold sm:text-5xl"
-              style={{ fontFamily: 'var(--font-display)', color: 'var(--text-main)' }}
+              style={{
+                fontFamily: 'var(--font-display)',
+                color: 'var(--text-main)',
+              }}
             >
               Choose your plan
             </h2>
-            <p className="mt-4 text-base sm:text-lg" style={{ color: 'var(--text-muted)' }}>
-              Your selected charity percentage is shown below so the subscription split stays clear
-              before you continue.
+            <p
+              className="mt-4 text-base sm:text-lg"
+              style={{ color: 'var(--text-muted)' }}
+            >
+              Your selected charity percentage is shown below so the
+              subscription split stays clear before you continue.
             </p>
           </div>
 
@@ -115,12 +124,15 @@ export default function RegisterPlan() {
             <div
               className="rounded-[28px] border border-white/60 p-6"
               style={{
-                background: 'linear-gradient(155deg, rgba(255,255,255,0.8), rgba(224,229,236,0.96))',
+                background:
+                  'linear-gradient(155deg, rgba(255,255,255,0.8), rgba(224,229,236,0.96))',
                 boxShadow: 'var(--shadow-out-sm)',
               }}
             >
               <h3 className="text-lg font-bold text-gray-900">
-                {charityPct > 0 ? 'Your charity contribution' : 'No charity contribution selected'}
+                {charityPct > 0
+                  ? 'Your charity contribution'
+                  : 'No charity contribution selected'}
               </h3>
               <p className="mt-2 text-sm text-gray-600">
                 {charityPct > 0
@@ -158,17 +170,23 @@ export default function RegisterPlan() {
               <p className="text-xs font-bold uppercase tracking-[0.22em] text-green-100">
                 Why it matters
               </p>
-              <h3 className="mt-3 text-2xl font-extrabold text-white" style={{ fontFamily: 'var(--font-display)' }}>
+              <h3
+                className="mt-3 text-2xl font-extrabold text-white"
+                style={{ fontFamily: 'var(--font-display)' }}
+              >
                 Transparent from the start
               </h3>
               <p className="mt-4 text-sm leading-6 text-green-50">
-                The prize pool gets what remains after your charity percentage is set aside. That
-                makes the split visible before you commit.
+                The prize pool gets what remains after your charity percentage
+                is set aside. That makes the split visible before you commit.
               </p>
               <div className="mt-6 rounded-2xl bg-white/10 p-4 text-sm text-green-50">
-                <p className="font-semibold">Prize pool grows with every subscriber.</p>
+                <p className="font-semibold">
+                  Prize pool grows with every subscriber.
+                </p>
                 <p className="mt-2 text-green-100">
-                  Monthly jackpots are built from actual prize-pool contributions, not raw revenue.
+                  Monthly jackpots are built from actual prize-pool
+                  contributions, not raw revenue.
                 </p>
               </div>
             </div>
@@ -178,7 +196,8 @@ export default function RegisterPlan() {
         <div
           className="mx-auto max-w-6xl rounded-[32px] border border-white/60 p-4 sm:p-6"
           style={{
-            background: 'linear-gradient(145deg, rgba(255,255,255,0.64), rgba(224,229,236,0.9))',
+            background:
+              'linear-gradient(145deg, rgba(255,255,255,0.64), rgba(224,229,236,0.9))',
             boxShadow: 'var(--shadow-out-sm)',
           }}
         >
@@ -197,7 +216,9 @@ export default function RegisterPlan() {
               }
               features={[
                 'Entered into every monthly draw',
-                charityPct > 0 ? `${charityPct}% reserved for charity` : 'Full amount to prize pool',
+                charityPct > 0
+                  ? `${charityPct}% reserved for charity`
+                  : 'Full amount to prize pool',
                 'Pick your charity after signup',
               ]}
               onSelect={() => handleSelectPlan('monthly')}
@@ -217,7 +238,9 @@ export default function RegisterPlan() {
               }
               features={[
                 'Entered into every monthly draw',
-                charityPct > 0 ? `${charityPct}% reserved for charity` : 'Full amount to prize pool',
+                charityPct > 0
+                  ? `${charityPct}% reserved for charity`
+                  : 'Full amount to prize pool',
                 '2 months free (£22 savings)',
               ]}
               featured
