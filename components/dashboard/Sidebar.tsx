@@ -1,8 +1,9 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { LayoutGrid, LogOut } from 'lucide-react';
+import { LogOut } from 'lucide-react';
 import { signOut } from '@/app/(auth)/actions';
 
 const raised =
@@ -30,19 +31,15 @@ export function Sidebar({
   return (
     <aside className="w-full lg:w-[200px] flex-shrink-0 bg-[var(--dashboard-bg)] flex flex-col h-full overflow-hidden">
       <div className="flex items-center justify-between lg:mb-6 flex-shrink-0">
-        <Link href="/dashboard" className="flex items-center gap-[9px]">
-          <div
-            className="flex h-[34px] w-[34px] items-center justify-center rounded-[10px] bg-[var(--dashboard-bg)]"
-            style={{ boxShadow: raisedSm }}
-          >
-            <LayoutGrid className="h-4 w-4 text-[#1a5e38]" />
-          </div>
-          <span
-            className="text-[17px] text-[#2a3a2a]"
-            style={{ fontFamily: '"DM Serif Display", serif' }}
-          >
-            GolfDraw
-          </span>
+        <Link href="/dashboard" className="flex items-center">
+          <Image
+            src="/images/GolfDraw.png"
+            alt="GolfDraw"
+            width={140}
+            height={40}
+            className="h-8 w-auto max-w-[min(100%,160px)] object-contain object-left"
+            priority
+          />
         </Link>
 
         {/* Mobile Logout */}

@@ -8,7 +8,7 @@ import { toast } from 'sonner';
 import { CharityCard } from '@/components/charity/CharityCard';
 import { PageShell } from '@/components/dashboard/PageShell';
 import { LoadingButton } from '@/components/ui/LoadingButton';
-import { SectionLoader } from '@/components/ui/SectionLoader';
+import SectionLoader from '@/components/ui/SectionLoader';
 import { Input } from '@/components/ui/input';
 import {
   CATEGORIES,
