@@ -1,6 +1,7 @@
 'use client';
 import { useQuery } from '@tanstack/react-query';
 import { createBrowserClient } from '@supabase/ssr';
+import { SectionLoader } from '@/components/ui/SectionLoader';
 
 export default function AdminAnalyticsPage() {
   const supabase = createBrowserClient(
@@ -32,7 +33,12 @@ export default function AdminAnalyticsPage() {
     },
   });
 
-  if (isLoading) return <div className="p-8">Loading analytics...</div>;
+  if (isLoading)
+    return (
+      <div className="p-8">
+        <SectionLoader label="Loading analytics..." />
+      </div>
+    );
 
   return (
     <div className="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 space-y-8">

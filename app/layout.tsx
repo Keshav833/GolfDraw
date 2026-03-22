@@ -2,8 +2,10 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import './globals.css';
 import { Inter } from 'next/font/google';
+import { Suspense } from 'react';
 import { cn } from '@/lib/utils';
 import Providers from '@/components/providers';
+import { TopLoader } from '@/components/ui/TopLoader';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -33,6 +35,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <Suspense fallback={null}>
+          <TopLoader />
+        </Suspense>
         <Providers>{children}</Providers>
       </body>
     </html>

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import UserTable from '@/components/admin/UserTable';
 import UserDetailPanel from '@/components/admin/UserDetailPanel';
+import { SectionLoader } from '@/components/ui/SectionLoader';
 import { toast } from 'sonner';
 
 export default function UsersPage() {
@@ -72,7 +73,7 @@ export default function UsersPage() {
       </header>
 
       {isLoading ? (
-        <div className="h-[600px] w-full bg-[var(--sd)]/20 animate-pulse rounded-3xl shadow-[var(--raised-sm)]" />
+        <SectionLoader label="Loading users..." />
       ) : error ? (
         <div className="p-10 text-center text-red-500">
           Error: {(error as Error).message}
@@ -107,6 +108,10 @@ export default function UsersPage() {
         user={selectedUser}
         onClose={() => setSelectedUser(null)}
         onCancelSubscription={handleCancelSubscription}
+        cancelSubscriptionLoading={
+          cancelMutation.isPending &&
+          cancelMutation.variables === selectedUser?.id
+        }
       />
     </div>
   );

@@ -1,9 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { AlertTriangle, CheckCircle, Mail, ShieldAlert, X } from 'lucide-react';
+import { AlertTriangle, CheckCircle, Mail, ShieldAlert } from 'lucide-react';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
+import { LoadingButton } from '@/components/ui/LoadingButton';
 
 interface DrawPublishConfirmProps {
   drawId: string;
@@ -119,22 +120,27 @@ export default function DrawPublishConfirm({
 
             <div className="grid grid-cols-2 gap-4 pt-2">
               <button
+                type="button"
                 onClick={onClose}
                 className="py-3 px-6 rounded-xl bg-[var(--bg)] shadow-[var(--raised-sm)] text-sm font-bold text-[var(--text-muted)] hover:text-[var(--text)] transition-all"
               >
                 Cancel
               </button>
-              <button
-                disabled={confirmText !== 'PUBLISH' || isPublishing}
+              <LoadingButton
+                variant="green"
+                loading={isPublishing}
+                disabled={confirmText !== 'PUBLISH'}
+                fullWidth
                 onClick={handlePublish}
-                className={`py-3 px-6 rounded-xl shadow-[var(--raised-sm)] text-sm font-bold transition-all ${
-                  confirmText === 'PUBLISH'
-                    ? 'bg-emerald-600 text-white hover:shadow-[var(--inset-sm)]'
-                    : 'bg-emerald-100 text-emerald-400 opacity-50 cursor-not-allowed'
-                }`}
+                style={{
+                  padding: '12px 16px',
+                  borderRadius: 12,
+                  fontWeight: 700,
+                  fontSize: 13,
+                }}
               >
-                {isPublishing ? 'Publishing...' : 'Confirm'}
-              </button>
+                Confirm publish
+              </LoadingButton>
             </div>
           </div>
         </div>

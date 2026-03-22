@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { LoadingButton } from '@/components/ui/LoadingButton';
 
 const raisedSm =
   '3px 3px 8px var(--dashboard-shadow-dark), -3px -3px 8px var(--dashboard-shadow-light)';
@@ -14,6 +15,7 @@ export function RejectModal({
   winnerName,
   prizeAmount,
   drawNumber,
+  loading = false,
   onConfirm,
   onCancel,
 }: {
@@ -21,6 +23,7 @@ export function RejectModal({
   winnerName: string;
   prizeAmount: number;
   drawNumber: number;
+  loading?: boolean;
   onConfirm: (note: string) => void;
   onCancel: () => void;
 }) {
@@ -79,19 +82,27 @@ export function RejectModal({
         </div>
 
         <div className="mt-6 flex flex-wrap gap-3">
-          <button
-            type="button"
-            onClick={() => onConfirm(note)}
+          <LoadingButton
+            variant="danger"
+            loading={loading}
             disabled={note.trim().length < 10}
-            className="rounded-[14px] px-5 py-3 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-60"
-            style={{ background: '#b42318', boxShadow: raisedXs }}
+            onClick={() => onConfirm(note)}
+            style={{
+              borderRadius: 14,
+              fontSize: 14,
+              fontWeight: 500,
+              color: '#fff',
+              background: '#b42318',
+              boxShadow: raisedXs,
+            }}
           >
             Confirm rejection
-          </button>
+          </LoadingButton>
           <button
             type="button"
             onClick={onCancel}
-            className="rounded-[14px] px-5 py-3 text-sm font-medium text-[#2a3a2a]"
+            disabled={loading}
+            className="rounded-[14px] px-5 py-3 text-sm font-medium text-[#2a3a2a] disabled:opacity-50"
             style={{ background: 'var(--dashboard-bg)', boxShadow: raisedXs }}
           >
             Cancel

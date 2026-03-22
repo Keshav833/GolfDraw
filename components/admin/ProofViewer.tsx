@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { RejectModal } from '@/components/admin/RejectModal';
+import { SectionLoader } from '@/components/ui/SectionLoader';
+import { LoadingButton } from '@/components/ui/LoadingButton';
 
 const raisedSm =
   '3px 3px 8px var(--dashboard-shadow-dark), -3px -3px 8px var(--dashboard-shadow-light)';
@@ -20,6 +22,8 @@ export function ProofViewer({
   prizeAmount,
   drawMonth,
   drawNumber,
+  approveLoading = false,
+  rejectLoading = false,
 }: {
   verificationId: string;
   onApprove: () => void;
@@ -30,6 +34,8 @@ export function ProofViewer({
   prizeAmount: number;
   drawMonth: string;
   drawNumber: number;
+  approveLoading?: boolean;
+  rejectLoading?: boolean;
 }) {
   const [signedUrl, setSignedUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -83,7 +89,9 @@ export function ProofViewer({
               style={{ boxShadow: insetShadow }}
             >
               {loading ? (
-                <div className="h-[420px] animate-pulse rounded-[18px] bg-[#d9ddd9]" />
+                <div className="flex h-[420px] items-center justify-center rounded-[18px] bg-[var(--dashboard-bg)]">
+                  <SectionLoader label="Loading image..." />
+                </div>
               ) : error ? (
                 <div className="flex h-[420px] items-center justify-center text-center text-sm text-[#6a7a6a]">
                   Could not load proof image. Try refreshing or contact support.
@@ -140,24 +148,27 @@ export function ProofViewer({
               </div>
 
               <div className="mt-6 flex flex-wrap gap-3">
-                <button
-                  type="button"
+                <LoadingButton
+                  variant="green"
+                  loading={approveLoading}
+                  disabled={rejectLoading}
                   onClick={onApprove}
-                  className="rounded-[14px] px-5 py-3 text-sm font-medium text-white"
                   style={{
-                    background: 'var(--dashboard-green-700)',
-                    boxShadow: raisedXs,
+                    borderRadius: 14,
+                    fontSize: 14,
+                    fontWeight: 500,
                   }}
                 >
-                  Approve ✓
-                </button>
+                  Approve
+                </LoadingButton>
                 <button
                   type="button"
+                  disabled={approveLoading || rejectLoading}
                   onClick={() => setShowReject(true)}
-                  className="rounded-[14px] px-5 py-3 text-sm font-medium text-white"
+                  className="rounded-[14px] px-5 py-3 text-sm font-medium text-white disabled:opacity-50"
                   style={{ background: '#b42318', boxShadow: raisedXs }}
                 >
-                  Reject ✗
+                  Reject
                 </button>
                 <button
                   type="button"
@@ -182,8 +193,8 @@ export function ProofViewer({
           winnerName={winnerName}
           prizeAmount={prizeAmount}
           drawNumber={drawNumber}
+          loading={rejectLoading}
           onConfirm={(note) => {
-            setShowReject(false);
             onReject(note);
           }}
           onCancel={() => setShowReject(false)}

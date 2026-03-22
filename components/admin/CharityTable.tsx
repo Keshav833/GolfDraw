@@ -12,6 +12,7 @@ import {
   X,
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { Spinner } from '@/components/ui/LoadingButton';
 
 interface Charity {
   id: string;
@@ -142,21 +143,27 @@ export default function CharityTable({
                     </div>
                   </td>
                   <td className="px-6 py-4 text-center">
-                    <button
-                      disabled={toggling === charity.id}
-                      onClick={() => handleToggleActive(charity)}
-                      className={`relative w-12 h-6 rounded-full transition-all duration-300 shadow-[var(--inset-sm)] ${
-                        charity.is_active ? 'bg-emerald-100' : 'bg-slate-200'
-                      }`}
-                    >
-                      <div
-                        className={`absolute top-1 left-1 w-4 h-4 rounded-full transition-all duration-300 shadow-[var(--raised-sm)] ${
-                          charity.is_active
-                            ? 'translate-x-6 bg-emerald-600'
-                            : 'translate-x-0 bg-slate-400'
+                    {toggling === charity.id ? (
+                      <div className="flex h-6 items-center justify-center">
+                        <Spinner color="#6a7a6a" />
+                      </div>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => handleToggleActive(charity)}
+                        className={`relative w-12 h-6 rounded-full transition-all duration-300 shadow-[var(--inset-sm)] ${
+                          charity.is_active ? 'bg-emerald-100' : 'bg-slate-200'
                         }`}
-                      />
-                    </button>
+                      >
+                        <div
+                          className={`absolute top-1 left-1 w-4 h-4 rounded-full transition-all duration-300 shadow-[var(--raised-sm)] ${
+                            charity.is_active
+                              ? 'translate-x-6 bg-emerald-600'
+                              : 'translate-x-0 bg-slate-400'
+                          }`}
+                        />
+                      </button>
+                    )}
                     <p className="text-[9px] mt-1 text-[var(--text-muted)] uppercase font-bold tracking-widest">
                       {charity.is_active ? 'Active' : 'Inactive'}
                     </p>
