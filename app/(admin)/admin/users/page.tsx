@@ -1,49 +1,89 @@
-'use client';
-import { useQuery } from '@tanstack/react-query';
-import { createBrowserClient } from '@supabase/ssr';
-import { StatusBadge } from '@/components/subscription/StatusBadge';
+'use client'
 
-export default function AdminUsersPage() {
-  const supabase = createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
+import { useState } from 'react'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import UserTable from '@/components/admin/UserTable'
+import UserDetailPanel from '@/components/admin/UserDetailPanel'
+import { toast } from 'sonner'
 
-  const { data: users, isLoading } = useQuery({
-    queryKey: ['admin_users'],
+export default function UsersPage() {
+  const queryClient = useQueryClient()
+  const [search, setSearch] = useState('')
+  const [status, setStatus] = useState('all')
+  const [page, setPage] = useState(1)
+  const [selectedUser, setSelectedUser] = useState<any | null>(null)
+
+  const { data: usersData, isLoading, error } = useQuery({
+    queryKey: ['admin-users', search, status, page],
     queryFn: async () => {
-      const { data } = await supabase.from('users').select('*, charities(name)');
-      return data || [];
+      const res = await fetch(`/api/admin/users?search=${search}&status=${status}&page=${page}`)
+      const json = await res.json()
+      if (!res.ok) throw new Error(json.error?.message || 'Failed to fetch users')
+      return json.data
     }
-  });
+  })
 
-  if (isLoading) return <div className="p-8">Loading users...</div>;
+  const cancelMutation = useMutation({
+    mutationFn: async (userId: string) => {
+      const res = await fetch(`/api/admin/users/${userId}/subscription`, {
+        method: 'DELETE'
+      })
+      const json = await res.json()
+      if (!res.ok) throw new Error(json.error?.message || 'Failed to cancel subscription')
+      return json.data
+    },
+    onSuccess: () => {
+      toast.success('Subscription cancelled successfully')
+      queryClient.invalidateQueries({ queryKey: ['admin-users'] })
+      setSelectedUser(null)
+    },
+    onError: (err: Error) => {
+      toast.error(err.message)
+    }
+  })
+
+  const handleCancelSubscription = (user: any) => {
+    if (confirm(`Are you sure you want to cancel the subscription for ${user.email}? This will take effect immediately in Razorpay.`)) {
+      cancelMutation.mutate(user.id)
+    }
+  }
 
   return (
-    <div className="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 space-y-8">
-       <h1 className="text-3xl font-extrabold font-serif mb-8">User Management</h1>
-       
-       <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-         <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Charity</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Joined</th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {users?.map((u: any) => (
-                <tr key={u.id} className="hover:bg-gray-50 cursor-pointer">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{u.full_name}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{u.email}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm"><StatusBadge status={u.subscription_status} /></td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{u.charities?.name || 'None'} ({u.charity_contribution_pct}%)</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{new Date(u.created_at).toLocaleDateString()}</td>
-                </tr>
-              ))}
-            </tbody>
-         </table>
-       </div>
+    <div className="space-y-10 pb-20 relative">
+      <header>
+        <h1 className="text-3xl font-serif text-[var(--text)] mb-2">User Management</h1>
+        <p className="text-sm text-[var(--text-muted)]">Manage platform members and their subscriptions.</p>
+      </header>
+
+      {isLoading ? (
+        <div className="h-[600px] w-full bg-[var(--sd)]/20 animate-pulse rounded-3xl shadow-[var(--raised-sm)]" />
+      ) : error ? (
+        <div className="p-10 text-center text-red-500">Error: {(error as Error).message}</div>
+      ) : (
+        <UserTable 
+          users={usersData?.users || []}
+          total={usersData?.total || 0}
+          page={page}
+          onPageChange={setPage}
+          onSearch={(val) => { setSearch(val); setPage(1); }}
+          onStatusFilter={(val) => { setStatus(val); setPage(1); }}
+          onViewDetails={setSelectedUser}
+          onCancelSubscription={handleCancelSubscription}
+        />
+      )}
+
+      {selectedUser && (
+        <div 
+          className="fixed inset-0 bg-black/10 backdrop-blur-[2px] z-[40]" 
+          onClick={() => setSelectedUser(null)} 
+        />
+      )}
+      
+      <UserDetailPanel 
+        user={selectedUser} 
+        onClose={() => setSelectedUser(null)}
+        onCancelSubscription={handleCancelSubscription}
+      />
     </div>
-  );
+  )
 }

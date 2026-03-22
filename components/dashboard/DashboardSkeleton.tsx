@@ -19,7 +19,7 @@ export function DashboardSkeleton() {
             </div>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-4 ">
             <div className="flex items-center justify-between">
               <div>
                 <Pulse className="h-8 w-48" />

@@ -23,6 +23,7 @@
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.53.0",
+    "recharts": "^2.15.4",
     "resend": "^4.0.0",
     "shadcn": "^4.1.0",
     "sonner": "^1.5.0",

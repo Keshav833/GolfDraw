@@ -1,11 +1,13 @@
 import { Suspense } from 'react';
 import Link from 'next/link';
 import { format, getHours } from 'date-fns';
-import { Bell, LayoutGrid, Search, User2 } from 'lucide-react';
+import { Bell, LayoutGrid, Search, User2, LogOut } from 'lucide-react';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
+import { signOut } from '@/app/(auth)/actions';
 import { DashboardSkeleton } from '@/components/dashboard/DashboardSkeleton';
 import { QuickActions } from '@/components/dashboard/QuickActions';
+import { Sidebar } from '@/components/dashboard/Sidebar';
 import { CharityWidget } from '@/components/charity/CharityWidget';
 import { DrawHistoryList } from '@/components/draw/DrawHistoryList';
 import { WinningsWidget } from '@/components/draw/WinningsWidget';
@@ -152,76 +154,25 @@ async function DashboardContent() {
   const isActive = subscription?.status === 'active';
 
   return (
-    <div className="mx-auto max-w-[1400px] px-4 py-6">
+    <div className="mx-auto max-w-[1400px] h-screen px-4 py-6 overflow-hidden">
       <div
-        className="overflow-hidden rounded-[24px] bg-[var(--dashboard-bg)] p-4 sm:p-5 lg:p-6"
+        className="h-full overflow-hidden rounded-[24px] bg-[var(--dashboard-bg)] p-4 sm:p-5 lg:p-6"
         style={{ boxShadow: raised }}
       >
-        <StatusBanner subscription={subscription} />
+        <div className="flex flex-col h-full overflow-hidden">
+          <StatusBanner subscription={subscription} />
 
-        <div className="grid grid-cols-1 gap-5 lg:grid-cols-[186px_minmax(0,1fr)_214px]">
-          <aside className="rounded-[20px] bg-[var(--dashboard-bg)] p-4 lg:p-0">
-            <div className="flex items-center gap-[9px] lg:mb-6">
-              <div
-                className="flex h-[34px] w-[34px] items-center justify-center rounded-[10px] bg-[var(--dashboard-bg)]"
-                style={{ boxShadow: raisedSm }}
-              >
-                <LayoutGrid className="h-4 w-4 text-[#1a5e38]" />
-              </div>
-              <span
-                className="text-[17px] text-[#2a3a2a]"
-                style={{ fontFamily: '"DM Serif Display", serif' }}
-              >
-                GolfDraw
-              </span>
-            </div>
+          <div className="flex flex-1 h-full gap-6 lg:flex-row flex-col min-h-0 overflow-hidden">
+          <Sidebar 
+            userName={user?.full_name ?? 'GolfDraw member'}
+            membershipLabel={subscription?.plan_type === 'yearly' ? 'Yearly member' : 'Monthly member'}
+            statusLabel={isActive ? 'Active' : subscription?.status?.replace('_', ' ') || 'Inactive'}
+            initials={initials}
+          />
 
-            <div className="hidden lg:block">
-              <div className="mb-[18px] flex flex-col items-center px-1 pb-5 pt-[18px] text-center">
-                <div
-                  className="mb-[10px] flex h-14 w-14 items-center justify-center rounded-full bg-[var(--dashboard-bg)] text-lg font-semibold text-[#1a5e38]"
-                  style={{ boxShadow: raised }}
-                >
-                  {initials}
-                </div>
-                <div className="text-[13px] font-semibold text-[#2a3a2a]">
-                  {user?.full_name ?? 'GolfDraw member'}
-                </div>
-                <div className="mt-0.5 text-[11px] text-[#6a7a6a]">
-                  {subscription?.plan_type === 'yearly' ? 'Yearly member' : 'Monthly member'}
-                </div>
-                <div
-                  className="mt-2 inline-flex items-center gap-[5px] rounded-[20px] px-3 py-1 text-[10px] font-medium"
-                  style={{
-                    background: 'var(--dashboard-bg)',
-                    boxShadow: insetShadow,
-                    color: '#1a5e38',
-                  }}
-                >
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#1a5e38]" />
-                  {isActive ? 'Active' : subscription?.status?.replace('_', ' ') || 'Inactive'}
-                </div>
-              </div>
-
-              <nav className="flex flex-col gap-1">
-                <NavLabel label="Main" />
-                <NavItem href="/dashboard" label="Overview" active />
-                <NavItem href="/scores" label="My Scores" />
-                <NavItem href="/draws" label="Draws" />
-                <NavItem href="/charity" label="Charity" />
-                <NavLabel label="Account" />
-                <NavItem href="/account" label="Billing" />
-                <NavItem href="/account" label="Profile" />
-              </nav>
-
-              <div className="my-3 h-px bg-gradient-to-r from-transparent via-[var(--dashboard-shadow-dark)] to-transparent opacity-50" />
-
-              <NavItem href="/account" label="Manage account" />
-            </div>
-          </aside>
-
-          <main className="min-w-0 space-y-4">
-            <header className="flex items-center justify-between gap-4">
+          <div className="flex-[1.5] min-w-0 flex flex-col relative h-full">
+            <main className="flex-1 min-w-0 overflow-y-auto no-scrollbar lg:py-0 py-4 space-y-4">
+              <header className="sticky top-0 z-20 bg-[var(--dashboard-bg)] pb-6 flex items-center justify-between gap-4">
               <div>
                 <h1
                   className="text-[21px] tracking-[-0.3px] text-[#2a3a2a]"
@@ -384,63 +335,69 @@ async function DashboardContent() {
             </section>
 
             <QuickActions />
-          </main>
+            </main>
+            <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-[var(--dashboard-bg)] to-transparent pointer-events-none z-10" />
+          </div>
 
-          <aside className="space-y-[18px]">
-            <div className="rounded-[16px] bg-[var(--dashboard-bg)] p-[14px]" style={{ boxShadow: raisedSm }}>
-              <div
-                className="rounded-[12px] p-[14px] text-white"
-                style={{
-                  background: '#1a3a2a',
-                  boxShadow: '3px 3px 8px rgba(0,0,0,0.3), -1px -1px 4px rgba(80,160,100,0.15)',
-                }}
-              >
-                <p className="text-[10px] text-white/45">Next jackpot draw</p>
-                <h3
-                  className="mt-1 text-[22px] text-white"
-                  style={{ fontFamily: '"DM Serif Display", serif' }}
+          <aside className="w-full lg:w-[260px] flex-shrink-0 flex flex-col h-full overflow-hidden relative">
+            <div className="flex-1 overflow-y-auto no-scrollbar space-y-[18px] pb-20">
+              <div className="rounded-[16px] bg-[var(--dashboard-bg)] p-[14px]" style={{ boxShadow: raisedSm }}>
+                <div
+                  className="rounded-[12px] p-[14px] text-white"
+                  style={{
+                    background: '#1a3a2a',
+                    boxShadow: '3px 3px 8px rgba(0,0,0,0.3), -1px -1px 4px rgba(80,160,100,0.15)',
+                  }}
                 >
-                  £4,200
-                </h3>
-                <p className="mb-2 text-[10px] text-white/40">Rolls over if unclaimed</p>
-                <div className="flex items-center gap-[5px] rounded-[7px] bg-white/10 px-2 py-[5px] text-[10px] text-white/60">
-                  <span className="h-[5px] w-[5px] rounded-full bg-[#7de0aa]" />
-                  {format(drawDate, 'd MMMM yyyy')}
+                  <p className="text-[10px] text-white/45">Next jackpot draw</p>
+                  <h3
+                    className="mt-1 text-[22px] text-white"
+                    style={{ fontFamily: '"DM Serif Display", serif' }}
+                  >
+                    £4,200
+                  </h3>
+                  <p className="mb-2 text-[10px] text-white/40">Rolls over if unclaimed</p>
+                  <div className="flex items-center gap-[5px] rounded-[7px] bg-white/10 px-2 py-[5px] text-[10px] text-white/60">
+                    <span className="h-[5px] w-[5px] rounded-full bg-[#7de0aa]" />
+                    {format(drawDate, 'd MMMM yyyy')}
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className="rounded-[16px] bg-[var(--dashboard-bg)] p-[14px]" style={{ boxShadow: raisedSm }}>
-              <DrawHistoryList results={drawResults} />
-            </div>
-
-            <div className="rounded-[16px] bg-[var(--dashboard-bg)] p-[14px]" style={{ boxShadow: raisedSm }}>
-              <ScoreSummary scores={scores} isSubscriptionActive={isActive} />
-            </div>
-
-            <div className="rounded-[16px] bg-[var(--dashboard-bg)] p-[14px]" style={{ boxShadow: raisedSm }}>
-              <CharityWidget
-                charity={charity}
-                pct={charityPct}
-                planType={subscription?.plan_type ?? 'monthly'}
-              />
-              <div
-                className="mt-2 inline-flex items-center gap-[7px] rounded-[20px] px-3 py-1 text-[10px] font-medium text-[#1a5e38]"
-                style={{ background: 'var(--dashboard-bg)', boxShadow: insetShadow }}
-              >
-                <span className="h-1.5 w-1.5 rounded-full bg-[#1a5e38]" />
-                {(subscription?.plan_type === 'yearly' ? 'Yearly' : 'Monthly') +
-                  ' · ' +
-                  (isActive ? 'Active' : subscription?.status?.replace('_', ' ') || 'Inactive')}
+              <div className="rounded-[16px] bg-[var(--dashboard-bg)] p-[14px]" style={{ boxShadow: raisedSm }}>
+                <DrawHistoryList results={drawResults} />
               </div>
-            </div>
 
-            <WinningsWidget totalPaid={totalWinnings} pendingResult={pending} />
+              <div className="rounded-[16px] bg-[var(--dashboard-bg)] p-[14px]" style={{ boxShadow: raisedSm }}>
+                <ScoreSummary scores={scores} isSubscriptionActive={isActive} />
+              </div>
+
+              <div className="rounded-[16px] bg-[var(--dashboard-bg)] p-[14px]" style={{ boxShadow: raisedSm }}>
+                <CharityWidget
+                  charity={charity}
+                  pct={charityPct}
+                  planType={subscription?.plan_type ?? 'monthly'}
+                />
+                <div
+                  className="mt-2 inline-flex items-center gap-[7px] rounded-[20px] px-3 py-1 text-[10px] font-medium text-[#1a5e38]"
+                  style={{ background: 'var(--dashboard-bg)', boxShadow: insetShadow }}
+                >
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#1a5e38]" />
+                  {(subscription?.plan_type === 'yearly' ? 'Yearly' : 'Monthly') +
+                    ' · ' +
+                    (isActive ? 'Active' : subscription?.status?.replace('_', ' ') || 'Inactive')}
+                </div>
+              </div>
+
+              <WinningsWidget totalPaid={totalWinnings} pendingResult={pending} />
+            </div>
+            <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-[var(--dashboard-bg)] to-transparent pointer-events-none z-10" />
           </aside>
         </div>
       </div>
     </div>
-  );
+  </div>
+);
 }
 
 function HeaderIcon({ href, icon }: { href: string; icon: React.ReactNode }) {
@@ -479,32 +436,6 @@ function HeroButton({
   );
 }
 
-function NavLabel({ label }: { label: string }) {
-  return <div className="px-2 py-[10px] text-[10px] uppercase tracking-[0.8px] text-[#9aaa9a]">{label}</div>;
-}
-
-function NavItem({
-  href,
-  label,
-  active = false,
-}: {
-  href: string;
-  label: string;
-  active?: boolean;
-}) {
-  return (
-    <Link
-      href={href}
-      className={`flex items-center gap-[9px] rounded-[12px] px-3 py-[10px] text-[13px] transition ${
-        active ? 'font-medium text-[#1a5e38]' : 'text-[#6a7a6a] hover:text-[#2a3a2a]'
-      }`}
-      style={{ boxShadow: active ? insetShadow : 'none' }}
-    >
-      <span className="h-[15px] w-[15px] rounded-[4px] bg-current opacity-70" />
-      {label}
-    </Link>
-  );
-}
 
 function StatCard({
   label,

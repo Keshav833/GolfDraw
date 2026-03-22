@@ -55,7 +55,12 @@ export async function GET() {
 
   return NextResponse.json({
     data: {
-      user: userProfile,
+      user: userProfile || {
+        id: user.id,
+        email: user.email,
+        full_name: user.user_metadata?.full_name || null,
+        charity_contribution_pct: 0,
+      },
       subscription: subscription || null,
       scores: scores || [],
       charity: firstCharity(charityJoin?.charities),

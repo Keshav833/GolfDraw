@@ -100,7 +100,7 @@ export default function AccountPage() {
   }
 
   const { user, subscription, charity } = res.data;
-  const userName = user.full_name?.trim() || user.email || 'GolfDraw member';
+  const userName = user?.full_name?.trim() || user?.email || 'GolfDraw member';
   const membershipLabel =
     subscription?.plan_type === 'yearly'
       ? 'Yearly member'
@@ -111,7 +111,7 @@ export default function AccountPage() {
     subscription?.status
       ? subscription.status.replace('_', ' ').replace(/\b\w/g, (char) => char.toUpperCase())
       : 'Inactive';
-  const contributionPct = Number(user.charity_contribution_pct ?? 0);
+  const contributionPct = Number(user?.charity_contribution_pct ?? 0);
   const renewalDate =
     subscription?.current_period_end && !Number.isNaN(new Date(subscription.current_period_end).getTime())
       ? format(new Date(subscription.current_period_end), 'd MMM yyyy')
@@ -145,7 +145,7 @@ export default function AccountPage() {
             >
               <p className="text-[11px] uppercase tracking-[0.14em] text-[#9aaa9a]">Full name</p>
               <p className="mt-2 text-base font-semibold text-[#2a3a2a]">
-                {user.full_name || 'Not set'}
+                {user?.full_name || 'Not set'}
               </p>
             </div>
             <div
@@ -153,7 +153,7 @@ export default function AccountPage() {
               style={{ boxShadow: insetShadow }}
             >
               <p className="text-[11px] uppercase tracking-[0.14em] text-[#9aaa9a]">Email</p>
-              <p className="mt-2 text-base font-semibold text-[#2a3a2a]">{user.email}</p>
+              <p className="mt-2 text-base font-semibold text-[#2a3a2a]">{user?.email}</p>
             </div>
           </div>
         </section>

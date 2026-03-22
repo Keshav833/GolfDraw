@@ -21,7 +21,12 @@ export default function LoginPage() {
     const redirectSignedInUser = async () => {
       const { data } = await supabase.auth.getUser();
       if (data.user) {
-        router.replace('/dashboard');
+        const role = data.user.app_metadata?.role;
+        if (role === 'admin') {
+          router.replace('/admin');
+        } else {
+          router.replace('/dashboard');
+        }
       }
     };
 
@@ -36,7 +41,13 @@ export default function LoginPage() {
       toast.error(error.message);
       setLoading(false);
     } else {
-      router.push('/dashboard');
+      const { data: { user } } = await supabase.auth.getUser();
+      const role = user?.app_metadata?.role;
+      if (role === 'admin') {
+        router.push('/admin');
+      } else {
+        router.push('/dashboard');
+      }
       router.refresh();
     }
   };

@@ -31,14 +31,37 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (
-    !user &&
-    (request.nextUrl.pathname.startsWith('/user') ||
-      request.nextUrl.pathname.startsWith('/admin'))
-  ) {
-    const url = request.nextUrl.clone()
-    url.pathname = '/login'
-    return NextResponse.redirect(url)
+  const path = request.nextUrl.pathname
+  const isAdminLogin = path === '/admin/login'
+  const isAdminRoute = path.startsWith('/admin') && !isAdminLogin
+  const isUserRoute  = path.startsWith('/dashboard') ||
+                       path.startsWith('/scores')    ||
+                       path.startsWith('/charity')   ||
+                       path.startsWith('/draws')     ||
+                       path.startsWith('/account')
+
+  // 1. Admin Login Page — redirect away if already admin
+  if (isAdminLogin && user) {
+    const role = user.app_metadata?.role
+    if (role === 'admin') {
+      return NextResponse.redirect(new URL('/admin', request.url))
+    }
+  }
+
+  // 2. Admin Routes — block non-admins
+  if (isAdminRoute) {
+    if (!user) {
+      return NextResponse.redirect(new URL('/admin/login', request.url))
+    }
+    const role = user.app_metadata?.role
+    if (role !== 'admin') {
+      return NextResponse.redirect(new URL('/admin/login?error=access_denied', request.url))
+    }
+  }
+
+  // 3. User Routes — block unauthenticated
+  if (isUserRoute && !user) {
+    return NextResponse.redirect(new URL('/login', request.url))
   }
 
   return supabaseResponse
