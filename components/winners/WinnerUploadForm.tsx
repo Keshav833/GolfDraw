@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { toast } from 'sonner';
 import { LoadingButton } from '@/components/ui/LoadingButton';
 
@@ -194,10 +195,13 @@ export function WinnerUploadForm({
             </div>
           ) : null}
           {previewUrl ? (
-            <img
+            <Image
               src={previewUrl}
               alt="Selected proof preview"
-              className="mt-6 max-h-64 rounded-[18px] object-contain"
+              width={300}
+              height={200}
+              unoptimized
+              className="mt-6 max-h-64 w-auto rounded-[18px] object-contain"
             />
           ) : null}
         </label>

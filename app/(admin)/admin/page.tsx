@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import StatCards from '@/components/admin/analytics/StatCards';
 import SubscriptionChart from '@/components/admin/analytics/SubscriptionChart';
 import DrawHistoryTable from '@/components/admin/analytics/DrawHistoryTable';
-import { SectionLoader } from '@/components/ui/SectionLoader';
+import SectionLoader from '@/components/ui/SectionLoader';
 
 export default function AdminDashboard() {
   const {

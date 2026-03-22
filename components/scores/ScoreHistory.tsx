@@ -1,6 +1,6 @@
 import { format, formatDistanceToNow } from 'date-fns';
 import type { Score } from '@/lib/types/score';
-import { SectionLoader } from '@/components/ui/SectionLoader';
+import SectionLoader from '@/components/ui/SectionLoader';
 
 const raisedXs =
   '2px 2px 5px var(--dashboard-shadow-dark), -2px -2px 5px var(--dashboard-shadow-light)';

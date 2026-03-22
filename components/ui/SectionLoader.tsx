@@ -1,8 +1,4 @@
-export function SectionLoader({
-  label = 'Loading...',
-}: {
-  label?: string;
-}) {
+export default function SectionLoader({ label = 'Loading...' }: { label?: string }) {
   return (
     <div
       style={{

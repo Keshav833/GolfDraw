@@ -5,7 +5,7 @@ import { formatDistanceToNow } from 'date-fns';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { ProofViewer } from '@/components/admin/ProofViewer';
-import { SectionLoader } from '@/components/ui/SectionLoader';
+import SectionLoader from '@/components/ui/SectionLoader';
 import { LoadingButton } from '@/components/ui/LoadingButton';
 import type { DrawResultWithWinner } from '@/lib/types/verification';
 
