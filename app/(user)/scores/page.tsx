@@ -20,5 +20,20 @@ export default async function ScoresPage() {
     .order('submitted_at', { ascending: false })
     .limit(5);
 
-  return <ScoresPageClient initialScores={(data ?? []) as Score[]} />;
+  const { data: subscription } = await supabase
+    .from('subscriptions')
+    .select('plan_type, status')
+    .eq('user_id', user.id)
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  return (
+    <ScoresPageClient
+      initialScores={(data ?? []) as Score[]}
+      userName={user.user_metadata?.full_name || user.email || 'GolfDraw member'}
+      membershipLabel={subscription?.plan_type === 'yearly' ? 'Yearly member' : 'Monthly member'}
+      statusLabel={subscription?.status?.replace('_', ' ') || 'Active'}
+    />
+  );
 }

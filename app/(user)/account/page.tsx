@@ -2,13 +2,38 @@
 
 import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
+import { format } from 'date-fns';
 import { toast } from 'sonner';
+import { PageShell } from '@/components/dashboard/PageShell';
 import { StatusBadge } from '@/components/subscription/StatusBadge';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
+const raisedSm = '3px 3px 8px var(--dashboard-shadow-dark), -3px -3px 8px var(--dashboard-shadow-light)';
+const raisedXs = '2px 2px 5px var(--dashboard-shadow-dark), -2px -2px 5px var(--dashboard-shadow-light)';
+const insetShadow =
+  'inset 3px 3px 7px var(--dashboard-shadow-dark), inset -3px -3px 7px var(--dashboard-shadow-light)';
+
+type AccountResponse = {
+  data: {
+    user: {
+      email: string;
+      full_name: string | null;
+      charity_contribution_pct?: number | null;
+    };
+    subscription: {
+      plan_type?: 'monthly' | 'yearly' | null;
+      status?: 'active' | 'past_due' | 'inactive' | 'cancelled' | string | null;
+      current_period_end?: string | null;
+    } | null;
+    charity: {
+      name?: string | null;
+    } | null;
+  } | null;
+};
+
 export default function AccountPage() {
-  const { data: res, isLoading, refetch } = useQuery({
+  const { data: res, isLoading, refetch } = useQuery<AccountResponse>({
     queryKey: ['me'],
     queryFn: () => fetch('/api/users/me').then((response) => response.json()),
   });
@@ -34,71 +59,210 @@ export default function AccountPage() {
   };
 
   if (isLoading) {
-    return <div className="p-8">Loading account...</div>;
+    return (
+      <PageShell
+        userName="GolfDraw member"
+        membershipLabel="Account"
+        statusLabel="Loading"
+        title="Account settings"
+        subtitle="Manage your profile, billing, and giving preferences."
+      >
+        <div className="grid gap-5 lg:grid-cols-[1.05fr_0.95fr]">
+          {Array.from({ length: 3 }).map((_, index) => (
+            <div
+              key={index}
+              className="h-56 animate-pulse rounded-[20px] bg-[#d9ddd9]"
+              style={{ boxShadow: raisedSm }}
+            />
+          ))}
+        </div>
+      </PageShell>
+    );
   }
 
   if (!res?.data) {
-    return <div className="p-8">Failed to load account data</div>;
+    return (
+      <PageShell
+        userName="GolfDraw member"
+        membershipLabel="Account"
+        statusLabel="Unavailable"
+        title="Account settings"
+        subtitle="Manage your profile, billing, and giving preferences."
+      >
+        <div
+          className="rounded-[20px] bg-[var(--dashboard-bg)] px-6 py-12 text-center text-[#6a7a6a]"
+          style={{ boxShadow: insetShadow }}
+        >
+          Failed to load account data.
+        </div>
+      </PageShell>
+    );
   }
 
   const { user, subscription, charity } = res.data;
+  const userName = user.full_name?.trim() || user.email || 'GolfDraw member';
+  const membershipLabel =
+    subscription?.plan_type === 'yearly'
+      ? 'Yearly member'
+      : subscription?.plan_type === 'monthly'
+        ? 'Monthly member'
+        : 'No active plan';
+  const statusLabel =
+    subscription?.status
+      ? subscription.status.replace('_', ' ').replace(/\b\w/g, (char) => char.toUpperCase())
+      : 'Inactive';
+  const contributionPct = Number(user.charity_contribution_pct ?? 0);
+  const renewalDate =
+    subscription?.current_period_end && !Number.isNaN(new Date(subscription.current_period_end).getTime())
+      ? format(new Date(subscription.current_period_end), 'd MMM yyyy')
+      : null;
 
   return (
-    <div className="mx-auto max-w-4xl space-y-8 p-4 sm:p-6 lg:p-8">
-      <h1 className="mb-8 text-3xl font-extrabold font-serif">Account Settings</h1>
+    <PageShell
+      userName={userName}
+      membershipLabel={membershipLabel}
+      statusLabel={statusLabel}
+      title="Account settings"
+      subtitle="Manage your profile, billing, and giving preferences."
+    >
+      <div className="grid gap-5 lg:grid-cols-[1.05fr_0.95fr]">
+        <section
+          className="rounded-[20px] bg-[var(--dashboard-bg)] p-5 sm:p-6"
+          style={{ boxShadow: raisedSm }}
+        >
+          <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#9aaa9a]">
+            Profile
+          </p>
+          <h2 className="mt-2 text-xl font-semibold text-[#2a3a2a]">Your details</h2>
+          <p className="mt-1 text-sm text-[#6a7a6a]">
+            Basic account details used across your GolfDraw profile.
+          </p>
 
-      <div className="flex flex-col gap-6 rounded-xl border border-gray-100 bg-white p-6 shadow-sm md:flex-row md:items-center md:justify-between">
-        <div>
-          <h2 className="mb-1 text-lg font-bold">Profile Details</h2>
-          <p className="font-medium text-gray-900">{user.full_name}</p>
-          <p className="text-sm text-gray-500">{user.email}</p>
-        </div>
-      </div>
+          <div className="mt-6 grid gap-4">
+            <div
+              className="rounded-[16px] bg-[var(--dashboard-bg)] px-4 py-4"
+              style={{ boxShadow: insetShadow }}
+            >
+              <p className="text-[11px] uppercase tracking-[0.14em] text-[#9aaa9a]">Full name</p>
+              <p className="mt-2 text-base font-semibold text-[#2a3a2a]">
+                {user.full_name || 'Not set'}
+              </p>
+            </div>
+            <div
+              className="rounded-[16px] bg-[var(--dashboard-bg)] px-4 py-4"
+              style={{ boxShadow: insetShadow }}
+            >
+              <p className="text-[11px] uppercase tracking-[0.14em] text-[#9aaa9a]">Email</p>
+              <p className="mt-2 text-base font-semibold text-[#2a3a2a]">{user.email}</p>
+            </div>
+          </div>
+        </section>
 
-      <div className="flex flex-col gap-6 rounded-xl border border-gray-100 bg-white p-6 shadow-sm md:flex-row md:items-center md:justify-between">
-        <div className="space-y-3">
-          <h2 className="text-lg font-bold">Subscription Plan</h2>
-          <div className="flex items-center gap-3">
-            <span className="capitalize font-medium text-gray-900">
-              {subscription?.plan_type || 'None selected'}
-            </span>
+        <section
+          className="rounded-[20px] bg-[var(--dashboard-bg)] p-5 sm:p-6"
+          style={{ boxShadow: raisedSm }}
+        >
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#9aaa9a]">
+                Subscription
+              </p>
+              <h2 className="mt-2 text-xl font-semibold text-[#2a3a2a]">Plan and billing</h2>
+            </div>
             <StatusBadge status={subscription?.status || 'inactive'} />
           </div>
-          {subscription?.current_period_end && subscription.status === 'active' ? (
-            <p className="text-sm text-gray-500">
-              Auto-renews on {new Date(subscription.current_period_end).toLocaleDateString()}
+
+          <div className="mt-6 rounded-[16px] bg-[var(--dashboard-bg)] px-4 py-4" style={{ boxShadow: insetShadow }}>
+            <p className="text-[11px] uppercase tracking-[0.14em] text-[#9aaa9a]">Current plan</p>
+            <p className="mt-2 text-lg font-semibold capitalize text-[#2a3a2a]">
+              {subscription?.plan_type ? `${subscription.plan_type} plan` : 'None selected'}
             </p>
-          ) : null}
-          {subscription?.status === 'cancelled' ? (
-            <p className="text-sm font-medium text-red-600">Subscription cancelled.</p>
-          ) : null}
-        </div>
+            <p className="mt-1 text-sm text-[#6a7a6a]">
+              {subscription?.plan_type === 'yearly'
+                ? 'GBP 86.00 per year'
+                : subscription?.plan_type === 'monthly'
+                  ? 'GBP 9.00 per month'
+                  : 'Subscribe to enter upcoming draws.'}
+            </p>
+            {renewalDate && subscription?.status === 'active' ? (
+              <p className="mt-3 text-sm text-[#1a5e38]">Renews on {renewalDate}</p>
+            ) : null}
+            {renewalDate && subscription?.status === 'cancelled' ? (
+              <p className="mt-3 text-sm text-[#b45309]">Access until {renewalDate}</p>
+            ) : null}
+          </div>
 
-        {subscription?.status === 'active' ? (
-          <Button variant="destructive" onClick={handleCancel}>
-            Cancel Subscription
-          </Button>
-        ) : null}
+          <div className="mt-5 flex flex-wrap gap-3">
+            <Link
+              href="/register/plan"
+              className={cn(
+                buttonVariants({ variant: 'outline' }),
+                'rounded-[14px] border-0 bg-[var(--dashboard-bg)] text-[#2a3a2a] hover:bg-[var(--dashboard-bg)]'
+              )}
+              style={{ boxShadow: raisedXs }}
+            >
+              {subscription?.status === 'active' ? 'Change plan' : 'Choose a plan'}
+            </Link>
+            {subscription?.status === 'active' ? (
+              <Button
+                variant="destructive"
+                onClick={handleCancel}
+                className="rounded-[14px] border-0"
+                style={{ boxShadow: raisedXs }}
+              >
+                Cancel subscription
+              </Button>
+            ) : null}
+          </div>
+        </section>
+
+        <section
+          className="rounded-[20px] bg-[var(--dashboard-bg)] p-5 sm:p-6 lg:col-span-2"
+          style={{ boxShadow: raisedSm }}
+        >
+          <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#9aaa9a]">
+                Charity &amp; giving
+              </p>
+              <h2 className="mt-2 text-xl font-semibold text-[#2a3a2a]">Your current allocation</h2>
+              <p className="mt-1 text-sm text-[#6a7a6a]">
+                Update your chosen charity and reserved contribution from the charity page.
+              </p>
+            </div>
+
+            <Link
+              href="/charity"
+              className={cn(
+                buttonVariants({ variant: 'outline' }),
+                'rounded-[14px] border-0 bg-[var(--dashboard-bg)] text-[#2a3a2a] hover:bg-[var(--dashboard-bg)]'
+              )}
+              style={{ boxShadow: raisedXs }}
+            >
+              Update charity
+            </Link>
+          </div>
+
+          <div className="mt-6 grid gap-4 md:grid-cols-2">
+            <div
+              className="rounded-[16px] bg-[var(--dashboard-bg)] px-4 py-4"
+              style={{ boxShadow: insetShadow }}
+            >
+              <p className="text-[11px] uppercase tracking-[0.14em] text-[#9aaa9a]">Current charity</p>
+              <p className="mt-2 text-base font-semibold text-[#2a3a2a]">
+                {charity?.name ?? 'None selected'}
+              </p>
+            </div>
+            <div
+              className="rounded-[16px] bg-[var(--dashboard-bg)] px-4 py-4"
+              style={{ boxShadow: insetShadow }}
+            >
+              <p className="text-[11px] uppercase tracking-[0.14em] text-[#9aaa9a]">Contribution</p>
+              <p className="mt-2 text-base font-semibold text-[#2a3a2a]">{contributionPct}%</p>
+            </div>
+          </div>
+        </section>
       </div>
-
-      <div className="flex flex-col gap-6 rounded-xl border border-gray-100 bg-white p-6 shadow-sm md:flex-row md:items-center md:justify-between">
-        <div className="space-y-2">
-          <h2 className="text-lg font-bold">Charity &amp; giving</h2>
-          <p className="text-sm text-gray-600">
-            Current charity: <span className="font-medium text-gray-900">{charity?.name ?? 'None selected'}</span>
-          </p>
-          <p className="text-sm text-gray-600">
-            Current percentage:{' '}
-            <span className="font-medium text-gray-900">
-              {Number(user.charity_contribution_pct ?? 0)}%
-            </span>
-          </p>
-        </div>
-
-        <Link href="/charity" className={cn(buttonVariants({ variant: 'outline' }))}>
-          Update
-        </Link>
-      </div>
-    </div>
+    </PageShell>
   );
 }

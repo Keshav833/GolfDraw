@@ -1,86 +1,69 @@
 import Link from 'next/link';
-import type { Charity } from '@/lib/types/charity';
-import { buttonVariants } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
+import type { DashboardCharity } from '@/lib/types/dashboard';
+
+const insetShadow =
+  'inset 3px 3px 7px var(--dashboard-shadow-dark), inset -3px -3px 7px var(--dashboard-shadow-light)';
 
 export function CharityWidget({
   charity,
   pct,
   planType,
 }: {
-  charity: Charity | null;
+  charity: DashboardCharity;
   pct: number;
   planType: 'monthly' | 'yearly';
 }) {
   const monthlyRate = planType === 'yearly' ? 86 / 12 : 9;
   const donationAmount = ((monthlyRate * pct) / 100).toFixed(2);
 
-  if (charity && pct > 0) {
-    return (
-      <div className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
-        <div>
-          <p className="text-sm font-bold uppercase tracking-widest text-gray-500">Your charity</p>
-          <h3 className="mt-3 text-xl font-bold text-gray-900">{charity.name}</h3>
-          <span className="mt-2 inline-flex rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-800">
-            {charity.category}
-          </span>
-        </div>
-
-        <div className="mt-5">
-          <div className="h-3 overflow-hidden rounded-full bg-gray-100">
-            <div className="h-full rounded-full bg-green-600" style={{ width: `${pct}%` }} />
-          </div>
-          <p className="mt-2 text-sm font-semibold text-gray-900">
-            {pct}% · £{donationAmount}/mo
-          </p>
-          <p className="mt-1 text-sm text-gray-500">Donated this month</p>
-        </div>
-
-        <Link
-          href="/charity"
-          className={cn(buttonVariants({ variant: 'link' }), 'mt-3 h-auto px-0 text-green-700')}
-        >
-          Change charity →
-        </Link>
-      </div>
-    );
-  }
-
-  if (pct > 0) {
-    return (
-      <div className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
-        <p className="text-sm font-bold uppercase tracking-widest text-gray-500">Your charity</p>
-        <h3 className="mt-3 text-xl font-bold text-gray-900">{pct}% ready to allocate</h3>
-        <p className="mt-2 text-sm text-gray-600">You haven&apos;t chosen a charity yet.</p>
-        <Link
-          href="/charity"
-          className={cn(
-            buttonVariants({ variant: 'default' }),
-            'mt-5 bg-green-800 text-white hover:bg-green-700'
-          )}
-        >
-          Choose a charity
-        </Link>
-      </div>
-    );
-  }
-
   return (
-    <div className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
-      <p className="text-sm font-bold uppercase tracking-widest text-gray-500">Your charity</p>
-      <h3 className="mt-3 text-xl font-bold text-gray-900">Not donating yet</h3>
-      <p className="mt-2 text-sm text-gray-600">
-        Add a charity to give back with every draw.
-      </p>
-      <Link
-        href="/charity"
-        className={cn(
-          buttonVariants({ variant: 'default' }),
-          'mt-5 bg-green-800 text-white hover:bg-green-700'
-        )}
-      >
-        Get started
-      </Link>
+    <div>
+      <div className="mb-[10px] flex items-center justify-between gap-3">
+        <h3 className="text-xs font-semibold text-[#2a3a2a]">My charity</h3>
+        <Link href="/charity" className="text-[10px] text-[#6a7a6a] hover:text-[#2a3a2a]">
+          Update →
+        </Link>
+      </div>
+
+      {charity && pct > 0 ? (
+        <>
+          <div className="flex items-center justify-between text-[11px]">
+            <span className="font-medium text-[#2a3a2a]">{charity.name}</span>
+            <span className="font-semibold text-[#1a5e38]">{pct}%</span>
+          </div>
+          <div
+            className="mt-[6px] h-2 overflow-hidden rounded bg-[var(--dashboard-bg)]"
+            style={{ boxShadow: insetShadow }}
+          >
+            <div
+              className="h-full rounded bg-[#1a5e38]"
+              style={{ width: `${pct}%`, boxShadow: '1px 1px 3px rgba(10,50,20,0.3)' }}
+            />
+          </div>
+          <p className="mt-[5px] text-[10px] text-[#6a7a6a]">£{donationAmount} donated this month</p>
+        </>
+      ) : pct > 0 ? (
+        <>
+          <div className="flex items-center justify-between text-[11px]">
+            <span className="font-medium text-[#2a3a2a]">{pct}% ready to allocate</span>
+            <span className="font-semibold text-[#1a5e38]">Pending</span>
+          </div>
+          <div
+            className="mt-[6px] h-2 overflow-hidden rounded bg-[var(--dashboard-bg)]"
+            style={{ boxShadow: insetShadow }}
+          >
+            <div
+              className="h-full rounded bg-[#1a5e38]"
+              style={{ width: `${pct}%`, boxShadow: '1px 1px 3px rgba(10,50,20,0.3)' }}
+            />
+          </div>
+          <p className="mt-[5px] text-[10px] text-[#6a7a6a]">Choose a charity to start giving back</p>
+        </>
+      ) : (
+        <div className="text-[11px] text-[#6a7a6a]">
+          Add a charity to give back with every draw.
+        </div>
+      )}
     </div>
   );
 }

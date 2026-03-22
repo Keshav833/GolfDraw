@@ -1,44 +1,65 @@
-import React from 'react';
-import { Card, CardContent } from '@/components/ui/card';
+import Link from 'next/link';
 import { MatchBadge } from './MatchBadge';
+
+const raisedSm = '3px 3px 8px var(--dashboard-shadow-dark), -3px -3px 8px var(--dashboard-shadow-light)';
+const insetShadow =
+  'inset 3px 3px 7px var(--dashboard-shadow-dark), inset -3px -3px 7px var(--dashboard-shadow-light)';
 
 interface DrawCardProps {
   month: string;
   draw_number: number;
-  match_category: '3-match'|'4-match'|'5-match'|null;
+  match_category: '3-match' | '4-match' | '5-match' | null;
   prize_amount: number | null;
   payment_status: string;
-  onUploadProof?: () => void;
 }
 
-export function DrawCard({ month, draw_number, match_category, prize_amount, payment_status, onUploadProof }: DrawCardProps) {
+export function DrawCard({
+  month,
+  draw_number,
+  match_category,
+  prize_amount,
+  payment_status,
+}: DrawCardProps) {
+  const amount = prize_amount != null ? `£${Number(prize_amount).toFixed(2)}` : null;
+
   return (
-    <Card className="overflow-hidden mb-4">
-      <CardContent className="p-0">
-        <div className="flex flex-col sm:flex-row items-center justify-between p-6 gap-4">
-          <div className="flex flex-col space-y-1 text-center sm:text-left">
-            <h3 className="text-lg font-bold">{month} Draw</h3>
-            <p className="text-sm text-gray-500">Winning number: <span className="font-mono bg-gray-100 px-1 rounded">{draw_number}</span></p>
-          </div>
-          
-          <div className="flex items-center space-x-4">
-            <MatchBadge category={match_category} />
-            {prize_amount && (
-              <div className="text-right">
-                <p className="font-bold text-green-700">£{Number(prize_amount).toLocaleString()}</p>
-                <p className="text-xs text-gray-500 capitalize">{payment_status}</p>
-              </div>
-            )}
-          </div>
+    <div
+      className="rounded-[18px] bg-[var(--dashboard-bg)] p-5"
+      style={{ boxShadow: raisedSm }}
+    >
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h3 className="text-lg font-semibold text-[#2a3a2a]">{month} draw</h3>
+          <p className="mt-1 text-sm text-[#6a7a6a]">
+            Winning number:{' '}
+            <span
+              className="inline-flex rounded-[8px] px-2 py-1 font-mono text-[#2a3a2a]"
+              style={{ background: 'var(--dashboard-bg)', boxShadow: insetShadow }}
+            >
+              {draw_number}
+            </span>
+          </p>
         </div>
-        
-        {match_category && payment_status === 'pending' && onUploadProof && (
-          <div className="bg-amber-50 border-t border-amber-100 p-4 text-sm flex justify-between items-center">
-            <span className="text-amber-800 leading-tight">Action required: Upload scorecard proof.</span>
-            <button onClick={onUploadProof} className="text-amber-700 font-medium hover:underline text-sm whitespace-nowrap ml-4">Upload proof →</button>
-          </div>
-        )}
-      </CardContent>
-    </Card>
+
+        <div className="flex items-center gap-4">
+          <MatchBadge category={match_category ?? 'no-match'} />
+          {amount ? (
+            <div className="text-right">
+              <p className="font-semibold text-[#1a5e38]">{amount}</p>
+              <p className="text-xs capitalize text-[#6a7a6a]">{payment_status.replace('_', ' ')}</p>
+            </div>
+          ) : null}
+        </div>
+      </div>
+
+      {match_category && payment_status === 'pending' ? (
+        <div className="mt-4 rounded-[12px] border border-[#e1cf8f] bg-[#fff5cf] px-4 py-3 text-sm text-[#6c5310]">
+          Action required: Upload scorecard proof.{' '}
+          <Link href="/draws" className="font-semibold hover:underline">
+            Upload proof →
+          </Link>
+        </div>
+      ) : null}
+    </div>
   );
 }

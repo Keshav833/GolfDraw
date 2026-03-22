@@ -1,6 +1,10 @@
 import { format, formatDistanceToNow } from 'date-fns';
 import type { Score } from '@/lib/types/score';
 
+const raisedXs = '2px 2px 5px var(--dashboard-shadow-dark), -2px -2px 5px var(--dashboard-shadow-light)';
+const insetShadow =
+  'inset 3px 3px 7px var(--dashboard-shadow-dark), inset -3px -3px 7px var(--dashboard-shadow-light)';
+
 export function ScoreHistory({
   scores,
   isLoading,
@@ -14,10 +18,11 @@ export function ScoreHistory({
         {Array.from({ length: 3 }).map((_, index) => (
           <div
             key={index}
-            className="flex items-center justify-between rounded-2xl border border-gray-100 bg-white p-4"
+            className="flex items-center justify-between rounded-[16px] bg-[var(--dashboard-bg)] p-4"
+            style={{ boxShadow: raisedXs }}
           >
-            <div className="h-10 w-16 animate-pulse rounded-xl bg-gray-100" />
-            <div className="h-4 w-28 animate-pulse rounded bg-gray-100" />
+            <div className="h-10 w-16 animate-pulse rounded-[12px] bg-[#d9ddd9]" />
+            <div className="h-4 w-28 animate-pulse rounded bg-[#d9ddd9]" />
           </div>
         ))}
       </div>
@@ -26,7 +31,10 @@ export function ScoreHistory({
 
   if (!scores.length) {
     return (
-      <div className="rounded-2xl border border-dashed border-gray-200 bg-gray-50 px-5 py-8 text-center text-sm text-gray-500">
+      <div
+        className="rounded-[16px] bg-[var(--dashboard-bg)] px-5 py-8 text-center text-sm text-[#6a7a6a]"
+        style={{ boxShadow: insetShadow }}
+      >
         No scores yet. Submit your first score after a round of golf.
       </div>
     );
@@ -42,25 +50,33 @@ export function ScoreHistory({
           <div
             key={score.id}
             title={absolute}
-            className={`flex items-center justify-between rounded-2xl border p-4 transition-colors ${
-              index === 0 ? 'border-green-100 bg-green-50/70' : 'border-gray-100 bg-white'
-            }`}
+            className="flex items-center justify-between rounded-[16px] bg-[var(--dashboard-bg)] p-4"
+            style={{ boxShadow: raisedXs }}
           >
             <div className="flex items-center gap-4">
               <div
-                className={`min-w-[64px] rounded-2xl px-4 py-3 text-center text-2xl font-bold ${
-                  index === 0 ? 'bg-green-700 text-white' : 'bg-gray-100 text-gray-900'
-                }`}
+                className="min-w-[64px] rounded-[14px] px-4 py-3 text-center text-2xl font-bold"
+                style={{
+                  background: index === 0 ? 'var(--dashboard-green-700)' : 'var(--dashboard-bg)',
+                  color: index === 0 ? '#ffffff' : '#2a3a2a',
+                  boxShadow:
+                    index === 0
+                      ? '3px 3px 7px rgba(10,50,20,0.3), -2px -2px 5px rgba(60,140,80,0.2)'
+                      : insetShadow,
+                }}
               >
                 {score.value}
               </div>
               {index === 0 ? (
-                <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-bold uppercase tracking-wide text-green-700">
+                <span
+                  className="rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#1a5e38]"
+                  style={{ background: 'var(--dashboard-green-50)', boxShadow: raisedXs }}
+                >
                   Latest
                 </span>
               ) : null}
             </div>
-            <div className="text-right text-sm text-gray-500">{relative}</div>
+            <div className="text-right text-sm text-[#6a7a6a]">{relative}</div>
           </div>
         );
       })}

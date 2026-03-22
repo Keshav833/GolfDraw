@@ -9,6 +9,10 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import type { Score, ScoreApiResponse } from '@/lib/types/score';
 
+const raisedSm = '3px 3px 8px var(--dashboard-shadow-dark), -3px -3px 8px var(--dashboard-shadow-light)';
+const insetShadow =
+  'inset 3px 3px 7px var(--dashboard-shadow-dark), inset -3px -3px 7px var(--dashboard-shadow-light)';
+
 const scoreInputSchema = z.object({
   value: z.preprocess(
     (value) => {
@@ -76,9 +80,9 @@ export function ScoreInput({ onSuccess }: { onSuccess: (scores: Score[]) => void
   return (
     <form
       onSubmit={form.handleSubmit((values) => mutation.mutate(values.value))}
-      className="space-y-3"
+      className="space-y-4"
     >
-      <div className="flex flex-col gap-3 sm:flex-row">
+      <div className="flex flex-col gap-4 sm:flex-row">
         <Input
           type="number"
           min={1}
@@ -87,14 +91,23 @@ export function ScoreInput({ onSuccess }: { onSuccess: (scores: Score[]) => void
           placeholder="Enter score (1-45)"
           disabled={mutation.isPending}
           aria-invalid={valueError ? 'true' : 'false'}
-          className={valueError ? 'border-red-500 focus-visible:ring-red-200' : ''}
+          className="h-12 rounded-[14px] border-0 bg-[var(--dashboard-bg)] px-4 text-[#2a3a2a] placeholder:text-[#9aaa9a]"
+          style={{
+            boxShadow: valueError ? insetShadow : insetShadow,
+            border: valueError ? '1px solid #d97777' : undefined,
+          }}
           {...form.register('value', valueField)}
         />
-        <Button type="submit" disabled={mutation.isPending} className="sm:min-w-[140px]">
+        <Button
+          type="submit"
+          disabled={mutation.isPending}
+          className="h-12 min-w-[170px] rounded-[14px] border-0 bg-[var(--dashboard-green-700)] px-5 text-white hover:bg-[var(--dashboard-green-800)]"
+          style={{ boxShadow: raisedSm }}
+        >
           {mutation.isPending ? 'Saving...' : 'Submit score'}
         </Button>
       </div>
-      {valueError ? <p className="text-sm text-red-600">{valueError}</p> : null}
+      {valueError ? <p className="text-sm text-[#b04747]">{valueError}</p> : null}
     </form>
   );
 }

@@ -4,11 +4,15 @@ import { Check, ExternalLink, MapPin } from 'lucide-react';
 import type { Charity } from '@/lib/types/charity';
 
 const categoryStyles: Record<Charity['category'], string> = {
-  'Golf & Sport': 'bg-green-100 text-green-800',
-  'Health & Research': 'bg-fuchsia-100 text-fuchsia-800',
-  'Youth & Education': 'bg-blue-100 text-blue-800',
-  Environment: 'bg-teal-100 text-teal-800',
+  'Golf & Sport': 'bg-[#d8f0e6] text-[#085041]',
+  'Health & Research': 'bg-[#ece9fb] text-[#4b3e9e]',
+  'Youth & Education': 'bg-[#dfeaf8] text-[#21558c]',
+  Environment: 'bg-[#dff1ee] text-[#0c6560]',
 };
+
+const raisedSm = '3px 3px 8px var(--dashboard-shadow-dark), -3px -3px 8px var(--dashboard-shadow-light)';
+const insetShadow =
+  'inset 3px 3px 7px var(--dashboard-shadow-dark), inset -3px -3px 7px var(--dashboard-shadow-light)';
 
 export function CharityCard({
   charity,
@@ -23,14 +27,16 @@ export function CharityCard({
     <button
       type="button"
       onClick={() => onSelect(charity)}
-      className={`group relative flex h-full flex-col rounded-xl border bg-white p-5 text-left transition-all duration-200 ${
-        selected
-          ? 'border-2 border-green-600 bg-green-50/60 shadow-sm'
-          : 'border-gray-200 hover:-translate-y-0.5 hover:border-gray-400'
-      }`}
+      className="group relative flex h-full flex-col rounded-[18px] bg-[var(--dashboard-bg)] p-5 text-left transition-all duration-200 hover:-translate-y-0.5"
+      style={{
+        boxShadow: selected
+          ? '3px 3px 7px rgba(10,50,20,0.3), -2px -2px 5px rgba(60,140,80,0.2)'
+          : raisedSm,
+        border: selected ? '1px solid rgba(26,94,56,0.25)' : '1px solid transparent',
+      }}
     >
       {selected ? (
-        <span className="absolute right-4 top-4 rounded-full bg-green-600 p-1 text-white">
+        <span className="absolute right-4 top-4 rounded-full bg-[#1a5e38] p-1 text-white">
           <Check className="h-3.5 w-3.5" />
         </span>
       ) : null}
@@ -44,9 +50,12 @@ export function CharityCard({
       </div>
 
       <div className="mt-4 flex-1">
-        <h3 className="text-[15px] font-bold text-gray-900">{charity.name}</h3>
-        <p className="mt-2 line-clamp-2 text-sm leading-6 text-gray-600">{charity.description}</p>
-        <div className="mt-3 inline-flex items-center gap-1 rounded-full bg-gray-100 px-2.5 py-1 text-xs text-gray-500">
+        <h3 className="text-[15px] font-bold text-[#2a3a2a]">{charity.name}</h3>
+        <p className="mt-2 line-clamp-2 text-sm leading-6 text-[#6a7a6a]">{charity.description}</p>
+        <div
+          className="mt-3 inline-flex items-center gap-1 rounded-full bg-[var(--dashboard-bg)] px-2.5 py-1 text-xs text-[#6a7a6a]"
+          style={{ boxShadow: insetShadow }}
+        >
           <MapPin className="h-3 w-3" />
           <span>{charity.country}</span>
         </div>
@@ -59,7 +68,7 @@ export function CharityCard({
             target="_blank"
             rel="noreferrer"
             onClick={(event) => event.stopPropagation()}
-            className="inline-flex items-center gap-1 text-sm font-medium text-gray-700 underline-offset-4 hover:text-gray-900 hover:underline"
+            className="inline-flex items-center gap-1 text-sm font-medium text-[#2a3a2a] underline-offset-4 hover:text-[#1a5e38] hover:underline"
           >
             Visit website
             <ExternalLink className="h-3.5 w-3.5" />

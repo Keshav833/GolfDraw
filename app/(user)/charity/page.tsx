@@ -44,6 +44,9 @@ export default async function CharityPage() {
         pct: Number(userCharityData?.charity_contribution_pct ?? 0),
       }}
       planType={subscriptionData?.plan_type === 'yearly' ? 'yearly' : 'monthly'}
+      userName={user.user_metadata?.full_name || user.email || 'GolfDraw member'}
+      membershipLabel={subscriptionData?.plan_type === 'yearly' ? 'Yearly member' : 'Monthly member'}
+      statusLabel={subscriptionData?.plan_type ? 'Active' : 'Inactive'}
     />
   );
 }
