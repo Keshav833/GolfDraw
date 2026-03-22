@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
+import { LoadingButton } from '@/components/ui/LoadingButton';
 import type { Score, ScoreApiResponse } from '@/lib/types/score';
 
 const raisedSm =
@@ -103,14 +103,20 @@ export function ScoreInput({
           }}
           {...form.register('value', valueField)}
         />
-        <Button
+        <LoadingButton
           type="submit"
-          disabled={mutation.isPending}
-          className="h-12 min-w-[170px] rounded-[14px] border-0 bg-[var(--dashboard-green-700)] px-5 text-white hover:bg-[var(--dashboard-green-800)]"
-          style={{ boxShadow: raisedSm }}
+          variant="green"
+          loading={mutation.isPending}
+          className="h-12 w-full min-w-0 sm:w-auto sm:min-w-[170px]"
+          style={{
+            borderRadius: 14,
+            padding: '0 20px',
+            fontSize: 14,
+            fontWeight: 600,
+          }}
         >
-          {mutation.isPending ? 'Saving...' : 'Submit score'}
-        </Button>
+          Submit score
+        </LoadingButton>
       </div>
       {valueError ? (
         <p className="text-sm text-[#b04747]">{valueError}</p>

@@ -7,7 +7,8 @@ import { Search } from 'lucide-react';
 import { toast } from 'sonner';
 import { CharityCard } from '@/components/charity/CharityCard';
 import { PageShell } from '@/components/dashboard/PageShell';
-import { Button } from '@/components/ui/button';
+import { LoadingButton } from '@/components/ui/LoadingButton';
+import { SectionLoader } from '@/components/ui/SectionLoader';
 import { Input } from '@/components/ui/input';
 import {
   CATEGORIES,
@@ -241,14 +242,7 @@ export function CharityManager({
 
       <section className="mt-5">
         {isLoading ? (
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
-            {Array.from({ length: 6 }).map((_, index) => (
-              <div
-                key={index}
-                className="h-56 animate-pulse rounded-[18px] bg-[#d9ddd9]"
-              />
-            ))}
-          </div>
+          <SectionLoader label="Loading charities..." />
         ) : data.length ? (
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
             {data.map((charity) => (
@@ -321,21 +315,28 @@ export function CharityManager({
         <p className="text-sm text-[#6a7a6a]">
           Changes apply from your next billing date.
         </p>
-        <Button
+        <LoadingButton
+          variant="green"
+          loading={mutation.isPending}
+          fullWidth
+          disabled={!selectedId}
           onClick={() =>
             selectedId
               ? mutation.mutate({
                   charity_id: selectedId,
                   charity_contribution_pct: selectedPct,
                 })
-              : null
+              : undefined
           }
-          disabled={!selectedId || mutation.isPending}
-          className="min-w-[220px] rounded-[14px] border-0 bg-[var(--dashboard-green-700)] text-white hover:bg-[var(--dashboard-green-800)]"
-          style={{ boxShadow: raisedXs }}
+          style={{
+            minWidth: 220,
+            borderRadius: 14,
+            fontSize: 14,
+            fontWeight: 600,
+          }}
         >
-          {mutation.isPending ? 'Saving...' : 'Save charity selection'}
-        </Button>
+          Save charity selection
+        </LoadingButton>
       </section>
     </PageShell>
   );

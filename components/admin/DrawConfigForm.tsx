@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Calendar, Info, RefreshCw, Save } from 'lucide-react';
+import { Calendar, Info, RefreshCw } from 'lucide-react';
+import { LoadingButton } from '@/components/ui/LoadingButton';
 import { format, addMonths } from 'date-fns';
 
 interface DrawConfigFormProps {
@@ -210,14 +211,21 @@ export default function DrawConfigForm({ draw, onSave }: DrawConfigFormProps) {
 
       {/* Action */}
       {!isPublished && (
-        <button
+        <LoadingButton
+          variant="primary"
+          loading={saving}
+          disabled={loading}
+          fullWidth
           onClick={handleSave}
-          disabled={saving || loading}
-          className="w-full py-4 rounded-2xl bg-[var(--bg)] shadow-[var(--raised-md)] hover:shadow-[var(--inset-sm)] active:scale-[0.98] transition-all flex items-center justify-center gap-3 font-bold text-[var(--green-700)]"
+          style={{
+            padding: '16px 20px',
+            borderRadius: 16,
+            fontWeight: 700,
+            color: 'var(--green-700)',
+          }}
         >
-          <Save size={20} />
-          {saving ? 'Saving...' : 'Save Configuration'}
-        </button>
+          Save configuration
+        </LoadingButton>
       )}
     </div>
   );

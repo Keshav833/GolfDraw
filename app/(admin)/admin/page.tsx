@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import StatCards from '@/components/admin/analytics/StatCards';
 import SubscriptionChart from '@/components/admin/analytics/SubscriptionChart';
 import DrawHistoryTable from '@/components/admin/analytics/DrawHistoryTable';
-import { Skeleton } from '@/components/ui/skeleton';
+import { SectionLoader } from '@/components/ui/SectionLoader';
 
 export default function AdminDashboard() {
   const {
@@ -22,7 +22,8 @@ export default function AdminDashboard() {
     },
   });
 
-  if (isLoading) return <DashboardSkeleton />;
+  if (isLoading)
+    return <SectionLoader label="Loading analytics..." />;
   if (error)
     return (
       <div className="p-10 text-center text-red-500">
@@ -54,24 +55,6 @@ export default function AdminDashboard() {
         <h2 className="text-xl font-serif">Recent Draw History</h2>
         {analytics?.draws && <DrawHistoryTable data={analytics.draws} />}
       </section>
-    </div>
-  );
-}
-
-function DashboardSkeleton() {
-  return (
-    <div className="space-y-10 animate-pulse">
-      <div className="h-10 w-48 bg-[var(--sd)]/20 rounded-xl" />
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        {[1, 2, 3, 4].map((i) => (
-          <div
-            key={i}
-            className="h-40 bg-[var(--sd)]/20 rounded-2xl shadow-[var(--raised-sm)]"
-          />
-        ))}
-      </div>
-      <div className="h-[250px] bg-[var(--sd)]/20 rounded-2xl shadow-[var(--raised-sm)]" />
-      <div className="h-[400px] bg-[var(--sd)]/20 rounded-3xl shadow-[var(--raised-sm)]" />
     </div>
   );
 }

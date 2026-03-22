@@ -5,6 +5,8 @@ import { formatDistanceToNow } from 'date-fns';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { ProofViewer } from '@/components/admin/ProofViewer';
+import { SectionLoader } from '@/components/ui/SectionLoader';
+import { LoadingButton } from '@/components/ui/LoadingButton';
 import type { DrawResultWithWinner } from '@/lib/types/verification';
 
 const raisedSm =
@@ -109,6 +111,13 @@ export function VerificationQueue({
     return undefined;
   }, [data?.total, status]);
 
+  const approveLoading =
+    reviewMutation.isPending &&
+    reviewMutation.variables?.action === 'approve';
+  const rejectLoading =
+    reviewMutation.isPending &&
+    reviewMutation.variables?.action === 'reject';
+
   return (
     <div className="mx-auto max-w-7xl px-4 py-8">
       <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
@@ -151,12 +160,7 @@ export function VerificationQueue({
 
       <div className="space-y-4">
         {isLoading ? (
-          Array.from({ length: 4 }).map((_, index) => (
-            <div
-              key={index}
-              className="h-32 animate-pulse rounded-[20px] bg-[#d9ddd9]"
-            />
-          ))
+          <SectionLoader label="Loading verifications..." />
         ) : data?.items.length ? (
           data.items.map((item) => (
             <div
@@ -242,16 +246,26 @@ export function VerificationQueue({
                       </button>
                     ) : null}
                     {item.verification?.status === 'approved' ? (
-                      <button
-                        type="button"
+                      <LoadingButton
+                        variant="primary"
+                        loading={
+                          paidMutation.isPending &&
+                          paidMutation.variables === item.verification!.id
+                        }
                         onClick={() =>
                           paidMutation.mutate(item.verification!.id)
                         }
-                        className="rounded-[14px] px-4 py-2 text-sm text-white"
-                        style={{ background: '#2563eb', boxShadow: raisedXs }}
+                        style={{
+                          borderRadius: 14,
+                          fontSize: 14,
+                          padding: '8px 16px',
+                          color: '#fff',
+                          background: '#2563eb',
+                          boxShadow: raisedXs,
+                        }}
                       >
                         Mark as paid
-                      </button>
+                      </LoadingButton>
                     ) : null}
                     {item.verification?.status === 'rejected' ? (
                       <button
@@ -324,6 +338,8 @@ export function VerificationQueue({
           prizeAmount={activeViewer.prize_amount}
           drawMonth={activeViewer.draw.month}
           drawNumber={activeViewer.draw.draw_number}
+          approveLoading={approveLoading}
+          rejectLoading={rejectLoading}
           onApprove={() =>
             reviewMutation.mutate({
               verificationId: activeViewer.verification!.id,

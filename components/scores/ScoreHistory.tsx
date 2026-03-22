@@ -1,5 +1,6 @@
 import { format, formatDistanceToNow } from 'date-fns';
 import type { Score } from '@/lib/types/score';
+import { SectionLoader } from '@/components/ui/SectionLoader';
 
 const raisedXs =
   '2px 2px 5px var(--dashboard-shadow-dark), -2px -2px 5px var(--dashboard-shadow-light)';
@@ -14,20 +15,7 @@ export function ScoreHistory({
   isLoading: boolean;
 }) {
   if (isLoading) {
-    return (
-      <div className="space-y-3">
-        {Array.from({ length: 3 }).map((_, index) => (
-          <div
-            key={index}
-            className="flex items-center justify-between rounded-[16px] bg-[var(--dashboard-bg)] p-4"
-            style={{ boxShadow: raisedXs }}
-          >
-            <div className="h-10 w-16 animate-pulse rounded-[12px] bg-[#d9ddd9]" />
-            <div className="h-4 w-28 animate-pulse rounded bg-[#d9ddd9]" />
-          </div>
-        ))}
-      </div>
-    );
+    return <SectionLoader label="Loading scores..." />;
   }
 
   if (!scores.length) {

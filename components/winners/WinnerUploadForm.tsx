@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { toast } from 'sonner';
+import { LoadingButton } from '@/components/ui/LoadingButton';
 
 const raisedSm =
   '3px 3px 8px var(--dashboard-shadow-dark), -3px -3px 8px var(--dashboard-shadow-light)';
@@ -202,18 +203,21 @@ export function WinnerUploadForm({
         </label>
       </section>
 
-      <button
-        type="button"
+      <LoadingButton
+        variant="green"
+        loading={uploading}
+        disabled={!file}
+        fullWidth
         onClick={handleUpload}
-        disabled={!file || uploading}
-        className="inline-flex min-w-[180px] rounded-[14px] px-6 py-3 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-60"
         style={{
-          background: 'var(--dashboard-green-700)',
-          boxShadow: raisedXs,
+          minWidth: 180,
+          borderRadius: 14,
+          fontSize: 14,
+          fontWeight: 500,
         }}
       >
-        {uploading ? 'Uploading...' : 'Upload proof'}
-      </button>
+        Upload proof
+      </LoadingButton>
     </div>
   );
 }

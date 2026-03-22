@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Eye, EyeOff, ArrowLeft, Loader2 } from 'lucide-react';
+import { Eye, EyeOff, ArrowLeft } from 'lucide-react';
+import { LoadingButton } from '@/components/ui/LoadingButton';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -207,26 +208,25 @@ export default function AdminLoginForm({ accessDenied }: Props) {
           )}
 
           {/* Submit */}
-          <button
+          <LoadingButton
             type="submit"
-            disabled={loading}
-            className="w-full py-3.5 rounded-xl text-[14px] font-bold text-white transition-all active:scale-[0.98] disabled:opacity-50 disabled:scale-100 flex items-center justify-center gap-2 mt-2"
+            variant="green"
+            loading={loading}
+            fullWidth
             style={{
+              marginTop: 8,
+              padding: '14px 20px',
+              borderRadius: 12,
+              fontSize: 14,
+              fontWeight: 700,
               background: 'linear-gradient(135deg, #1a5e38, #0f3d24)',
               boxShadow:
                 '0 4px 20px rgba(10,50,30,0.6), inset 0 1px 0 rgba(125,224,170,0.2)',
               border: '1px solid rgba(125,224,170,0.2)',
             }}
           >
-            {loading ? (
-              <>
-                <Loader2 className="animate-spin" size={18} />
-                Signing in...
-              </>
-            ) : (
-              'Sign In to Dashboard'
-            )}
-          </button>
+            Sign in
+          </LoadingButton>
         </form>
       </div>
 

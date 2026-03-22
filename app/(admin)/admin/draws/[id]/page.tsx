@@ -5,10 +5,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   Trophy,
   Settings,
-  Play,
   CheckCircle,
   ChevronLeft,
-  Loader2,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
@@ -18,6 +16,8 @@ import { toast } from 'sonner';
 import DrawConfigForm from '@/components/admin/DrawConfigForm';
 import DrawSimulationPreview from '@/components/admin/DrawSimulationPreview';
 import DrawPublishConfirm from '@/components/admin/DrawPublishConfirm';
+import { SectionLoader } from '@/components/ui/SectionLoader';
+import { LoadingButton } from '@/components/ui/LoadingButton';
 
 export default function DrawDetailPage() {
   const { id } = useParams();
@@ -69,8 +69,8 @@ export default function DrawDetailPage() {
 
   if (isLoading)
     return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="animate-spin text-[var(--green-700)]" size={40} />
+      <div className="flex min-h-[400px] items-center justify-center">
+        <SectionLoader label="Loading draw..." />
       </div>
     );
   if (error)
@@ -117,18 +117,23 @@ export default function DrawDetailPage() {
 
         <div className="flex gap-4">
           {!isPublished && (
-            <button
+            <LoadingButton
+              variant="primary"
+              loading={simulateMutation.isPending}
               onClick={() => simulateMutation.mutate()}
-              disabled={simulateMutation.isPending}
-              className="flex items-center gap-2 px-6 py-3 rounded-xl bg-[var(--bg)] shadow-[var(--raised-sm)] hover:shadow-[var(--inset-sm)] text-sm font-bold text-[var(--green-700)] transition-all disabled:opacity-50"
+              style={{
+                padding: '12px 20px',
+                borderRadius: 12,
+                fontWeight: 700,
+                fontSize: 14,
+                color: 'var(--green-700)',
+                display: 'inline-flex',
+                gap: 8,
+                alignItems: 'center',
+              }}
             >
-              <Play size={18} fill="currentColor" />
-              {simulateMutation.isPending
-                ? 'Simulating...'
-                : isSimulated
-                  ? 'Re-run Simulation'
-                  : 'Run Simulation'}
-            </button>
+              {isSimulated ? 'Re-run Simulation' : 'Run Simulation'}
+            </LoadingButton>
           )}
 
           {isSimulated && !isPublished && (
@@ -202,12 +207,20 @@ export default function DrawDetailPage() {
                 <p className="text-[var(--text-muted)] font-medium">
                   Run a simulation first to see potential results.
                 </p>
-                <button
+                <LoadingButton
+                  variant="primary"
+                  loading={simulateMutation.isPending}
                   onClick={() => simulateMutation.mutate()}
-                  className="px-8 py-3 rounded-xl bg-[var(--bg)] shadow-[var(--raised-sm)] text-[var(--green-700)] font-bold text-sm"
+                  style={{
+                    padding: '12px 32px',
+                    borderRadius: 12,
+                    fontWeight: 700,
+                    fontSize: 14,
+                    color: 'var(--green-700)',
+                  }}
                 >
                   Start Simulation
-                </button>
+                </LoadingButton>
               </div>
             ) : (
               <DrawSimulationPreview

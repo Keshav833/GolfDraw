@@ -6,20 +6,22 @@ import {
   Heart,
   Trophy,
   History,
-  AlertCircle,
 } from 'lucide-react';
+import { LoadingButton } from '@/components/ui/LoadingButton';
 import { format } from 'date-fns';
 
 interface UserDetailPanelProps {
   user: any | null;
   onClose: () => void;
   onCancelSubscription: (user: any) => void;
+  cancelSubscriptionLoading?: boolean;
 }
 
 export default function UserDetailPanel({
   user,
   onClose,
   onCancelSubscription,
+  cancelSubscriptionLoading = false,
 }: UserDetailPanelProps) {
   if (!user) return null;
 
@@ -145,13 +147,21 @@ export default function UserDetailPanel({
       {/* Footer Actions */}
       <div className="p-6 border-t border-[var(--sd)] bg-[var(--bg)]">
         {user.subscription_status === 'active' && (
-          <button
+          <LoadingButton
+            variant="danger"
+            loading={cancelSubscriptionLoading}
+            fullWidth
             onClick={() => onCancelSubscription(user)}
-            className="w-full flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-[var(--bg)] text-red-600 shadow-[var(--raised-sm)] hover:shadow-[var(--inset-sm)] transition-all font-bold text-sm"
+            style={{
+              padding: '16px 24px',
+              borderRadius: 12,
+              fontWeight: 700,
+              fontSize: 14,
+              color: '#b42318',
+            }}
           >
-            <AlertCircle size={18} />
-            Cancel Subscription
-          </button>
+            Cancel subscription
+          </LoadingButton>
         )}
       </div>
     </div>
