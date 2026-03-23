@@ -1,14 +1,7 @@
 import { format } from 'date-fns';
-import { createClient } from '@supabase/supabase-js';
+import { createServiceRoleClient } from '@/lib/supabase/server';
 import { verifyWebhookSignature } from '@/lib/razorpay/verify';
 import { sendWelcomeEmail } from '@/lib/email/templates';
-
-function createAdminClient() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
-}
 
 export async function POST(req: Request) {
   try {
@@ -20,7 +13,7 @@ export async function POST(req: Request) {
     }
 
     const event = JSON.parse(body);
-    const supabase = createAdminClient();
+    const supabase = createServiceRoleClient();
 
     (async () => {
       try {
@@ -64,7 +57,7 @@ export async function POST(req: Request) {
             .single();
 
           if (subscriptionRecord && userRecord) {
-            const total = planType === 'yearly' ? 86 : 9;
+            const total = planType === 'yearly' ? 999 : 100;
             const pct = Number(userRecord.charity_contribution_pct ?? 0);
             const charityAmount = total * (pct / 100);
             const prizePoolAmount = total - charityAmount;
@@ -118,7 +111,7 @@ export async function POST(req: Request) {
 
             if (subscriptionRecord && userRecord) {
               const currentMonth = format(new Date(), 'yyyy-MM');
-              const total = subscriptionRecord.plan_type === 'yearly' ? 86 : 9;
+              const total = subscriptionRecord.plan_type === 'yearly' ? 999 : 100;
               const pct = Number(userRecord.charity_contribution_pct ?? 0);
               const charityAmount = total * (pct / 100);
               const prizePoolAmount = total - charityAmount;

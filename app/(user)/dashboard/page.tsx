@@ -164,7 +164,7 @@ async function DashboardContent() {
   );
   const monthLabel = format(new Date(), 'MMMM yyyy');
   const monthlyDonation = (
-    (subscription?.plan_type === 'yearly' ? 86 / 12 : 9) *
+    (subscription?.plan_type === 'yearly' ? 999 / 12 : 100) *
     (charityPct / 100)
   ).toFixed(2);
   const scoreSeries = buildScoreSeries(scores);
@@ -268,7 +268,7 @@ async function DashboardContent() {
                           className="mt-1 text-[34px] tracking-[-0.5px] text-white"
                           style={{ fontFamily: '"DM Serif Display", serif' }}
                         >
-                          £4,200.00
+                          ₹40,000.00
                         </h2>
                       </div>
                       <div className="flex items-center gap-[5px] rounded-[20px] border border-white/20 bg-white/10 px-[10px] py-[3px] text-[10px] text-white/80">
@@ -294,7 +294,7 @@ async function DashboardContent() {
                 <section className="grid grid-cols-1 gap-3 md:grid-cols-3">
                   <StatCard
                     label="Total winnings"
-                    value={`£${totalWinnings.toFixed(2)}`}
+                    value={`₹${totalWinnings.toFixed(2)}`}
                     change={
                       totalWinnings > 0
                         ? `${drawResults.filter((result) => result.match_category).length} winning result${drawResults.filter((result) => result.match_category).length === 1 ? '' : 's'}`
@@ -305,7 +305,7 @@ async function DashboardContent() {
                   />
                   <StatCard
                     label="Charity donated"
-                    value={`£${monthlyDonation}`}
+                    value={`₹${monthlyDonation}`}
                     change={
                       charityPct > 0
                         ? `${charityPct}% of subscription`
@@ -470,7 +470,7 @@ async function DashboardContent() {
                       className="mt-1 text-[22px] text-white"
                       style={{ fontFamily: '"DM Serif Display", serif' }}
                     >
-                      £4,200
+                      ₹40,000
                     </h3>
                     <p className="mb-2 text-[10px] text-white/40">
                       Rolls over if unclaimed

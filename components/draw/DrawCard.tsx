@@ -22,7 +22,7 @@ export function DrawCard({
   payment_status,
 }: DrawCardProps) {
   const amount =
-    prize_amount != null ? `£${Number(prize_amount).toFixed(2)}` : null;
+    prize_amount != null ? `₹${Number(prize_amount).toFixed(2)}` : null;
 
   return (
     <div

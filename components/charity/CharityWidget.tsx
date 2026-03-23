@@ -13,7 +13,7 @@ export function CharityWidget({
   pct: number;
   planType: 'monthly' | 'yearly';
 }) {
-  const monthlyRate = planType === 'yearly' ? 86 / 12 : 9;
+  const monthlyRate = planType === 'yearly' ? 999 / 12 : 100;
   const donationAmount = ((monthlyRate * pct) / 100).toFixed(2);
 
   return (
@@ -47,7 +47,7 @@ export function CharityWidget({
             />
           </div>
           <p className="mt-[5px] text-[10px] text-[#6a7a6a]">
-            £{donationAmount} donated this month
+            ₹{donationAmount} donated this month
           </p>
         </>
       ) : pct > 0 ? (

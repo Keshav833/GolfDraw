@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { CONTRIBUTION_OPTIONS } from '@/lib/types/charity';
+import { ChevronLeft } from 'lucide-react';
 
 const optionLabels: Record<(typeof CONTRIBUTION_OPTIONS)[number], string> = {
   10: 'A great start',
@@ -41,13 +42,22 @@ export default function RegisterCharity() {
     >
       <div className="mx-auto max-w-5xl space-y-8">
         <div
-          className="rounded-[32px] border border-white/60 p-8 sm:p-10"
+          className="relative rounded-[32px] border border-white/60 p-8 sm:p-10"
           style={{
             background:
               'radial-gradient(circle at top left, rgba(125,224,170,0.34), transparent 32%), linear-gradient(145deg, rgba(255,255,255,0.8), rgba(224,229,236,0.94))',
             boxShadow: 'var(--shadow-out)',
           }}
         >
+          <button
+            onClick={() => router.push('/register')}
+            className="group absolute left-6 top-6 flex items-center gap-1.5 rounded-full bg-white/40 px-3.5 py-1.5 text-xs font-bold transition-all hover:bg-white/60 hover:text-green-800"
+            style={{ color: 'var(--text-muted)' }}
+          >
+            <ChevronLeft size={14} className="transition-transform group-hover:-translate-x-0.5" />
+            BACK
+          </button>
+
           <div className="mx-auto max-w-3xl text-center">
             <p
               className="text-sm font-bold uppercase tracking-[0.28em]"
@@ -104,7 +114,7 @@ export default function RegisterCharity() {
                         : 'var(--text-muted)',
                   }}
                 >
-                  £{((9 * pct) / 100).toFixed(2)} per month
+                  ₹{((100 * pct) / 100).toFixed(2)} per month
                 </p>
                 <p
                   className="mt-8 text-sm font-semibold uppercase tracking-[0.22em]"

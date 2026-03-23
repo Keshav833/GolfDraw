@@ -35,12 +35,12 @@ export async function sendWinnerNotificationEmail(params: {
     return await resend.emails.send({
       from: process.env.EMAIL_FROM || 'noreply@golfdraw.com',
       to: params.to,
-      subject: `You won £${params.prizeAmount.toFixed(2)} in GolfDraw`,
+      subject: `You won ₹${params.prizeAmount.toFixed(2)} in GolfDraw`,
       html: `
         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
           <h2>Great news, ${params.name}!</h2>
           <p>You hit a ${params.matchCategory} in the ${params.drawMonth} draw.</p>
-          <p>Your prize amount is <strong>£${params.prizeAmount.toFixed(2)}</strong>.</p>
+          <p>Your prize amount is <strong>₹${params.prizeAmount.toFixed(2)}</strong>.</p>
           <p>Please upload your scorecard so we can verify the win:</p>
           <p><a href="${params.verifyUrl}">Upload proof now</a></p>
         </div>
@@ -93,7 +93,7 @@ export async function sendPaymentConfirmedEmail(params: {
       html: `
         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
           <h2>Great news ${params.name}!</h2>
-          <p>Your <strong>£${params.prizeAmount.toFixed(2)}</strong> prize for the ${params.drawMonth} draw has been confirmed and payment is being processed.</p>
+          <p>Your <strong>₹${params.prizeAmount.toFixed(2)}</strong> prize for the ${params.drawMonth} draw has been confirmed and payment is being processed.</p>
           <p>Please allow 3-5 business days for it to arrive.</p>
         </div>
       `,

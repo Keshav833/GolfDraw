@@ -36,7 +36,7 @@ export function SubscriptionCard({
   const planLabel =
     subscription.plan_type === 'yearly' ? 'Yearly plan' : 'Monthly plan';
   const planPrice =
-    subscription.plan_type === 'yearly' ? '£86 / year' : '£9 / month';
+    subscription.plan_type === 'yearly' ? '₹999 / year' : '₹100 / month';
   const showRenewal =
     subscription.status === 'active' && subscription.current_period_end;
   const showCancellation =

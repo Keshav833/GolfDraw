@@ -66,11 +66,9 @@ export default function LoginPage() {
         >
           <div
             style={{
-              width: '48px',
-              height: '48px',
-              background: 'var(--bg)',
-              borderRadius: '50%',
-              boxShadow: 'var(--shadow-out-sm)',
+              width: '78px',
+              height: '78px',
+        
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',

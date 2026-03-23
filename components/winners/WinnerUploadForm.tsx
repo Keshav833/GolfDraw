@@ -136,7 +136,7 @@ export function WinnerUploadForm({
           </div>
           <div>
             <h1 className="text-3xl font-semibold text-[#2a3a2a]">
-              You won £{prizeAmount.toFixed(2)}!
+              You won ₹{prizeAmount.toFixed(2)}!
             </h1>
             <p className="mt-1 text-sm text-[#1a5e38]">
               {matchCategory} in the {drawMonth} draw

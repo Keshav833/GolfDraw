@@ -113,7 +113,7 @@ export function CharityManager({
     [data, savedCharity, selectedId]
   );
 
-  const monthlyRate = planType === 'yearly' ? 86 / 12 : 9;
+  const monthlyRate = planType === 'yearly' ? 999 / 12 : 100;
 
   const mutation = useMutation({
     mutationFn: async (payload: {
@@ -179,7 +179,7 @@ export function CharityManager({
                 className="rounded-[16px] bg-[var(--dashboard-bg)] px-4 py-3 text-sm text-[#1a5e38]"
                 style={{ boxShadow: insetShadow }}
               >
-                You donate {savedPct}% (£
+                You donate {savedPct}% (₹
                 {((monthlyRate * savedPct) / 100).toFixed(2)}/mo) to{' '}
                 {savedCharity.name}
               </div>
@@ -300,7 +300,7 @@ export function CharityManager({
                 <div
                   className={`mt-1 text-sm ${selectedPct === option ? 'text-[#dff4e7]' : 'text-[#6a7a6a]'}`}
                 >
-                  £{((monthlyRate * option) / 100).toFixed(2)}/mo
+                  ₹{((monthlyRate * option) / 100).toFixed(2)}/mo
                 </div>
               </button>
             ))}

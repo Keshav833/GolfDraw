@@ -1,4 +1,4 @@
-import { Users, PoundSterling, Heart, Trophy } from 'lucide-react';
+import { Users, IndianRupee, Heart, Trophy } from 'lucide-react';
 
 interface StatCardsProps {
   data: {
@@ -21,19 +21,19 @@ export default function StatCards({ data }: StatCardsProps) {
     },
     {
       label: 'Monthly Recurring Revenue',
-      value: `£${data.mrr.toFixed(2)}`,
+      value: `₹${data.mrr.toFixed(2)}`,
       subtext: `${data.subscriptions.active} active plans`,
-      icon: <PoundSterling className="h-6 w-6 text-[var(--green-700)]" />,
+      icon: <IndianRupee className="h-6 w-6 text-[var(--green-700)]" />,
     },
     {
       label: 'Total Charity Donated',
-      value: `£${data.charity_total.toFixed(2)}`,
+      value: `₹${data.charity_total.toFixed(2)}`,
       subtext: 'Across all members',
       icon: <Heart className="h-6 w-6 text-rose-500" />,
     },
     {
       label: 'Total Prizes Paid',
-      value: `£${data.prizes_total.toFixed(2)}`,
+      value: `₹${data.prizes_total.toFixed(2)}`,
       subtext: 'Across all draws',
       icon: <Trophy className="h-6 w-6 text-amber-500" />,
     },

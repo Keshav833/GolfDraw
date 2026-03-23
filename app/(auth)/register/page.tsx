@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import Link from 'next/link';
+import { ChevronLeft } from 'lucide-react';
 
 export default function RegisterStep1() {
   const [loading, setLoading] = useState(false);
@@ -34,12 +35,9 @@ export default function RegisterStep1() {
           className="inline-flex items-center gap-3 text-decoration-none"
         >
           <div
-            style={{
-              width: '48px',
-              height: '48px',
-              background: 'var(--bg)',
-              borderRadius: '50%',
-              boxShadow: 'var(--shadow-out-sm)',
+           style={{
+              width: '78px',
+              height: '78px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -64,7 +62,16 @@ export default function RegisterStep1() {
         </Link>
       </div>
 
-      <div className="neu-panel space-y-8">
+      <div className="neu-panel relative space-y-8">
+        <Link
+          href="/"
+          className="group absolute left-6 top-6 flex items-center gap-1.5 rounded-full bg-white/40 px-3.5 py-1.5 text-xs font-bold transition-all hover:bg-white/60 hover:text-green-800"
+          style={{ color: 'var(--text-muted)' }}
+        >
+          <ChevronLeft size={14} className="transition-transform group-hover:-translate-x-0.5" />
+          BACK
+        </Link>
+
         <div className="text-center">
           <p
             style={{

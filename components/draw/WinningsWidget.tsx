@@ -21,7 +21,7 @@ export function WinningsWidget({
           Claim needed
         </p>
         <h3 className="mt-2 text-lg font-bold text-[#4e3a00]">
-          You won £{Number(pendingResult.prize_amount).toFixed(2)}!
+          You won ₹{Number(pendingResult.prize_amount).toFixed(2)}!
         </h3>
         <p className="mt-1 text-[11px] text-[#6c5310]">
           {pendingResult.match_category.replace('-', ' ')} in{' '}
@@ -37,7 +37,7 @@ export function WinningsWidget({
           Upload proof now →
         </Link>
         <p className="mt-3 text-[10px] text-[#6c5310]">
-          Total earned: £{totalPaid.toFixed(2)}
+          Total earned: ₹{totalPaid.toFixed(2)}
         </p>
       </div>
     );
@@ -53,7 +53,7 @@ export function WinningsWidget({
           Total winnings
         </p>
         <h3 className="mt-2 text-2xl font-bold text-[#0f3d2e]">
-          £{totalPaid.toFixed(2)}
+          ₹{totalPaid.toFixed(2)}
         </h3>
         <p className="mt-1 text-[11px] text-[#6a7a6a]">
           Across all verified draws

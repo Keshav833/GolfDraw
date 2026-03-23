@@ -125,7 +125,7 @@ export default async function DrawsPage() {
                   <div className="flex flex-wrap items-center gap-4">
                     <MatchBadge category={result.match_category} />
                     <p className="text-lg font-semibold text-[#1a5e38]">
-                      £{Number(result.prize_amount ?? 0).toFixed(2)}
+                      ₹{Number(result.prize_amount ?? 0).toFixed(2)}
                     </p>
                   </div>
                 </div>

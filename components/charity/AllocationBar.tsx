@@ -16,7 +16,7 @@ export function AllocationBar({
           {pct}% to {charityName}
         </span>
         <span className="font-bold text-green-700">
-          ~£{amount.toFixed(2)}/mo
+          ~₹{amount.toFixed(2)}/mo
         </span>
       </div>
       <div className="h-3 w-full bg-gray-100 rounded-full overflow-hidden flex">

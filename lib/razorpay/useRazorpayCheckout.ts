@@ -40,6 +40,11 @@ export function useRazorpayCheckout(): UseRazorpayCheckoutReturn {
       const createJson = await createRes.json();
 
       if (!createRes.ok || createJson.error) {
+        if (createJson.error?.code === 'ALREADY_SUBSCRIBED') {
+          toast.info('You already have an active subscription.');
+          onSuccess();
+          return;
+        }
         throw new Error(
           createJson.error?.message ||
             'Failed to create subscription. Please try again.'

@@ -219,9 +219,9 @@ export default function AccountPage() {
             </p>
             <p className="mt-1 text-sm text-[#6a7a6a]">
               {subscription?.plan_type === 'yearly'
-                ? 'GBP 86.00 per year'
+                ? '₹999 per year'
                 : subscription?.plan_type === 'monthly'
-                  ? 'GBP 9.00 per month'
+                  ? '₹100 per month'
                   : 'Subscribe to enter upcoming draws.'}
             </p>
             {renewalDate && subscription?.status === 'active' ? (
@@ -246,7 +246,7 @@ export default function AccountPage() {
                   className="rounded-[14px] border-0 bg-[var(--dashboard-bg)] text-[#2a3a2a] hover:bg-[var(--dashboard-bg)]"
                   style={{ boxShadow: raisedXs }}
                 >
-                  {checkoutPending ? 'Opening...' : 'Monthly — £9/mo'}
+                  {checkoutPending ? 'Opening...' : 'Monthly — ₹100/mo'}
                 </Button>
                 <Button
                   onClick={() => handleSubscribe('yearly')}
@@ -254,7 +254,7 @@ export default function AccountPage() {
                   className="rounded-[14px] border-0 bg-green-800 text-white hover:bg-green-700"
                   style={{ boxShadow: raisedXs }}
                 >
-                  {checkoutPending ? 'Opening...' : 'Yearly — £86/yr'}
+                  {checkoutPending ? 'Opening...' : 'Yearly — ₹999/yr'}
                 </Button>
               </>
             ) : (

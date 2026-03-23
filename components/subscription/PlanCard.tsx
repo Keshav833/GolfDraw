@@ -39,7 +39,7 @@ export function PlanCard({
       }}
     >
       <div
-        className="absolute inset-x-0 top-0 h-1.5"
+        // className="absolute inset-x-0 top-0 h-4.5"
         style={{
           background: featured
             ? 'linear-gradient(90deg, #2d8c55, #7de0aa)'
@@ -47,8 +47,8 @@ export function PlanCard({
         }}
       />
       {featured ? (
-        <div className="absolute right-0 top-0 translate-x-2 -translate-y-3 transform">
-          <span className="rounded-full bg-green-600 px-3 py-1 text-xs font-bold uppercase tracking-wide text-white">
+        <div className="absolute right-0  top-0 -translate-x-2 translate-y-2 transform z-10">
+          <span className="z-90 rounded-full bg-gradient-to-br from-green-600 to-green-500 px-4 py-1.5 text-[10px] font-bold uppercase tracking-wider text-white  shadow-lg shadow-green-900/20">
             Best Value
           </span>
         </div>
@@ -56,7 +56,7 @@ export function PlanCard({
       <CardHeader className="pb-4">
         <CardTitle className="capitalize text-2xl">{plan}</CardTitle>
         <CardDescription>
-          <span className="text-3xl font-bold text-gray-900">£{price}</span>
+          <span className="text-3xl font-bold text-gray-900">₹{price}</span>
           <span className="text-sm text-gray-500">
             {' '}
             / {plan === 'monthly' ? 'mo' : 'yr'}

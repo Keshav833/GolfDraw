@@ -103,7 +103,7 @@ function prizeText(result: DrawResult) {
     return '—';
   }
 
-  const amount = `£${Number(result.prize_amount).toFixed(2)}`;
+  const amount = `₹${Number(result.prize_amount).toFixed(2)}`;
 
   if (result.payment_status === 'pending') {
     return `${amount} ↗`;

@@ -282,14 +282,21 @@ export default function HomePage() {
         .pricing-header { text-align: center; margin-bottom: 60px; }
         .plans-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; max-width: 800px; margin: 0 auto; }
         .plan-card { 
+          position: relative;
           background: var(--bg); box-shadow: var(--shadow-out); 
           border-radius: var(--radius-lg); padding: 40px; 
         }
         .plan-card.featured { box-shadow: var(--shadow-in), 0 0 0 2px var(--accent-light); }
         .plan-badge { 
-          display: inline-block; background: var(--bg); box-shadow: var(--shadow-out-sm); 
-          color: var(--accent-dark); font-size: 12px; font-weight: 600; 
-          padding: 6px 14px; border-radius: 100px; margin-bottom: 20px; 
+          position: absolute;
+          top: 0; right: 0;
+          transform: translate(12px, -12px);
+          background: linear-gradient(135deg, var(--accent-dark), var(--accent));
+          color: white; font-size: 11px; font-weight: 700; 
+          padding: 6px 16px; border-radius: 100px; 
+          text-transform: uppercase; letter-spacing: 0.5px;
+          box-shadow: 4px 4px 10px rgba(10,50,20,0.25);
+          z-index: 10;
         }
         .plan-name { font-size: 15px; font-weight: 600; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
         .plan-price { font-family: var(--font-display); font-size: 52px; color: var(--text-main); line-height: 1; margin-bottom: 8px; }
@@ -449,7 +456,7 @@ export default function HomePage() {
           <div className="hero-left">
             <div className="badge animate-fade-up">
               <div className="badge-dot"></div>
-              Monthly draw live — £4,200 jackpot
+              Monthly draw live — ₹40,000 jackpot
             </div>
             <h1 className="hero-h1 animate-fade-up delay-1">
               Golf scores.
@@ -465,7 +472,7 @@ export default function HomePage() {
             </p>
             <div className="hero-actions animate-fade-up delay-3">
               <a href="/login" className="btn btn-primary btn-large">
-                Start playing — £9/mo
+                Start playing — ₹100/mo
               </a>
               <a href="#how-it-works" className="btn btn-ghost btn-large">
                 See how it works
@@ -492,11 +499,11 @@ export default function HomePage() {
 
         <div className="stats-bar">
           <div className="stat-cell animate-fade-up delay-1">
-            <div className="stat-n">£84k</div>
+            <div className="stat-n">₹8.4L</div>
             <div className="stat-l">Total prizes awarded</div>
           </div>
           <div className="stat-cell animate-fade-up delay-2">
-            <div className="stat-n">£12k</div>
+            <div className="stat-n">₹1.2L</div>
             <div className="stat-l">Donated to charities</div>
           </div>
           <div className="stat-cell animate-fade-up delay-3">
@@ -675,7 +682,7 @@ export default function HomePage() {
           <div className="draw-right">
             <div className="draw-pool-card">
               <div className="pool-label">Current jackpot pool</div>
-              <div className="pool-amount">£4,200</div>
+              <div className="pool-amount">₹40,000</div>
               <div className="pool-note">Including last month's rollover</div>
             </div>
             <div className="draw-detail-cards">
@@ -711,7 +718,7 @@ export default function HomePage() {
             <div className="plan-card">
               <div className="plan-name">Monthly</div>
               <div className="plan-price">
-                <sup>£</sup>9<sub> / month</sub>
+                <sup>₹</sup>100<sub> / month</sub>
               </div>
               <div className="plan-desc">Billed monthly. Cancel anytime.</div>
               <a href="/login" className="btn btn-ghost plan-btn">
@@ -763,13 +770,13 @@ export default function HomePage() {
               </div>
             </div>
             <div className="plan-card featured">
-              <div className="plan-badge">Best value — save 20%</div>
+              <div className="plan-badge">Best value — save ₹200+</div>
               <div className="plan-name">Yearly</div>
               <div className="plan-price">
-                <sup>£</sup>86<sub> / year</sub>
+                <sup>₹</sup>999<sub> / year</sub>
               </div>
               <div className="plan-desc">
-                That's £7.17/mo · billed annually.
+                That's ₹83.25/mo · billed annually.
               </div>
               <a href="/login" className="btn btn-primary plan-btn">
                 Get started
@@ -890,7 +897,7 @@ export default function HomePage() {
             <div className="testimonial-card">
               <div className="testimonial-stars">★★★★★</div>
               <p className="testimonial-text">
-                "Won £340 in the 4-match draw last month. The verification
+                "Won ₹340 in the 4-match draw last month. The verification
                 process was painless — uploaded my screenshot and had the money
                 within a week."
               </p>
@@ -922,7 +929,7 @@ export default function HomePage() {
               <p className="testimonial-text">
                 "Simple concept, executed really well. I just play golf and
                 submit my score — everything else is handled. The jackpot is now
-                at £4k and I'm feeling lucky."
+                at ₹4k and I'm feeling lucky."
               </p>
               <div className="testimonial-author">
                 <div className="t-av">AP</div>
@@ -945,7 +952,7 @@ export default function HomePage() {
             </p>
             <div className="cta-actions">
               <a href="/login" className="btn btn-primary btn-xl">
-                Start for £9 / month
+                Start for ₹9 / month
               </a>
               <button className="btn btn-ghost btn-xl">Learn more</button>
             </div>
