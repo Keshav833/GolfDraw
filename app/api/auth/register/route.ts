@@ -10,7 +10,6 @@ export async function POST(req: Request) {
       email,
       password,
       charity_contribution_pct = 0,
-      plan_type,
     } = await req.json();
 
     const cookieStore = cookies();
@@ -61,7 +60,7 @@ export async function POST(req: Request) {
         full_name,
         charity_id: null,
         charity_contribution_pct: charityPct,
-        subscription_status: plan_type ? 'active' : 'inactive',
+        subscription_status: 'inactive',
       });
 
       if (dbError) {
@@ -69,30 +68,6 @@ export async function POST(req: Request) {
           { data: null, error: { message: dbError.message, code: 'DB_ERR' } },
           { status: 500 }
         );
-      }
-
-      if (plan_type) {
-        const selectedPlan = plan_type === 'yearly' ? 'yearly' : 'monthly';
-        const demoSubscriptionId = `demo_${selectedPlan}_${authData.user.id}`;
-
-        const { error: subError } = await supabaseAdmin
-          .from('subscriptions')
-          .insert({
-            user_id: authData.user.id,
-            razorpay_subscription_id: demoSubscriptionId,
-            plan_type: selectedPlan,
-            status: 'active',
-          });
-
-        if (subError) {
-          return NextResponse.json(
-            {
-              data: null,
-              error: { message: subError.message, code: 'DB_ERR' },
-            },
-            { status: 500 }
-          );
-        }
       }
     }
 

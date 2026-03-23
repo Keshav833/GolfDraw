@@ -8,6 +8,7 @@ import { PageShell } from '@/components/dashboard/PageShell';
 import { StatusBadge } from '@/components/subscription/StatusBadge';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { useRazorpayCheckout } from '@/lib/razorpay/useRazorpayCheckout';
 
 const raisedSm =
   '3px 3px 8px var(--dashboard-shadow-dark), -3px -3px 8px var(--dashboard-shadow-light)';
@@ -43,6 +44,7 @@ export default function AccountPage() {
     queryKey: ['me'],
     queryFn: () => fetch('/api/users/me').then((response) => response.json()),
   });
+  const { checkout, isPending: checkoutPending } = useRazorpayCheckout();
 
   const handleCancel = async () => {
     if (
@@ -64,6 +66,17 @@ export default function AccountPage() {
     }
 
     toast.error('Failed to cancel subscription.');
+  };
+
+  const handleSubscribe = (planType: 'monthly' | 'yearly') => {
+    checkout({
+      planType,
+      userName: res?.data?.user?.full_name ?? undefined,
+      userEmail: res?.data?.user?.email,
+      onSuccess: () => {
+        refetch();
+      },
+    });
   };
 
   if (isLoading) {
@@ -224,19 +237,27 @@ export default function AccountPage() {
           </div>
 
           <div className="mt-5 flex flex-wrap gap-3">
-            <Link
-              href="/register/plan"
-              className={cn(
-                buttonVariants({ variant: 'outline' }),
-                'rounded-[14px] border-0 bg-[var(--dashboard-bg)] text-[#2a3a2a] hover:bg-[var(--dashboard-bg)]'
-              )}
-              style={{ boxShadow: raisedXs }}
-            >
-              {subscription?.status === 'active'
-                ? 'Change plan'
-                : 'Choose a plan'}
-            </Link>
-            {subscription?.status === 'active' ? (
+            {subscription?.status !== 'active' ? (
+              <>
+                <Button
+                  variant="outline"
+                  onClick={() => handleSubscribe('monthly')}
+                  disabled={checkoutPending}
+                  className="rounded-[14px] border-0 bg-[var(--dashboard-bg)] text-[#2a3a2a] hover:bg-[var(--dashboard-bg)]"
+                  style={{ boxShadow: raisedXs }}
+                >
+                  {checkoutPending ? 'Opening...' : 'Monthly — £9/mo'}
+                </Button>
+                <Button
+                  onClick={() => handleSubscribe('yearly')}
+                  disabled={checkoutPending}
+                  className="rounded-[14px] border-0 bg-green-800 text-white hover:bg-green-700"
+                  style={{ boxShadow: raisedXs }}
+                >
+                  {checkoutPending ? 'Opening...' : 'Yearly — £86/yr'}
+                </Button>
+              </>
+            ) : (
               <Button
                 variant="destructive"
                 onClick={handleCancel}
@@ -245,7 +266,7 @@ export default function AccountPage() {
               >
                 Cancel subscription
               </Button>
-            ) : null}
+            )}
           </div>
         </section>
 

@@ -97,7 +97,31 @@ export default function HomePage() {
         .btn-xl { padding: 18px 40px; font-size: 18px; border-radius: var(--radius-md); }
 
         /* ── HERO ─────────────────────────────────────── */
-        .hero { display: grid; grid-template-columns: 1fr 1fr; min-height: calc(100vh - 92px); gap: 40px; padding: 40px; }
+        /* ── HERO ─────────────────────────────────────── */
+        .hero { 
+          display: grid; 
+          grid-template-columns: 1fr 1fr; 
+          min-height: calc(100vh - 92px); 
+          gap: 40px; 
+          padding: 40px; 
+          position: relative;
+          overflow: hidden;
+        }
+        .hero::before {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          height: 60%;
+          background: url('/images/pitch.png') no-repeat bottom center;
+          background-size: cover;
+          opacity: 0.15;
+          z-index: 0;
+          mask-image: linear-gradient(to top, black 20%, transparent 100%);
+          -webkit-mask-image: linear-gradient(to top, black 20%, transparent 100%);
+        }
+        .hero > * { position: relative; z-index: 1; }
         .hero-left { padding: 40px 0; display: flex; flex-direction: column; justify-content: center; }
         .badge { 
           display: inline-flex; align-items: center; gap: 8px; 
@@ -126,10 +150,10 @@ export default function HomePage() {
         .trust-text strong { color: var(--text-main); font-weight: 600; }
 
         .hero-right { 
-          background: var(--bg); 
-          border-radius: var(--radius-lg); 
-          box-shadow: var(--shadow-in);
-          padding: 50px; display: flex; flex-direction: column; justify-content: center; gap: 24px; position: relative; 
+          // background: var(--bg); 
+          // border-radius: var(--radius-lg); 
+          // box-shadow: var(--shadow-in);
+          // padding: 50px; display: flex; flex-direction: column; justify-content: center; gap: 24px; position: relative; 
         }
         
         /* Neumorphic Cards */
@@ -462,40 +486,7 @@ export default function HomePage() {
           </div>
 
           <div className="hero-right">
-            <div className="neu-card animate-fade-up delay-2">
-              <div className="card-label">This month's jackpot</div>
-              <div className="card-value">£4,200</div>
-              <div className="card-sub">
-                5-match prize · rolls over if unclaimed
-              </div>
-            </div>
-
-            <div className="neu-card animate-fade-up delay-3">
-              <div className="card-label">Your last 5 scores</div>
-              <div className="score-pills">
-                <div className="score-pill hot">32</div>
-                <div className="score-pill">28</div>
-                <div className="score-pill">35</div>
-                <div className="score-pill">30</div>
-                <div className="score-pill">27</div>
-              </div>
-            </div>
-
-            <div className="neu-card animate-fade-up delay-4">
-              <div className="card-label">Your charity</div>
-              <div className="charity-bar-wrap">
-                <div className="charity-bar-row">
-                  <span className="charity-name">St Andrews Links Trust</span>
-                  <span className="charity-pct">15%</span>
-                </div>
-                <div className="bar-track">
-                  <div className="bar-fill" style={{ width: '15%' }}></div>
-                </div>
-                <div className="bar-note">
-                  £1.35 donated this month · min 10%
-                </div>
-              </div>
-            </div>
+            <img src="/images/Golf.png" alt="GolfDraw" />
           </div>
         </section>
 

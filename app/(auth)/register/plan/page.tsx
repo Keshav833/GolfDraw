@@ -3,12 +3,15 @@
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';
+import { createBrowserClient } from '@supabase/ssr';
 import { PlanCard } from '@/components/subscription/PlanCard';
+import { useRazorpayCheckout } from '@/lib/razorpay/useRazorpayCheckout';
 
 export default function RegisterPlan() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [loading, setLoading] = useState<'monthly' | 'yearly' | null>(null);
+  const { checkout, isPending } = useRazorpayCheckout();
+  const [activePlan, setActivePlan] = useState<'monthly' | 'yearly' | null>(null);
   const [pendingRegistration, setPendingRegistration] = useState<{
     full_name: string;
     email: string;
@@ -45,30 +48,63 @@ export default function RegisterPlan() {
       return;
     }
 
-    setLoading(planType);
+    setActivePlan(planType);
 
     try {
-      const res = await fetch('/api/auth/register', {
+      // Step 1: Create the user account (no plan_type — subscription handled by Razorpay)
+      const registerRes = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...pendingRegistration,
           charity_contribution_pct: charityPct,
-          plan_type: planType,
         }),
       });
 
-      const json = await res.json();
+      const registerJson = await registerRes.json();
 
-      if (!res.ok || json.error || !json.data) {
-        throw new Error(json.error?.message || 'Failed to activate plan');
+      if (!registerRes.ok || registerJson.error || !registerJson.data) {
+        throw new Error(
+          registerJson.error?.message || 'Failed to create account'
+        );
       }
 
-      sessionStorage.removeItem('pending_registration');
-      router.push('/dashboard?account_created=1');
+      // Step 2: Sign in so the session is available for /api/subscriptions/create
+      const supabase = createBrowserClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+      );
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email: pendingRegistration.email,
+        password: pendingRegistration.password,
+      });
+
+      if (signInError) {
+        throw new Error(
+          'Account created but sign-in failed. Please log in manually.'
+        );
+      }
+
+      // Step 3: Open the Razorpay checkout
+      await checkout({
+        planType,
+        userName: pendingRegistration.full_name,
+        userEmail: pendingRegistration.email,
+        onSuccess: () => {
+          sessionStorage.removeItem('pending_registration');
+          router.push('/dashboard?account_created=1');
+        },
+        onDismiss: () => {
+          // Account created but no subscription yet — redirect to dashboard
+          // The user can subscribe from Account settings
+          sessionStorage.removeItem('pending_registration');
+          toast('You can subscribe any time from Account settings.');
+          router.push('/dashboard?account_created=1');
+        },
+      });
     } catch (error: any) {
       toast.error(error.message);
-      setLoading(null);
+      setActivePlan(null);
     }
   };
 
@@ -222,7 +258,7 @@ export default function RegisterPlan() {
                 'Pick your charity after signup',
               ]}
               onSelect={() => handleSelectPlan('monthly')}
-              isLoading={loading === 'monthly'}
+              isLoading={isPending && activePlan === 'monthly'}
             />
             <PlanCard
               plan="yearly"
@@ -245,7 +281,7 @@ export default function RegisterPlan() {
               ]}
               featured
               onSelect={() => handleSelectPlan('yearly')}
-              isLoading={loading === 'yearly'}
+              isLoading={isPending && activePlan === 'yearly'}
             />
           </div>
         </div>
