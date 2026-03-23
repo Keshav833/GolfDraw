@@ -12,6 +12,6 @@ console.log('--- Running fresh npm install ---');
 try {
   execSync('npm install --legacy-peer-deps', { stdio: 'inherit' });
   console.log('--- Install Successful ---');
-} catch {
+} catch (e) {
   console.error('Npm install failed:', e.message);
 }

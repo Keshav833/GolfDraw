@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { sendPaymentConfirmedEmail } from '@/lib/email/templates';
+import { paymentConfirmationEmail } from '@/lib/email/templates';
 
 const schema = z.object({
   to: z.string().email(),
@@ -24,6 +24,6 @@ export async function POST(req: Request) {
     );
   }
 
-  await sendPaymentConfirmedEmail(parsed.data);
+  await paymentConfirmationEmail(parsed.data as any);
   return NextResponse.json({ data: { sent: true }, error: null });
 }
