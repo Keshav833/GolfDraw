@@ -1,16 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import {
-  Plus,
-  Edit2,
-  Trash2,
-  Globe,
-  Heart,
-  Users,
-  Check,
-  X,
-} from 'lucide-react';
+import { Plus, Edit2, Trash2, Globe, Heart, Users } from 'lucide-react';
 import { toast } from 'sonner';
 import { Spinner } from '@/components/ui/LoadingButton';
 
@@ -58,7 +49,7 @@ export default function CharityTable({
         const json = await res.json();
         toast.error(json.error?.message || 'Failed to update status');
       }
-    } catch (err) {
+    } catch {
       toast.error('An unexpected error occurred');
     } finally {
       setToggling(null);
@@ -80,7 +71,7 @@ export default function CharityTable({
         const json = await res.json();
         toast.error(json.error?.message || 'Failed to delete charity');
       }
-    } catch (err) {
+    } catch {
       toast.error('An unexpected error occurred');
     }
   };

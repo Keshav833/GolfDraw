@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createServiceRoleClient } from '@/lib/supabase/server';
-import { drawWinnerEmail } from '@/lib/email/templates';
+import { paymentFailedEmail } from '@/lib/email/templates';
 import { sendEmail } from '@/lib/email/send';
 import { verifyInternalSecret } from '@/lib/auth/verifyInternalSecret';
 
@@ -10,19 +10,12 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const {
-      user_id,
-      match_category,
-      prize_amount,
-      draw_month,
-      draw_number,
-      draw_result_id,
-    } = await req.json();
+    const { user_id } = await req.json();
 
     const db = createServiceRoleClient();
     const { data: user, error: userError } = await db
       .from('users')
-      .select('email, full_name')
+      .select('*, subscriptions(*)')
       .eq('id', user_id)
       .single();
 
@@ -30,15 +23,12 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
+    const subscription = user.subscriptions?.[0];
     const firstName = user.full_name?.split(' ')[0] ?? 'there';
 
-    const { subject, html } = drawWinnerEmail({
+    const { subject, html } = paymentFailedEmail({
       firstName,
-      matchCategory: match_category,
-      prizeAmount: prize_amount,
-      drawMonth: draw_month,
-      drawNumber: draw_number,
-      drawResultId: draw_result_id,
+      planType: subscription?.plan_type ?? 'monthly',
     });
 
     const result = await sendEmail({
@@ -49,7 +39,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ success: result.success });
   } catch (err: any) {
-    console.error('Draw winner email route crashed:', err);
+    console.error('Payment failed email route crashed:', err);
     return NextResponse.json({ success: false, error: err.message });
   }
 }

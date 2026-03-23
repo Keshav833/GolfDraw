@@ -47,9 +47,28 @@ export async function POST(req: Request) {
       );
     }
 
-    const result = await publishStoredDraw({
+    const { result, insertedResults } = await publishStoredDraw({
       supabase: serviceSupabase,
       draw,
+    });
+
+    // 🏆 WINNER EMAILS
+    insertedResults.forEach((winner) => {
+      fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/email/draw-winner`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-internal-secret': process.env.INTERNAL_SECRET ?? '',
+        },
+        body: JSON.stringify({
+          user_id: winner.user_id,
+          match_category: winner.match_category,
+          prize_amount: winner.prize_amount,
+          draw_month: result.month,
+          draw_number: result.draw_number,
+          draw_result_id: winner.id,
+        }),
+      }).catch((err) => console.error('Winner email failed:', err));
     });
 
     return NextResponse.json({

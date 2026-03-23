@@ -1,15 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import {
-  Search,
-  MoreHorizontal,
-  User as UserIcon,
-  Trash2,
-  ExternalLink,
-  ChevronLeft,
-  ChevronRight,
-} from 'lucide-react';
+import { Search, ExternalLink, ChevronLeft, ChevronRight } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 
 interface User {
@@ -46,7 +38,7 @@ export default function UserTable({
   onSearch,
   onStatusFilter,
   onViewDetails,
-  onCancelSubscription,
+  onCancelSubscription: _onCancelSubscription,
 }: UserTableProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeStatus, setActiveStatus] = useState('all');

@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { createBrowserClient } from '@supabase/ssr';
 import { toast } from 'sonner';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -66,8 +67,8 @@ export default function LoginPage() {
         >
           <div
             style={{
-              width: '78px',
-              height: '78px',
+              width: '40px',
+              height: '40px',
 
               display: 'flex',
               alignItems: 'center',
@@ -75,9 +76,11 @@ export default function LoginPage() {
               overflow: 'hidden',
             }}
           >
-            <img
+            <Image
               src="/images/GolfDraw.png"
               alt="GolfDraw"
+              width={40}
+              height={40}
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             />
           </div>

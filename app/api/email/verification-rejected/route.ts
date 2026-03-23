@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createServiceRoleClient } from '@/lib/supabase/server';
-import { drawWinnerEmail } from '@/lib/email/templates';
+import { verificationRejectedEmail } from '@/lib/email/templates';
 import { sendEmail } from '@/lib/email/send';
 import { verifyInternalSecret } from '@/lib/auth/verifyInternalSecret';
 
@@ -12,10 +12,9 @@ export async function POST(req: Request) {
 
     const {
       user_id,
-      match_category,
       prize_amount,
       draw_month,
-      draw_number,
+      rejection_note,
       draw_result_id,
     } = await req.json();
 
@@ -32,12 +31,11 @@ export async function POST(req: Request) {
 
     const firstName = user.full_name?.split(' ')[0] ?? 'there';
 
-    const { subject, html } = drawWinnerEmail({
+    const { subject, html } = verificationRejectedEmail({
       firstName,
-      matchCategory: match_category,
       prizeAmount: prize_amount,
       drawMonth: draw_month,
-      drawNumber: draw_number,
+      rejectionNote: rejection_note,
       drawResultId: draw_result_id,
     });
 
@@ -49,7 +47,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ success: result.success });
   } catch (err: any) {
-    console.error('Draw winner email route crashed:', err);
+    console.error('Verification rejected email route crashed:', err);
     return NextResponse.json({ success: false, error: err.message });
   }
 }

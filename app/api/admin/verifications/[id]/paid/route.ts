@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createServiceSupabase, requireAdminUser } from '@/lib/draw/api';
-import { sendPaymentConfirmedEmail } from '@/lib/email/templates';
+
 import { getAdminVerificationRecord } from '@/lib/verification/helpers';
 
 export async function POST(_: Request, { params }: { params: { id: string } }) {
@@ -58,14 +58,18 @@ export async function POST(_: Request, { params }: { params: { id: string } }) {
       );
     }
 
-    await sendPaymentConfirmedEmail({
-      to: verificationRecord.user.email,
-      name:
-        verificationRecord.user.full_name.split(' ')[0] ||
-        verificationRecord.user.full_name,
-      prizeAmount: verificationRecord.prize_amount,
-      drawMonth: verificationRecord.draw.month,
-    });
+    fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/email/payment-processed`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-internal-secret': process.env.INTERNAL_SECRET ?? '',
+      },
+      body: JSON.stringify({
+        user_id: verificationRecord.user_id,
+        prize_amount: verificationRecord.prize_amount,
+        draw_month: verificationRecord.draw.month,
+      }),
+    }).catch((err) => console.error('Payment processed email failed:', err));
 
     return NextResponse.json({
       data: { payment_status: data?.[0]?.draw_result_status ?? 'paid' },

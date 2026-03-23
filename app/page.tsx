@@ -1,12 +1,9 @@
 import { Flag, Brain, Medal } from 'lucide-react';
+import Image from 'next/image';
 
 export default function HomePage() {
   return (
     <>
-      <link
-        href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap"
-        rel="stylesheet"
-      />
       <style
         dangerouslySetInnerHTML={{
           __html: `
@@ -422,9 +419,11 @@ export default function HomePage() {
         <nav className="nav">
           <a href="#" className="nav-logo">
             <div className="nav-logo-mark" style={{ overflow: 'hidden' }}>
-              <img
+              <Image
                 src="/images/GolfDraw.png"
                 alt="GolfDraw"
+                width={58}
+                height={58}
                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
               />
             </div>
@@ -495,7 +494,14 @@ export default function HomePage() {
           </div>
 
           <div className="hero-right">
-            <img src="/images/Golf.png" alt="GolfDraw" />
+            <Image
+              src="/images/Golf.png"
+              alt="GolfDraw"
+              width={600}
+              height={400}
+              priority
+              style={{ width: '100%', height: 'auto' }}
+            />
           </div>
         </section>
 
@@ -987,9 +993,11 @@ export default function HomePage() {
                       overflow: 'hidden',
                     }}
                   >
-                    <img
+                    <Image
                       src="/images/GolfDraw.png"
                       alt="GolfDraw"
+                      width={32}
+                      height={32}
                       style={{
                         width: '100%',
                         height: '100%',

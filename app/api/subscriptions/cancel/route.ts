@@ -3,7 +3,7 @@ import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import { razorpay } from '@/lib/razorpay/client';
 
-export async function DELETE(req: Request) {
+export async function DELETE(_req: Request) {
   try {
     const cookieStore = cookies();
     const supabase = createServerClient(

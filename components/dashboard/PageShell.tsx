@@ -3,16 +3,12 @@
 import Link from 'next/link';
 import { Bell, Search, User2 } from 'lucide-react';
 import { usePathname } from 'next/navigation';
-import { signOut as _signOut } from '@/app/(auth)/actions';
 import { Sidebar } from './Sidebar';
 
 const raised =
   '5px 5px 12px var(--dashboard-shadow-dark), -5px -5px 12px var(--dashboard-shadow-light)';
 const raisedXs =
   '2px 2px 5px var(--dashboard-shadow-dark), -2px -2px 5px var(--dashboard-shadow-light)';
-const _insetShadow =
-  'inset 3px 3px 7px var(--dashboard-shadow-dark), inset -3px -3px 7px var(--dashboard-shadow-light)';
-
 export function PageShell({
   userName,
   membershipLabel,

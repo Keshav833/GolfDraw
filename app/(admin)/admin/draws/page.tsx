@@ -2,15 +2,7 @@
 
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import {
-  Plus,
-  Trophy,
-  Calendar,
-  CheckCircle,
-  Play,
-  Trash2,
-  Edit,
-} from 'lucide-react';
+import { Plus, Trophy, Trash2, Edit } from 'lucide-react';
 import Link from 'next/link';
 import { format } from 'date-fns';
 import { toast } from 'sonner';

@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { createServiceSupabase, requireAdminUser } from '@/lib/draw/api';
-import { sendVerificationRejectedEmail } from '@/lib/email/templates';
+
 import { getAdminVerificationRecord } from '@/lib/verification/helpers';
 
 const schema = z.discriminatedUnion('action', [
@@ -93,16 +93,40 @@ export async function POST(
       );
     }
 
-    if (parsed.data.action === 'reject') {
-      const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-      await sendVerificationRejectedEmail({
-        to: verificationRecord.user.email,
-        name:
-          verificationRecord.user.full_name.split(' ')[0] ||
-          verificationRecord.user.full_name,
-        rejectionNote: parsed.data.rejection_note,
-        drawsUrl: `${appUrl}/draws`,
-      });
+    if (parsed.data.action === 'approve') {
+      fetch(
+        `${process.env.NEXT_PUBLIC_APP_URL}/api/email/verification-approved`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-internal-secret': process.env.INTERNAL_SECRET ?? '',
+          },
+          body: JSON.stringify({
+            user_id: verificationRecord.user_id,
+            prize_amount: verificationRecord.prize_amount,
+            draw_month: verificationRecord.draw.month,
+          }),
+        }
+      ).catch((err) => console.error('Approval email failed:', err));
+    } else if (parsed.data.action === 'reject') {
+      fetch(
+        `${process.env.NEXT_PUBLIC_APP_URL}/api/email/verification-rejected`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-internal-secret': process.env.INTERNAL_SECRET ?? '',
+          },
+          body: JSON.stringify({
+            user_id: verificationRecord.user_id,
+            prize_amount: verificationRecord.prize_amount,
+            draw_month: verificationRecord.draw.month,
+            rejection_note: parsed.data.rejection_note,
+            draw_result_id: verificationRecord.id,
+          }),
+        }
+      ).catch((err) => console.error('Rejection email failed:', err));
     }
 
     return NextResponse.json({

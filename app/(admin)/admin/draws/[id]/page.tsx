@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Trophy, Settings, CheckCircle, ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { format } from 'date-fns';
 import { toast } from 'sonner';
 
@@ -16,7 +16,6 @@ import { LoadingButton } from '@/components/ui/LoadingButton';
 
 export default function DrawDetailPage() {
   const { id } = useParams();
-  const router = useRouter();
   const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState<'config' | 'results'>('config');
   const [showPublishModal, setShowPublishModal] = useState(false);

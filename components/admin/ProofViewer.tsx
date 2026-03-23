@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { RejectModal } from '@/components/admin/RejectModal';
 import { SectionLoader } from '@/components/ui/SectionLoader';
 import { LoadingButton } from '@/components/ui/LoadingButton';
+import Image from 'next/image';
 
 const raisedSm =
   '3px 3px 8px var(--dashboard-shadow-dark), -3px -3px 8px var(--dashboard-shadow-light)';
@@ -117,10 +118,14 @@ export function ProofViewer({
                   </a>
                 </div>
               ) : (
-                <img
+                <Image
                   src={signedUrl ?? ''}
                   alt="Winner proof"
-                  className="max-h-[520px] w-full rounded-[18px] object-contain"
+                  width={800}
+                  height={600}
+                  style={{ width: '100%', height: 'auto', borderRadius: 18 }}
+                  className="max-h-[520px] object-contain"
+                  unoptimized
                 />
               )}
             </div>

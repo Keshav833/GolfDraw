@@ -2,16 +2,7 @@
 
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import {
-  Trophy,
-  CheckCircle,
-  Clock,
-  XCircle,
-  Search,
-  Filter,
-  Mail,
-  CreditCard,
-} from 'lucide-react';
+import { CheckCircle, Clock, Filter, Mail, CreditCard } from 'lucide-react';
 import { format } from 'date-fns';
 import { toast } from 'sonner';
 
@@ -19,11 +10,7 @@ export default function WinnersPage() {
   const queryClient = useQueryClient();
   const [statusFilter, setStatusFilter] = useState('pending');
 
-  const {
-    data: winners,
-    isLoading,
-    error,
-  } = useQuery({
+  const { data: winners, isLoading } = useQuery({
     queryKey: ['admin-winners', statusFilter],
     queryFn: async () => {
       const res = await fetch(`/api/admin/winners?status=${statusFilter}`);

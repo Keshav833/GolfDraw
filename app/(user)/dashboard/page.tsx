@@ -1,10 +1,9 @@
 import { Suspense } from 'react';
 import Link from 'next/link';
 import { format, getHours } from 'date-fns';
-import { Bell, LayoutGrid, Search, User2, LogOut } from 'lucide-react';
+import { Bell, Search, User2 } from 'lucide-react';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
-import { signOut } from '@/app/(auth)/actions';
 import { DashboardSkeleton } from '@/components/dashboard/DashboardSkeleton';
 import { QuickActions } from '@/components/dashboard/QuickActions';
 import { Sidebar } from '@/components/dashboard/Sidebar';

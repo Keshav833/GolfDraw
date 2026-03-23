@@ -135,14 +135,23 @@ export async function publishStoredDraw(params: {
     payment_status: 'pending',
   }));
 
+  let insertedResults: Array<{
+    id: string;
+    user_id: string;
+    match_category: MatchCategory;
+    prize_amount: number;
+  }> = [];
+
   if (drawResultInserts.length > 0) {
-    const { error } = await params.supabase
+    const { data, error } = await params.supabase
       .from('draw_results')
-      .insert(drawResultInserts);
+      .insert(drawResultInserts)
+      .select('id, user_id, match_category, prize_amount');
 
     if (error) {
       throw new Error(error.message);
     }
+    insertedResults = data || [];
   }
 
   if (winningResults.length > 0) {
@@ -221,5 +230,5 @@ export async function publishStoredDraw(params: {
     throw new Error(updateError.message);
   }
 
-  return result;
+  return { result, insertedResults };
 }

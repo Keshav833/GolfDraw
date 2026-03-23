@@ -1,9 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { X, Save, Heart, Shield, Globe } from 'lucide-react';
+import { X, Save, Globe } from 'lucide-react';
 import { toast } from 'sonner';
-import { useRouter } from 'next/navigation';
 
 interface Charity {
   id: string;
@@ -61,7 +60,7 @@ export default function CharityForm({
       } else {
         toast.error(json.error?.message || 'Failed to save charity');
       }
-    } catch (err) {
+    } catch {
       toast.error('An unexpected error occurred');
     } finally {
       setSaving(false);

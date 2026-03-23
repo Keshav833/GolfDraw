@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ChevronLeft } from 'lucide-react';
 
 export default function RegisterStep1() {
@@ -36,17 +37,19 @@ export default function RegisterStep1() {
         >
           <div
             style={{
-              width: '78px',
-              height: '78px',
+              width: '40px',
+              height: '40px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               overflow: 'hidden',
             }}
           >
-            <img
+            <Image
               src="/images/GolfDraw.png"
               alt="GolfDraw"
+              width={40}
+              height={40}
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             />
           </div>

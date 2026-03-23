@@ -1,13 +1,6 @@
 'use client';
 
-import {
-  Trophy,
-  Users,
-  CheckCircle,
-  AlertCircle,
-  EyeOff,
-  Info,
-} from 'lucide-react';
+import { Users, CheckCircle, AlertCircle, EyeOff, Info } from 'lucide-react';
 import type { DrawResult, MatchResult } from '@/lib/types/draw';
 
 interface DrawSimulationPreviewProps {
