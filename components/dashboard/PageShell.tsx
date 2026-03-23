@@ -1,9 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { Bell, LayoutGrid, Search, User2, LogOut } from 'lucide-react';
+import { Bell, Search, User2 } from 'lucide-react';
 import { usePathname } from 'next/navigation';
-import { signOut } from '@/app/(auth)/actions';
+import { signOut as _signOut } from '@/app/(auth)/actions';
 import { Sidebar } from './Sidebar';
 
 const raised =
