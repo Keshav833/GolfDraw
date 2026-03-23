@@ -118,9 +118,7 @@ export function LoadingButton({
 }
 
 function loadingLabel(children: ReactNode): string {
-  const text =
-    typeof children === 'string' ? children : 'Loading';
-
+  const text = typeof children === 'string' ? children : 'Loading';
   const map: Record<string, string> = {
     'Submit score': 'Saving...',
     Save: 'Saving...',

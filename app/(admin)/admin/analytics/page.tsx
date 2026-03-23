@@ -1,7 +1,7 @@
 'use client';
 import { useQuery } from '@tanstack/react-query';
 import { createBrowserClient } from '@supabase/ssr';
-import SectionLoader from '@/components/ui/SectionLoader';
+import { SectionLoader } from '@/components/ui/SectionLoader';
 
 export default function AdminAnalyticsPage() {
   const supabase = createBrowserClient(

@@ -12,15 +12,15 @@ NProgress.configure({
 });
 
 export function TopLoader() {
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const _pathname = usePathname();
+  const _searchParams = useSearchParams();
 
   useEffect(() => {
     NProgress.done();
     return () => {
       NProgress.start();
     };
-  }, [pathname, searchParams]);
+  }, [_pathname, _searchParams]);
 
   return null;
 }

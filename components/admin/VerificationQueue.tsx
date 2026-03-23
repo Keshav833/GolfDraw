@@ -5,7 +5,7 @@ import { formatDistanceToNow } from 'date-fns';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { ProofViewer } from '@/components/admin/ProofViewer';
-import SectionLoader from '@/components/ui/SectionLoader';
+import { SectionLoader } from '@/components/ui/SectionLoader';
 import { LoadingButton } from '@/components/ui/LoadingButton';
 import type { DrawResultWithWinner } from '@/lib/types/verification';
 
@@ -112,11 +112,9 @@ export function VerificationQueue({
   }, [data?.total, status]);
 
   const approveLoading =
-    reviewMutation.isPending &&
-    reviewMutation.variables?.action === 'approve';
+    reviewMutation.isPending && reviewMutation.variables?.action === 'approve';
   const rejectLoading =
-    reviewMutation.isPending &&
-    reviewMutation.variables?.action === 'reject';
+    reviewMutation.isPending && reviewMutation.variables?.action === 'reject';
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8">

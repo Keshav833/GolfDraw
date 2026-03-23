@@ -8,7 +8,7 @@ import { toast } from 'sonner';
 import { CharityCard } from '@/components/charity/CharityCard';
 import { PageShell } from '@/components/dashboard/PageShell';
 import { LoadingButton } from '@/components/ui/LoadingButton';
-import SectionLoader from '@/components/ui/SectionLoader';
+import { SectionLoader } from '@/components/ui/SectionLoader';
 import { Input } from '@/components/ui/input';
 import {
   CATEGORIES,
@@ -31,8 +31,6 @@ type UserCharityResponse = {
 };
 
 const FILTER_OPTIONS = ['All', ...CATEGORIES] as const;
-const raised =
-  '5px 5px 12px var(--dashboard-shadow-dark), -5px -5px 12px var(--dashboard-shadow-light)';
 const raisedSm =
   '3px 3px 8px var(--dashboard-shadow-dark), -3px -3px 8px var(--dashboard-shadow-light)';
 const raisedXs =

@@ -1,12 +1,6 @@
 'use client';
 
-import {
-  X,
-  CreditCard,
-  Heart,
-  Trophy,
-  History,
-} from 'lucide-react';
+import { X, CreditCard, Heart, Trophy, History } from 'lucide-react';
 import { LoadingButton } from '@/components/ui/LoadingButton';
 import { format } from 'date-fns';
 

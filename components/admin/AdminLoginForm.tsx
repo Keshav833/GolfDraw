@@ -66,20 +66,16 @@ export default function AdminLoginForm({ accessDenied }: Props) {
     <div className="w-full max-w-[420px] flex flex-col items-center">
       {/* Logo / Brand */}
       <div className="mb-6 flex flex-col items-center gap-3">
-       
-        
-          <Image
-            src="/images/GolfDraw.png"
-            alt="GolfDraw Logo"
-            width={80}
-            height={80}
-            className="object-contain"
-            priority
-          />
-        
+        <Image
+          src="/images/GolfDraw.png"
+          alt="GolfDraw Logo"
+          width={80}
+          height={80}
+          className="object-contain"
+          priority
+        />
 
         <div className="text-center">
-         
           <div
             className="mt-1.5 inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold uppercase tracking-widest"
             style={{
@@ -231,7 +227,6 @@ export default function AdminLoginForm({ accessDenied }: Props) {
       </div>
 
       <Link
-
         href="/"
         className="mt-5 flex items-center gap-2 text-[12px] font-semibold text-white/30 hover:text-white/60 transition-colors"
       >

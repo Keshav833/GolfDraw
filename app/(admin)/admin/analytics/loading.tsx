@@ -3,11 +3,7 @@ import { SkeletonBlock } from '@/components/ui/skeleton';
 export default function AnalyticsRouteLoading() {
   return (
     <div style={{ padding: '32px' }}>
-      <SkeletonBlock
-        width="240px"
-        height="32px"
-        style={{ marginBottom: 32 }}
-      />
+      <SkeletonBlock width="240px" height="32px" style={{ marginBottom: 32 }} />
       <div
         style={{
           display: 'grid',

@@ -20,7 +20,10 @@ export async function POST(req: Request) {
 
     if (!user) {
       return NextResponse.json(
-        { data: null, error: { message: 'Unauthorized', code: 'UNAUTHORIZED' } },
+        {
+          data: null,
+          error: { message: 'Unauthorized', code: 'UNAUTHORIZED' },
+        },
         { status: 401 }
       );
     }
@@ -60,9 +63,18 @@ export async function POST(req: Request) {
     );
 
     if (!isValid) {
-      console.error('Invalid signature for subscription:', razorpay_subscription_id);
+      console.error(
+        'Invalid signature for subscription:',
+        razorpay_subscription_id
+      );
       return NextResponse.json(
-        { data: null, error: { message: 'Payment signature invalid', code: 'INVALID_SIGNATURE' } },
+        {
+          data: null,
+          error: {
+            message: 'Payment signature invalid',
+            code: 'INVALID_SIGNATURE',
+          },
+        },
         { status: 400 }
       );
     }
@@ -83,7 +95,7 @@ export async function POST(req: Request) {
 
     if (subError) {
       console.error('Subscription upsert error:', subError);
-      // We don't return 500 here yet, because if sub was created in Razorpay, 
+      // We don't return 500 here yet, because if sub was created in Razorpay,
       // we want to at least try updating user status or let webhook handle it.
     }
 
@@ -96,7 +108,13 @@ export async function POST(req: Request) {
     if (userError) {
       console.error('User status update error:', userError);
       return NextResponse.json(
-        { data: null, error: { message: 'Payment verified but session update failed', code: 'STATUS_ERR' } },
+        {
+          data: null,
+          error: {
+            message: 'Payment verified but session update failed',
+            code: 'STATUS_ERR',
+          },
+        },
         { status: 500 }
       );
     }
@@ -110,9 +128,14 @@ export async function POST(req: Request) {
   } catch (err: any) {
     console.error('Verify route crashed:', err);
     return NextResponse.json(
-      { data: null, error: { message: err.message || 'Internal server error', code: 'SERVER_ERR' } },
+      {
+        data: null,
+        error: {
+          message: err.message || 'Internal server error',
+          code: 'SERVER_ERR',
+        },
+      },
       { status: 500 }
     );
   }
 }
-

@@ -16,7 +16,10 @@ export async function POST(req: Request) {
 
     if (!user) {
       return NextResponse.json(
-        { data: null, error: { message: 'Unauthorized', code: 'UNAUTHORIZED' } },
+        {
+          data: null,
+          error: { message: 'Unauthorized', code: 'UNAUTHORIZED' },
+        },
         { status: 401 }
       );
     }
@@ -64,7 +67,10 @@ export async function POST(req: Request) {
 
     if (!userRecord) {
       return NextResponse.json(
-        { data: null, error: { message: 'User not found', code: 'USER_NOT_FOUND' } },
+        {
+          data: null,
+          error: { message: 'User not found', code: 'USER_NOT_FOUND' },
+        },
         { status: 404 }
       );
     }
@@ -76,7 +82,9 @@ export async function POST(req: Request) {
         : process.env.RAZORPAY_MONTHLY_PLAN_ID;
 
     if (!plan_id || plan_id.startsWith('plan_mock')) {
-      console.error(`Missing or mock Razorpay ${parsed.data.plan_type} plan ID`);
+      console.error(
+        `Missing or mock Razorpay ${parsed.data.plan_type} plan ID`
+      );
       return NextResponse.json(
         {
           data: null,
@@ -108,10 +116,16 @@ export async function POST(req: Request) {
           .eq('id', user.id);
       } catch (custErr: any) {
         console.error('Customer creation failed:', custErr);
-        // If it fails because customer already exists but we didn't have ID, 
+        // If it fails because customer already exists but we didn't have ID,
         // Razorpay might return an error we can handle, but for now we log and fail.
         return NextResponse.json(
-          { data: null, error: { message: 'Failed to initialize customer', code: 'CUSTOMER_ERR' } },
+          {
+            data: null,
+            error: {
+              message: 'Failed to initialize customer',
+              code: 'CUSTOMER_ERR',
+            },
+          },
           { status: 500 }
         );
       }
@@ -141,11 +155,11 @@ export async function POST(req: Request) {
     });
   } catch (err: any) {
     console.error('Subscription creation error:', err);
-    const message = err?.error?.description || err.message || 'Something went wrong';
+    const message =
+      err?.error?.description || err.message || 'Something went wrong';
     return NextResponse.json(
       { data: null, error: { message, code: 'RAZORPAY_ERROR' } },
       { status: 500 }
     );
   }
 }
-

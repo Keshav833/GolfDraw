@@ -3,11 +3,7 @@ import { SkeletonBlock } from '@/components/ui/skeleton';
 export default function CharityLoading() {
   return (
     <div style={{ padding: '32px' }}>
-      <SkeletonBlock
-        width="200px"
-        height="28px"
-        style={{ marginBottom: 24 }}
-      />
+      <SkeletonBlock width="200px" height="28px" style={{ marginBottom: 24 }} />
       <div
         style={{
           display: 'grid',

@@ -32,7 +32,9 @@ export function PlanPageClient({
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [activePlan, setActivePlan] = useState<'monthly' | 'yearly' | null>(null);
+  const [activePlan, setActivePlan] = useState<'monthly' | 'yearly' | null>(
+    null
+  );
   const [pendingRegistration, setPendingRegistration] = useState<{
     full_name: string;
     email: string;
@@ -122,7 +124,9 @@ export function PlanPageClient({
       }
 
       if (!createRes.ok || !createData.data?.subscription_id) {
-        throw new Error(createData.error?.message || 'Failed to create subscription');
+        throw new Error(
+          createData.error?.message || 'Failed to create subscription'
+        );
       }
 
       const { subscription_id, razorpay_key } = createData.data;
@@ -138,7 +142,8 @@ export function PlanPageClient({
         key: razorpay_key || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
         subscription_id: subscription_id,
         name: 'GolfDraw',
-        description: planType === 'yearly' ? 'Yearly Membership' : 'Monthly Membership',
+        description:
+          planType === 'yearly' ? 'Yearly Membership' : 'Monthly Membership',
         theme: { color: '#1a5e38' },
         prefill: {
           name: userName || pendingRegistration.full_name,
@@ -160,7 +165,9 @@ export function PlanPageClient({
             const verifyData = await verifyRes.json();
 
             if (!verifyRes.ok) {
-              throw new Error(verifyData.error?.message || 'Payment verification failed');
+              throw new Error(
+                verifyData.error?.message || 'Payment verification failed'
+              );
             }
 
             sessionStorage.removeItem('pending_registration');
@@ -214,7 +221,10 @@ export function PlanPageClient({
             className="group absolute left-6 top-6 flex items-center gap-1.5 rounded-full bg-white/40 px-3.5 py-1.5 text-xs font-bold transition-all hover:bg-white/60 hover:text-green-800"
             style={{ color: 'var(--text-muted)' }}
           >
-            <ChevronLeft size={14} className="transition-transform group-hover:-translate-x-0.5" />
+            <ChevronLeft
+              size={14}
+              className="transition-transform group-hover:-translate-x-0.5"
+            />
             BACK
           </button>
 

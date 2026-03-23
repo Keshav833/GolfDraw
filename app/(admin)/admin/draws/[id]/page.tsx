@@ -2,12 +2,7 @@
 
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import {
-  Trophy,
-  Settings,
-  CheckCircle,
-  ChevronLeft,
-} from 'lucide-react';
+import { Trophy, Settings, CheckCircle, ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { format } from 'date-fns';
@@ -16,7 +11,7 @@ import { toast } from 'sonner';
 import DrawConfigForm from '@/components/admin/DrawConfigForm';
 import DrawSimulationPreview from '@/components/admin/DrawSimulationPreview';
 import DrawPublishConfirm from '@/components/admin/DrawPublishConfirm';
-import SectionLoader from '@/components/ui/SectionLoader';
+import { SectionLoader } from '@/components/ui/SectionLoader';
 import { LoadingButton } from '@/components/ui/LoadingButton';
 
 export default function DrawDetailPage() {

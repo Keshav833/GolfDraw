@@ -8,11 +8,9 @@ import { Sidebar } from './Sidebar';
 
 const raised =
   '5px 5px 12px var(--dashboard-shadow-dark), -5px -5px 12px var(--dashboard-shadow-light)';
-const raisedSm =
-  '3px 3px 8px var(--dashboard-shadow-dark), -3px -3px 8px var(--dashboard-shadow-light)';
 const raisedXs =
   '2px 2px 5px var(--dashboard-shadow-dark), -2px -2px 5px var(--dashboard-shadow-light)';
-const insetShadow =
+const _insetShadow =
   'inset 3px 3px 7px var(--dashboard-shadow-dark), inset -3px -3px 7px var(--dashboard-shadow-light)';
 
 export function PageShell({
@@ -30,7 +28,7 @@ export function PageShell({
   subtitle: string;
   children: React.ReactNode;
 }) {
-  const pathname = usePathname();
+  const _pathname = usePathname();
   const initials =
     userName
       .split(' ')

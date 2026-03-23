@@ -111,7 +111,8 @@ export async function POST(req: Request) {
 
             if (subscriptionRecord && userRecord) {
               const currentMonth = format(new Date(), 'yyyy-MM');
-              const total = subscriptionRecord.plan_type === 'yearly' ? 999 : 100;
+              const total =
+                subscriptionRecord.plan_type === 'yearly' ? 999 : 100;
               const pct = Number(userRecord.charity_contribution_pct ?? 0);
               const charityAmount = total * (pct / 100);
               const prizePoolAmount = total - charityAmount;

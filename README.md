@@ -2,7 +2,6 @@
 
 <div align="center">
 
-
 **Play · Win · Give Back**
 
 A subscription-based golf platform combining score tracking,
@@ -53,19 +52,19 @@ GolfDraw lets golfers subscribe monthly or yearly, track their last 5 golf score
 
 The platform serves three distinct audiences:
 
-| Audience | Role |
-|----------|------|
-| 🏌️ **Members** | Subscribe, submit scores, watch the jackpot grow, claim prizes |
-| 🛠️ **Admins** | Configure and publish monthly draws, verify winners, manage charities |
-| 💚 **Charities** | Receive a portion of subscription revenue automatically every month |
+| Audience         | Role                                                                  |
+| ---------------- | --------------------------------------------------------------------- |
+| 🏌️ **Members**   | Subscribe, submit scores, watch the jackpot grow, claim prizes        |
+| 🛠️ **Admins**    | Configure and publish monthly draws, verify winners, manage charities |
+| 💚 **Charities** | Receive a portion of subscription revenue automatically every month   |
 
 ---
 
 ## 🚀 Live demo
 
-| Environment | URL | Status |
-|-------------|-----|--------|
-| 🌐 Production | `https://golf-draw-4yoz.vercel.app/` | ![Live](https://img.shields.io/badge/status-live-brightgreen?style=flat-square) |
+| Environment    | URL                                             | Status                                                                          |
+| -------------- | ----------------------------------------------- | ------------------------------------------------------------------------------- |
+| 🌐 Production  | `https://golf-draw-4yoz.vercel.app/`            | ![Live](https://img.shields.io/badge/status-live-brightgreen?style=flat-square) |
 | 🔐 Admin login | `https://golf-draw-4yoz.vercel.app/admin/login` | ![Live](https://img.shields.io/badge/status-live-brightgreen?style=flat-square) |
 
 ---
@@ -74,37 +73,37 @@ The platform serves three distinct audiences:
 
 ### 👤 Member features
 
-| Feature | Description |
-|---------|-------------|
-| 💳 Subscription | Monthly (£9/mo) or yearly (£86/yr) plans via Razorpay |
-| 🏌️ Score tracking | Submit scores 1–45, rolling window of last 5 retained automatically |
-| 🎟️ Auto draw entry | All active subscribers entered each month automatically |
-| 💚 Charity giving | Choose 10%, 15%, or 30% of subscription to donate |
-| 🏢 Charity selection | Pick from a curated directory of 12+ verified charities |
-| 📊 Draw history | Full history of every draw entered and match results |
-| 🏆 Winner portal | Upload scorecard proof to claim prizes securely |
-| 📱 User dashboard | Overview of scores, draws, charity, and subscription status |
+| Feature              | Description                                                         |
+| -------------------- | ------------------------------------------------------------------- |
+| 💳 Subscription      | Monthly (£9/mo) or yearly (£86/yr) plans via Razorpay               |
+| 🏌️ Score tracking    | Submit scores 1–45, rolling window of last 5 retained automatically |
+| 🎟️ Auto draw entry   | All active subscribers entered each month automatically             |
+| 💚 Charity giving    | Choose 10%, 15%, or 30% of subscription to donate                   |
+| 🏢 Charity selection | Pick from a curated directory of 12+ verified charities             |
+| 📊 Draw history      | Full history of every draw entered and match results                |
+| 🏆 Winner portal     | Upload scorecard proof to claim prizes securely                     |
+| 📱 User dashboard    | Overview of scores, draws, charity, and subscription status         |
 
 ### 🛠️ Admin features
 
-| Feature | Description |
-|---------|-------------|
-| ⚙️ Draw configuration | Set mode, month, prize pool, and draw number |
-| 🔍 Simulation mode | Preview results before committing — nothing is saved |
-| 📢 Publish draws | Lock results, notify winners, trigger jackpot rollover |
-| ✅ Winner verification | Review scorecard uploads, approve or reject with notes |
-| 👥 User management | Search, filter, view all members, cancel subscriptions |
-| 🏢 Charity management | Add, edit, activate and deactivate charities |
-| 📈 Analytics | MRR, charity totals, subscription trends, draw history |
-| 🔐 Admin login | Separate `/admin/login` with role-based JWT access control |
+| Feature                | Description                                                |
+| ---------------------- | ---------------------------------------------------------- |
+| ⚙️ Draw configuration  | Set mode, month, prize pool, and draw number               |
+| 🔍 Simulation mode     | Preview results before committing — nothing is saved       |
+| 📢 Publish draws       | Lock results, notify winners, trigger jackpot rollover     |
+| ✅ Winner verification | Review scorecard uploads, approve or reject with notes     |
+| 👥 User management     | Search, filter, view all members, cancel subscriptions     |
+| 🏢 Charity management  | Add, edit, activate and deactivate charities               |
+| 📈 Analytics           | MRR, charity totals, subscription trends, draw history     |
+| 🔐 Admin login         | Separate `/admin/login` with role-based JWT access control |
 
 ### 🎯 Draw prize structure
 
-| Category | Pool share | Rollover |
-|----------|:----------:|:--------:|
-| 🥇 5-match jackpot | **40%** | ✅ Yes — carries forward if unclaimed |
-| 🥈 4-match prize | **35%** | ❌ No |
-| 🥉 3-match prize | **25%** | ❌ No |
+| Category           | Pool share |               Rollover                |
+| ------------------ | :--------: | :-----------------------------------: |
+| 🥇 5-match jackpot |  **40%**   | ✅ Yes — carries forward if unclaimed |
+| 🥈 4-match prize   |  **35%**   |                 ❌ No                 |
+| 🥉 3-match prize   |  **25%**   |                 ❌ No                 |
 
 > Two draw modes: **Random** (equal odds, cryptographic RNG) and **Algorithmic** (score-weighted bias toward members whose average is closest to the draw number).
 
@@ -112,23 +111,23 @@ The platform serves three distinct audiences:
 
 ## 🛠️ Tech stack
 
-| Layer | Technology | Purpose |
-|-------|-----------|---------|
-| **Framework** | Next.js 14 | App Router, SSR, API routes |
-| **Language** | TypeScript | Strict mode throughout |
-| **Styling** | Tailwind CSS + shadcn/ui | Utility-first CSS |
-| **Design** | Neumorphic | DM Serif Display + DM Sans |
-| **Database** | Supabase | PostgreSQL + RLS + Storage |
-| **Auth** | Supabase Auth | JWT, role-based access |
-| **Payments** | Razorpay | Subscriptions + webhooks |
-| **Email** | Resend | Transactional emails |
-| **Jobs** | pg_cron | Monthly draw scheduler |
-| **Data fetching** | TanStack Query | Server state management |
-| **Forms** | react-hook-form + zod | Validation |
-| **Charts** | Recharts | Analytics visualisations |
-| **Progress** | nprogress | Route transition loader |
-| **Toasts** | sonner | Notifications |
-| **Deployment** | Vercel | Edge deployment + CDN |
+| Layer             | Technology               | Purpose                     |
+| ----------------- | ------------------------ | --------------------------- |
+| **Framework**     | Next.js 14               | App Router, SSR, API routes |
+| **Language**      | TypeScript               | Strict mode throughout      |
+| **Styling**       | Tailwind CSS + shadcn/ui | Utility-first CSS           |
+| **Design**        | Neumorphic               | DM Serif Display + DM Sans  |
+| **Database**      | Supabase                 | PostgreSQL + RLS + Storage  |
+| **Auth**          | Supabase Auth            | JWT, role-based access      |
+| **Payments**      | Razorpay                 | Subscriptions + webhooks    |
+| **Email**         | Resend                   | Transactional emails        |
+| **Jobs**          | pg_cron                  | Monthly draw scheduler      |
+| **Data fetching** | TanStack Query           | Server state management     |
+| **Forms**         | react-hook-form + zod    | Validation                  |
+| **Charts**        | Recharts                 | Analytics visualisations    |
+| **Progress**      | nprogress                | Route transition loader     |
+| **Toasts**        | sonner                   | Notifications               |
+| **Deployment**    | Vercel                   | Edge deployment + CDN       |
 
 ---
 
@@ -527,24 +526,24 @@ npx supabase db push
 
 ### Migration overview
 
-| File | Purpose |
-|------|---------|
+| File                     | Purpose                                    |
+| ------------------------ | ------------------------------------------ |
 | `001_initial_schema.sql` | Creates all 8 core tables with constraints |
-| `002_rls_policies.sql` | Enables RLS and all access policies |
-| `003_score_trigger.sql` | Rolling 5-score window Postgres trigger |
-| `004_pg_cron_draw.sql` | Monthly draw scheduler (1st, 09:00 UTC) |
-| `005_winner_storage.sql` | Private storage bucket + upload policies |
+| `002_rls_policies.sql`   | Enables RLS and all access policies        |
+| `003_score_trigger.sql`  | Rolling 5-score window Postgres trigger    |
+| `004_pg_cron_draw.sql`   | Monthly draw scheduler (1st, 09:00 UTC)    |
+| `005_winner_storage.sql` | Private storage bucket + upload policies   |
 
 ### Seed charities
 
 The seed file inserts **12 charities** across 4 categories:
 
-| Category | Charities |
-|----------|-----------|
-| ⛳ Golf & Sport | St Andrews Links Trust · Golf Foundation · The R&A Foundation |
+| Category             | Charities                                                                     |
+| -------------------- | ----------------------------------------------------------------------------- |
+| ⛳ Golf & Sport      | St Andrews Links Trust · Golf Foundation · The R&A Foundation                 |
 | 🏥 Health & Research | Alzheimer's Research UK · British Heart Foundation · Macmillan Cancer Support |
-| 🎓 Youth & Education | Youth Sport Trust · Street League · StreetGames |
-| 🌿 Environment | The Wildlife Trusts · Woodland Trust · Golf Environment Organisation |
+| 🎓 Youth & Education | Youth Sport Trust · Street League · StreetGames                               |
+| 🌿 Environment       | The Wildlife Trusts · Woodland Trust · Golf Environment Organisation          |
 
 ### Configure pg_cron (production)
 
@@ -566,10 +565,10 @@ ALTER DATABASE postgres
 
 In Razorpay Dashboard → Products → Subscriptions → Plans:
 
-| Plan | Period | Amount | Env var |
-|------|--------|--------|---------|
-| Monthly | monthly | 900 paise (£9.00) | `RAZORPAY_MONTHLY_PLAN_ID` |
-| Yearly | yearly | 8600 paise (£86.00) | `RAZORPAY_YEARLY_PLAN_ID` |
+| Plan    | Period  | Amount              | Env var                    |
+| ------- | ------- | ------------------- | -------------------------- |
+| Monthly | monthly | 900 paise (£9.00)   | `RAZORPAY_MONTHLY_PLAN_ID` |
+| Yearly  | yearly  | 8600 paise (£86.00) | `RAZORPAY_YEARLY_PLAN_ID`  |
 
 ### Webhook events
 
@@ -587,19 +586,19 @@ URL: https://yourdomain.com/api/webhooks/razorpay
 
 ```ts
 // ⚠️ Always verify before processing
-const body      = await req.text()       // raw body — parse AFTER
-const signature = req.headers.get('x-razorpay-signature')
-const expected  = crypto
+const body = await req.text(); // raw body — parse AFTER
+const signature = req.headers.get('x-razorpay-signature');
+const expected = crypto
   .createHmac('sha256', process.env.RAZORPAY_WEBHOOK_SECRET!)
   .update(body)
-  .digest('hex')
+  .digest('hex');
 
 if (signature !== expected) {
-  return new Response('Unauthorized', { status: 400 })
+  return new Response('Unauthorized', { status: 400 });
 }
 
 // ⚡ Return 200 immediately to prevent duplicate retries
-return new Response('OK', { status: 200 })
+return new Response('OK', { status: 200 });
 ```
 
 ---
@@ -689,10 +688,10 @@ June draw:    Someone hits 5-match!
 
 ### Draw modes
 
-| Mode | Description |
-|------|-------------|
-| 🎲 **Random** | `crypto.randomInt(1, 46)` — cryptographically secure, equal odds for all, seed stored for audit |
-| 🧮 **Algorithmic** | Same RNG + hot-zone bias: 30% chance to re-roll toward the top 5 most common member scores |
+| Mode               | Description                                                                                     |
+| ------------------ | ----------------------------------------------------------------------------------------------- |
+| 🎲 **Random**      | `crypto.randomInt(1, 46)` — cryptographically secure, equal odds for all, seed stored for audit |
+| 🧮 **Algorithmic** | Same RNG + hot-zone bias: 30% chance to re-roll toward the top 5 most common member scores      |
 
 ### Run the tests
 
@@ -736,9 +735,9 @@ If you need a fast deploy and will fix later:
 ```ts
 // next.config.ts — remove once errors are fixed
 const nextConfig = {
-  eslint:     { ignoreDuringBuilds: true },
+  eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
-}
+};
 ```
 
 ### ✅ Production checklist
@@ -764,11 +763,11 @@ const nextConfig = {
 
 Three levels of loading feedback throughout:
 
-| Level | Implementation | Where |
-|-------|---------------|-------|
-| 🔵 **Route transitions** | `nprogress` green progress bar | Every navigation |
-| 🟡 **Page skeletons** | `loading.tsx` neumorphic skeleton | Every route |
-| 🟢 **Action spinners** | `LoadingButton` component | Every API-calling button |
+| Level                    | Implementation                    | Where                    |
+| ------------------------ | --------------------------------- | ------------------------ |
+| 🔵 **Route transitions** | `nprogress` green progress bar    | Every navigation         |
+| 🟡 **Page skeletons**    | `loading.tsx` neumorphic skeleton | Every route              |
+| 🟢 **Action spinners**   | `LoadingButton` component         | Every API-calling button |
 
 ---
 
@@ -834,6 +833,6 @@ Please ensure all tests pass, TypeScript compiles cleanly, and lint reports no e
 
 ⛳ **GolfDraw** — Play · Win · Give Back
 
-*If this project helped you, consider giving it a ⭐ on GitHub*
+_If this project helped you, consider giving it a ⭐ on GitHub_
 
 </div>

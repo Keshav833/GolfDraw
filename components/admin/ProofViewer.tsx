@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { RejectModal } from '@/components/admin/RejectModal';
-import SectionLoader from '@/components/ui/SectionLoader';
+import { SectionLoader } from '@/components/ui/SectionLoader';
 import { LoadingButton } from '@/components/ui/LoadingButton';
 
 const raisedSm =

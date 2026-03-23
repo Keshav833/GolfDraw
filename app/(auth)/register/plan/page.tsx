@@ -17,7 +17,7 @@ export default async function RegisterPlan() {
       .select('subscription_status, email, full_name')
       .eq('id', user.id)
       .single();
-    
+
     userRecord = record;
 
     if (userRecord?.subscription_status === 'active') {

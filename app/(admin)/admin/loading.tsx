@@ -15,11 +15,7 @@ export default function AdminLoading() {
           <SkeletonBlock key={i} width="100%" height="88px" />
         ))}
       </div>
-      <SkeletonBlock
-        width="100%"
-        height="220px"
-        style={{ marginBottom: 16 }}
-      />
+      <SkeletonBlock width="100%" height="220px" style={{ marginBottom: 16 }} />
       <SkeletonBlock width="100%" height="320px" />
     </div>
   );

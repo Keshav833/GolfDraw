@@ -9,8 +9,6 @@ import { Input } from '@/components/ui/input';
 import { LoadingButton } from '@/components/ui/LoadingButton';
 import type { Score, ScoreApiResponse } from '@/lib/types/score';
 
-const raisedSm =
-  '3px 3px 8px var(--dashboard-shadow-dark), -3px -3px 8px var(--dashboard-shadow-light)';
 const insetShadow =
   'inset 3px 3px 7px var(--dashboard-shadow-dark), inset -3px -3px 7px var(--dashboard-shadow-light)';
 

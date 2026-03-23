@@ -54,7 +54,10 @@ export default function RegisterCharity() {
             className="group absolute left-6 top-6 flex items-center gap-1.5 rounded-full bg-white/40 px-3.5 py-1.5 text-xs font-bold transition-all hover:bg-white/60 hover:text-green-800"
             style={{ color: 'var(--text-muted)' }}
           >
-            <ChevronLeft size={14} className="transition-transform group-hover:-translate-x-0.5" />
+            <ChevronLeft
+              size={14}
+              className="transition-transform group-hover:-translate-x-0.5"
+            />
             BACK
           </button>
 

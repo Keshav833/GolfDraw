@@ -68,7 +68,7 @@ export default function LoginPage() {
             style={{
               width: '78px',
               height: '78px',
-        
+
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
