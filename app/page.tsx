@@ -1,3 +1,5 @@
+import { Flag, Brain, Medal } from 'lucide-react';
+
 export default function HomePage() {
   return (
     <>
@@ -845,7 +847,9 @@ export default function HomePage() {
           </p>
           <div className="charity-grid">
             <div className="charity-card">
-              <div className="charity-logo">⛳</div>
+              <div className="charity-logo">
+                <Flag size={32} color="var(--accent-dark)" />
+              </div>
               <div className="charity-cname">St Andrews Links Trust</div>
               <div className="charity-cat">Golf & sport · Scotland</div>
               <div className="charity-bar-bg">
@@ -857,7 +861,9 @@ export default function HomePage() {
               <div className="charity-support">72% of members support this</div>
             </div>
             <div className="charity-card">
-              <div className="charity-logo">🧠</div>
+              <div className="charity-logo">
+                <Brain size={32} color="#534AB7" />
+              </div>
               <div className="charity-cname">Alzheimer's Research UK</div>
               <div className="charity-cat">Health & research · UK</div>
               <div className="charity-bar-bg">
@@ -869,7 +875,9 @@ export default function HomePage() {
               <div className="charity-support">48% of members support this</div>
             </div>
             <div className="charity-card">
-              <div className="charity-logo">🏅</div>
+              <div className="charity-logo">
+                <Medal size={32} color="var(--gold)" />
+              </div>
               <div className="charity-cname">Youth Sport Trust</div>
               <div className="charity-cat">Youth & education · UK</div>
               <div className="charity-bar-bg">
